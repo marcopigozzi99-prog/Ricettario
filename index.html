@@ -9,6 +9,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#F2EEDF">
 <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAE0klEQVR4nO3dP27UQBTHcQdxlhShSpMTUEGRLhKKKHIRFHERCoSQ0lFAlRPQpCIFN0iVK1CMsKy1f5vxn5n35vn7qVKYaHf83WevvWFPnp8eO2DKK+sHAL+IAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSPHj+Pv428PGLQoeB2WscRL1lv3Bzjs9uzDZuGkxJwcDYxMx4xgjlwUCxjG5t9TwL7dxAK+tH8DGxvvvyM4rt3EMoSYHZWwrzuTg7cnmQk2OIc5A14szOZpzeXOVfvjx5c72kShxJsesaV9u43xum+jFiWOslSNLP0K8CXj5vK33LKkMn1Mk4OQY77AjL/RyG8/ic3gEnBxJQ9dJ3Q6PgJMjmdxb6oVebuMX/fz4If1weXPV/+xE2MnRWaQwa34cSeH91+/5v6ecyHF0XvvInBDmiYQ9rCSnZxf5r+ZyGw/lHzvMjzLB40hafP/iwS7i8GPuMLAdHsQBiTjqWTYGDIfHTuNo7i6diV3E0codOG/if56DT4gtFnxyUMYaweMY7rMX91+5jZNlVzwNr5MGj6P7v+cy91+5jVsU/N6KQ7PemtreXok/ObAYcdSWPwzM78qGOqw8fLP/sN35de4Huvg8x1oe9nc559d3B4k4ySJxEUfsApbJn0DlGMRBCsvUz+VYHJt8Xj59qLp0EG/efS76++f68+tT0d/fh7LhPhqbjmOrP6O4fbv833rb3+WsKen2frOHMU6k1I23WVnsp4NJk08/s5i0zhsmMjQxOdaPjcwydt5EptxKtujjYHhwEQxSkcPK7X3W8OhfE4yQsVknIvUOKx0npHXt7oQ06R/6gkpmLZm3kiq8la3wh/mVrnMMcRFsmcmLYAbXOSojl7GdXj6fJXY3Hgo4wnscs3goyfn+niVUHNgWF8EgEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIA1KRr/Gq8A1TOKC+bWkNJgck4oBEHJCIAxJxQCIOSEXiKPG2CkcUWnAmByTigEQckIgDUqk4OCetptxSMzkgEQck4oBUMA5OOyooushMDkhl42B4FFV6eZkckIgDUvE4OLIUUmFhmRyQasTB8NhcnSVlckCqFAfDY0PVFrPe5KCPTdRcRg4rkKrGwfBYqfIC1p4c9LFY/aXjsALJIA6GxwImi2YzOehjFqvlMjus0Ecmw4WyPOegjxfZLpHxCSl9HGG+OPbvVsyXwCcPy2IfR+djIVxxsiAu4ujcLIcHfpbCSxydp0Ux5GoRHMXROVua+rw9fV9xdP4WqBqHT/zk+enR+jFM289/g+wwi8Td5Oi5XbJteX6afidHL+oI8ZxF4ndy9Pwv4gJNPKkGJkcvxghpIoukpTiSdhNpKIukvTiSthJpLouk1TgS/4k0mkXSdhyJz0SaziKJEEfPQyUBmuiFimOoZiiRghgKG8dQiVCiBjG0izjG5uayhxTGdhoHcjRw+RxWiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKA9A++/h2ysoA3TwAAAABJRU5ErkJggg==">
+<link rel="manifest" href="manifest.json">
 <title>Il nostro ricettario</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,6 +55,7 @@ a{-webkit-tap-highlight-color:transparent;}
   padding-bottom:calc(56px + env(safe-area-inset-bottom));
   position:relative;
 }
+body.timer-active .app{ padding-bottom:calc(56px + 78px + env(safe-area-inset-bottom)); }
 /* Header */
 .topbar{
   position:sticky;
@@ -467,6 +469,7 @@ a{-webkit-tap-highlight-color:transparent;}
 .step-item .txt{font-size:15px;line-height:1.55;color:var(--ink);}
 .step-item.done .txt{color:var(--ink-soft);text-decoration:line-through;}
 .step-item.done .snum{color:var(--ink-soft);}
+.txt-col{flex:1;display:flex;flex-direction:column;align-items:flex-start;min-width:0;}
 
 .notecard{
   margin:0 20px 14px;
@@ -572,6 +575,7 @@ footer.appfooter{
   -webkit-tap-highlight-color:transparent;
 }
 .fab:active{transform:scale(0.94);}
+body.timer-active .fab{ bottom:calc(88px + env(safe-area-inset-bottom)); }
 
 /* Form aggiungi ricetta */
 .form-wrap{padding:6px 20px 40px;}
@@ -652,9 +656,150 @@ footer.appfooter{
   -webkit-appearance:none;
   appearance:none;
 }
+
+/* Timer nei passaggi */
+.step-timer{
+  flex:none;
+  border:1px solid var(--gold);
+  color:var(--gold);
+  background:none;
+  font-size:12px;
+  font-weight:600;
+  padding:5px 10px;
+  border-radius:999px;
+  margin-top:6px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+#timerbar{
+  position:fixed;
+  left:0;right:0;
+  bottom:0;
+  z-index:40;
+  background:var(--olive-dark);
+  color:#F4F0DF;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 16px;
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.25s ease, padding 0.25s ease;
+}
+#timerbar.show{
+  max-height:120px;
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+}
+#timerbar.done{background:var(--brick);}
+#timerbar .tlabel{flex:1;min-width:0;}
+#timerbar .tlabel .tt{font-size:12px;opacity:0.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#timerbar .tlabel .tv{font-family:var(--serif);font-size:22px;font-weight:600;}
+#timerbar button{
+  border:1px solid rgba(244,240,223,0.5);
+  background:none;
+  color:#F4F0DF;
+  width:38px;height:38px;
+  border-radius:50%;
+  font-size:16px;
+  cursor:pointer;
+  flex:none;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* Nota personale */
+.notebox{padding:8px 20px 4px;}
+.notebox textarea{
+  width:100%;
+  min-height:70px;
+  border:1px solid var(--line);
+  background:var(--card);
+  border-radius:var(--radius-sm);
+  padding:11px 13px;
+  font-size:16px;
+  font-family:var(--sans);
+  color:var(--ink);
+  resize:vertical;
+  -webkit-appearance:none;
+  appearance:none;
+}
+.notebox .savebtn{
+  margin-top:8px;
+  border:1px solid var(--olive);
+  background:none;
+  color:var(--olive-dark);
+  font-size:13px;
+  font-weight:600;
+  padding:8px 16px;
+  border-radius:999px;
+  cursor:pointer;
+}
+.notebox .saved-msg{font-size:12.5px;color:var(--olive-dark);margin-left:10px;}
+
+/* Home quick actions */
+.quick-actions{display:flex;gap:10px;padding:0 20px 6px;}
+.quick-actions button{
+  flex:1;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--olive-dark);
+  font-weight:600;
+  font-size:13.5px;
+  padding:12px;
+  border-radius:999px;
+  cursor:pointer;
+}
+
+/* Piano settimanale */
+.week-label{
+  font-family:var(--serif);
+  font-size:14px;
+  font-weight:600;
+  color:var(--ink-soft);
+  padding:20px 20px 6px;
+}
+.day-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 20px;
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+  background:none;border:none;width:100%;text-align:left;
+}
+.day-row.today{background:var(--card-alt);}
+.day-row .dwrap{width:56px;flex:none;}
+.day-row .dname{font-size:12px;color:var(--ink-soft);text-transform:capitalize;}
+.day-row .dnum{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--olive-dark);}
+.day-row .dmain{flex:1;min-width:0;}
+.day-row .dmain .rt{font-size:14.5px;font-weight:600;color:var(--ink);}
+.day-row .dmain .empty-slot{font-size:14px;color:var(--ink-soft);}
+.day-row .dx{
+  flex:none;border:none;background:none;color:var(--ink-soft);
+  font-size:18px;padding:6px;cursor:pointer;
+}
+.pickrow{display:flex;flex-direction:column;}
+
+/* Lista della spesa */
+.spesa-item{
+  display:flex;align-items:flex-start;gap:11px;
+  padding:11px 20px;
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+}
+.spesa-item .box{
+  width:20px;height:20px;flex:none;margin-top:1px;
+  border-radius:5px;border:1.5px solid var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--card);font-size:12px;
+}
+.spesa-item.done .box{background:var(--olive);border-color:var(--olive);}
+.spesa-item .txt{font-size:15.5px;color:var(--ink);line-height:1.4;}
+.spesa-item.done .txt{color:var(--ink-soft);text-decoration:line-through;}
 </style>
 </head>
 <body>
+<div id="timerbar"></div>
 <div id="splash" onclick="dismissSplash()">
   <svg class="art" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
     <path d="M100 58 C 96 44, 104 34, 100 20" fill="none" stroke="#C9BFA0" stroke-width="4" stroke-linecap="round"/>
@@ -842,6 +987,198 @@ function setServings(cn, rn, delta, ev){
   render();
 }
 
+/* ---------- note personali (per qualsiasi ricetta, libro o proprie) ---------- */
+var LS_NOTES = 'ricettario_note_v1';
+var personalNotes = {};
+function loadNotes(){
+  var raw = lsGet(LS_NOTES);
+  if(raw){ try{ personalNotes = JSON.parse(raw) || {}; }catch(e){ personalNotes = {}; } }
+}
+function saveNoteFor(key, text){
+  if(text) personalNotes[key] = text; else delete personalNotes[key];
+  lsSet(LS_NOTES, JSON.stringify(personalNotes));
+}
+window.savePersonalNote = function(key, ev){
+  if(ev) ev.preventDefault();
+  var ta = document.getElementById('noteText');
+  if(!ta) return;
+  saveNoteFor(key, ta.value.trim());
+  var msg = document.getElementById('noteSaved');
+  if(msg){
+    msg.style.opacity = '1';
+    clearTimeout(window._noteMsgT);
+    window._noteMsgT = setTimeout(function(){ msg.style.opacity = '0'; }, 1800);
+  }
+};
+
+/* ---------- ricetta random ---------- */
+function pickRandomRecipe(){
+  if(!searchIndex.length) return;
+  var it = searchIndex[Math.floor(Math.random()*searchIndex.length)];
+  nav('#/c/'+it.cnum+'/r/'+it.rnum);
+}
+window.pickRandomRecipe = pickRandomRecipe;
+
+/* ---------- timer nei passaggi ---------- */
+var DURATION_RE = /(\d+)\s*(?:-\s*\d+\s*)?(minuti|minuto|min|ore|ora|secondi|second[oi])\b/i;
+function parseDurationSeconds(text){
+  var m = DURATION_RE.exec(text);
+  if(!m) return null;
+  var n = parseInt(m[1], 10);
+  var unit = m[2].toLowerCase();
+  if(unit.indexOf('or') === 0) return n*3600;
+  if(unit.indexOf('sec') === 0) return n;
+  return n*60;
+}
+function fmtDurationShort(s){
+  if(s < 60) return s+' sec';
+  if(s % 60 === 0) return (s/60)+' min';
+  return Math.round(s/60)+' min';
+}
+function fmtClock(s){
+  s = Math.max(0, Math.round(s));
+  var m = Math.floor(s/60), sec = s%60;
+  return (m<10?'0':'')+m+':'+(sec<10?'0':'')+sec;
+}
+var timer = null;
+function renderTimerBar(){
+  var el = document.getElementById('timerbar');
+  if(!el) return;
+  if(!timer){
+    el.className = '';
+    el.innerHTML = '';
+    document.body.classList.remove('timer-active');
+    return;
+  }
+  document.body.classList.add('timer-active');
+  el.className = 'show' + (timer.state==='done' ? ' done' : '');
+  var icon = timer.state==='running' ? '&#10074;&#10074;' : '&#9654;';
+  el.innerHTML =
+    '<div class="tlabel"><div class="tt">'+esc(timer.label)+'</div><div class="tv">'+(timer.state==='done' ? 'Fatto! \u2713' : fmtClock(timer.remaining))+'</div></div>'+
+    (timer.state!=='done' ? '<button onclick="toggleTimerPause()" aria-label="Pausa">'+icon+'</button>' : '') +
+    '<button onclick="cancelTimer()" aria-label="Chiudi">&#10005;</button>';
+}
+function timerTick(){
+  if(!timer || timer.state!=='running') return;
+  timer.remaining -= 1;
+  if(timer.remaining <= 0){
+    timer.remaining = 0;
+    timer.state = 'done';
+    clearInterval(timer.intervalId);
+    if(navigator.vibrate){ try{ navigator.vibrate([200,100,200,100,200]); }catch(e){} }
+    playBeep();
+  }
+  renderTimerBar();
+}
+function playBeep(){
+  try{
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    var ctx = new Ctx();
+    [0,0.32,0.64].forEach(function(t){
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = 880;
+      o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.0001, ctx.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(0.35, ctx.currentTime+t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+t+0.28);
+      o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.3);
+    });
+  }catch(e){}
+}
+function startTimerInternal(seconds, label){
+  if(timer && timer.intervalId) clearInterval(timer.intervalId);
+  timer = {remaining:seconds, label:label, state:'running'};
+  timer.intervalId = setInterval(timerTick, 1000);
+  renderTimerBar();
+}
+window.startStepTimerFromBtn = function(btn, ev){
+  if(ev) ev.stopPropagation();
+  var secs = parseInt(btn.getAttribute('data-secs'), 10);
+  var label = btn.getAttribute('data-label');
+  startTimerInternal(secs, label);
+};
+window.toggleTimerPause = function(){
+  if(!timer) return;
+  if(timer.state==='running'){ timer.state='paused'; clearInterval(timer.intervalId); }
+  else if(timer.state==='paused'){ timer.state='running'; timer.intervalId=setInterval(timerTick,1000); }
+  renderTimerBar();
+};
+window.cancelTimer = function(){
+  if(timer && timer.intervalId) clearInterval(timer.intervalId);
+  timer = null;
+  renderTimerBar();
+};
+
+/* ---------- piano settimanale (generico, si ripete ogni settimana) ---------- */
+var LS_PIANO = 'ricettario_piano_v1';
+var piano = {};
+function loadPiano(){
+  var raw = lsGet(LS_PIANO);
+  if(raw){ try{ piano = JSON.parse(raw) || {}; }catch(e){ piano = {}; } }
+}
+function savePiano(){ lsSet(LS_PIANO, JSON.stringify(piano)); }
+var PIANO_DAYS = [
+  {key:'lun', label:'Luned\u00ec'},
+  {key:'mar', label:'Marted\u00ec'},
+  {key:'mer', label:'Mercoled\u00ec'},
+  {key:'gio', label:'Gioved\u00ec'},
+  {key:'ven', label:'Venerd\u00ec'},
+  {key:'sab', label:'Sabato'},
+  {key:'dom', label:'Domenica'}
+];
+var PIANO_MEALS = [
+  {key:'pranzo', label:'Pranzo', icon:'&#127869;'},
+  {key:'cena', label:'Cena', icon:'&#127860;'}
+];
+function pianoDayByKey(k){ return PIANO_DAYS.find(function(d){ return d.key===k; }); }
+function pianoMealByKey(k){ return PIANO_MEALS.find(function(m){ return m.key===k; }); }
+window.assignToPiano = function(slot, cnum, rnum){
+  piano[slot] = {cnum:cnum, rnum:rnum};
+  savePiano();
+  nav('#/piano');
+};
+window.removeFromPiano = function(slot, ev){
+  if(ev) ev.stopPropagation();
+  delete piano[slot];
+  savePiano();
+  render();
+};
+
+/* ---------- lista della spesa (calcolata dal piano) ---------- */
+var LS_SPESA = 'ricettario_spesa_check_v1';
+var spesaChecked = {};
+function loadSpesaChecked(){
+  var raw = lsGet(LS_SPESA);
+  if(raw){ try{ spesaChecked = JSON.parse(raw) || {}; }catch(e){ spesaChecked = {}; } }
+}
+function safeKey(s){ return normalize(s).replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''); }
+function buildShoppingList(lines){
+  var groups = {};
+  lines.forEach(function(txt){
+    var m = NUM_RE.exec(txt);
+    var num=null, rest;
+    if(m){ num = parseFloat(m[1].replace(',', '.')); rest = m[3].trim(); }
+    else { rest = txt.trim(); }
+    if(!rest) rest = txt.trim();
+    var k = normalize(rest);
+    if(!groups[k]) groups[k] = {rest:rest, total:0, hasNum:false, count:0};
+    groups[k].count++;
+    if(num!==null){ groups[k].total += num; groups[k].hasNum = true; }
+  });
+  var out = Object.keys(groups).map(function(k){
+    var g = groups[k];
+    var label = g.hasNum ? (fmtNum(g.total)+' '+g.rest) : (g.count>1 ? g.rest+' (x'+g.count+')' : g.rest);
+    return {key:safeKey(g.rest), label:label};
+  });
+  out.sort(function(a,b){ return a.label.localeCompare(b.label); });
+  return out;
+}
+window.toggleSpesa = function(k){
+  spesaChecked[k] = !spesaChecked[k];
+  lsSet(LS_SPESA, JSON.stringify(spesaChecked));
+  render();
+};
+
 /* ---------- router ---------- */
 function parseHash(){
   var h = location.hash.replace(/^#\/?/, '');
@@ -861,6 +1198,15 @@ function parseHash(){
   }
   if(parts[0] === 'esporta'){
     return {view:'esporta'};
+  }
+  if(parts[0] === 'piano' && parts[1] === 'pick' && parts[2]){
+    return {view:'pianopick', slot:parts[2]};
+  }
+  if(parts[0] === 'piano'){
+    return {view:'piano'};
+  }
+  if(parts[0] === 'spesa'){
+    return {view:'spesa'};
   }
   return {view:'home'};
 }
@@ -987,6 +1333,10 @@ function renderHome(){
       '<p>Un libro di famiglia ancora in scrittura: filosofia, organizzazione e le ricette di tutti i giorni, capitolo per capitolo.</p>'+
       '<div class="search-wrap"><span class="sicon">&#128269;</span><input id="searchInput" type="text" placeholder="Cerca una ricetta o un ingrediente\u2026" oninput="onSearchInput(this.value)"></div>'+
     '</div>'+
+    '<div class="quick-actions">'+
+      '<button onclick="pickRandomRecipe()">&#127922; Sorprendimi</button>'+
+      '<button onclick="nav(\'#/piano\')">&#128197; Piano settimanale</button>'+
+    '</div>'+
     '<div class="section-label">Indice</div>'+
     '<div class="toc">'+toc+'</div>'+
     '<footer class="appfooter">Il ricettario cresce nel tempo \u2014 manda pure il libro aggiornato quando aggiungete nuovi capitoli.</footer>'+
@@ -1075,7 +1425,12 @@ function renderRecipe(cnum, rnum){
   html += '</div>';
 
   html += '<div class="metarow">';
-  if(r.time) html += '<div class="pill">&#9201; '+esc(r.time)+'</div>';
+  var timeDur = r.time ? parseDurationSeconds(r.time) : null;
+  if(r.time && timeDur){
+    html += '<button class="pill" data-secs="'+timeDur+'" data-label="'+esc(r.title)+'" onclick="startStepTimerFromBtn(this,event)" style="cursor:pointer;">&#9201; '+esc(r.time)+' &middot; avvia timer</button>';
+  } else if(r.time){
+    html += '<div class="pill">&#9201; '+esc(r.time)+'</div>';
+  }
   if(baseServings){
     html += '<div class="stepper">'+
       '<button onclick="setServings('+cnum+','+rnum+',-1,event)" aria-label="Meno persone">&#8722;</button>'+
@@ -1104,8 +1459,11 @@ function renderRecipe(cnum, rnum){
       r.steps.map(function(step, i){
         var ck = key+'-step-'+i;
         var done = checkState[ck];
+        var dur = parseDurationSeconds(step);
+        var timerBtn = dur ? '<button class="step-timer" data-secs="'+dur+'" data-label="'+esc(r.title)+'" onclick="startStepTimerFromBtn(this,event)">&#9201; Avvia timer ('+fmtDurationShort(dur)+')</button>' : '';
         return '<li class="step-item '+(done?'done':'')+'" onclick="toggleCheck(\''+ck+'\',event)">'+
-          '<span class="snum">'+(i+1)+'</span><span class="txt">'+esc(step)+'</span>'+
+          '<span class="snum">'+(i+1)+'</span>'+
+          '<div class="txt-col"><span class="txt">'+esc(step)+'</span>'+timerBtn+'</div>'+
           '</li>';
       }).join('')+'</ul></div>';
   }
@@ -1122,6 +1480,11 @@ function renderRecipe(cnum, rnum){
   if(r.custom){
     html += '<div class="form-wrap" style="padding-top:0;"><button class="danger-btn" onclick="removeCustomRecipe('+r.num+',event)">Elimina questa ricetta</button></div>';
   }
+
+  html += '<div class="notebox"><h2 style="font-family:var(--serif);font-size:19px;font-weight:600;color:var(--olive-dark);margin:18px 0 10px;">La tua nota</h2>'+
+    '<textarea id="noteText" placeholder="Appunti tuoi su questa ricetta\u2026">'+esc(personalNotes[key]||'')+'</textarea>'+
+    '<div><button class="savebtn" onclick="savePersonalNote(\''+key+'\',event)">Salva nota</button>'+
+    '<span id="noteSaved" class="saved-msg" style="opacity:0;transition:opacity .3s;">Salvata \u2713</span></div></div>';
 
   html += '<footer class="appfooter">'+esc(c.title)+(r.custom?'':(' \u2014 Capitolo '+c.num))+'</footer>';
   return html;
@@ -1157,6 +1520,84 @@ function renderExport(){
   var json = JSON.stringify(customRecipes, null, 1);
   html += '<div class="form-wrap export-box"><textarea id="exportText" readonly>'+esc(json)+'</textarea>'+
     '<button id="copyBtn" class="btn-primary" onclick="copyExport()">Copia</button></div>';
+  return html;
+}
+
+function renderPiano(){
+  var html = topbar({back:'#/', title:'Piano settimanale'});
+  html += '<div class="chero" style="padding-bottom:2px;"><h1>Cosa cuciniamo</h1></div>';
+  html += '<div class="formnote">Un piano settimanale generico da riusare ogni settimana \u2014 non \u00e8 legato a date precise. Tocca un pasto per assegnargli una ricetta.</div>';
+  PIANO_DAYS.forEach(function(day){
+    html += '<div class="week-label">'+day.label+'</div>';
+    PIANO_MEALS.forEach(function(meal){
+      var slot = day.key+'-'+meal.key;
+      var assigned = piano[slot];
+      var rec = assigned ? recipeByNums(assigned.cnum, assigned.rnum) : null;
+      html += '<button class="day-row" onclick="nav(\'#/piano/pick/'+slot+'\')">'+
+        '<div class="dwrap" style="text-align:center;"><div style="font-size:21px;">'+meal.icon+'</div></div>'+
+        '<div class="dmain"><div class="dname" style="text-transform:none;">'+meal.label+'</div>'+
+        (rec ? '<div class="rt">'+esc(rec.recipe.title)+'</div>' : '<div class="empty-slot">Aggiungi</div>')+'</div>'+
+        (rec ? '<span class="dx" onclick="removeFromPiano(\''+slot+'\',event)">&#10005;</span>' : '') +
+        '</button>';
+    });
+  });
+  html += '<div class="form-wrap"><button class="btn-primary" onclick="nav(\'#/spesa\')">Genera lista della spesa</button></div>';
+  return html;
+}
+
+function pickResultsHtml(slot, q){
+  var nq = normalize(q);
+  var list = nq ? searchIndex.filter(function(it){ return it.hay.indexOf(nq) !== -1; }) : searchIndex;
+  if(!list.length) return '<div class="empty">Nessuna ricetta trovata.</div>';
+  return list.map(function(it){
+    return '<button class="rrow" onclick="assignToPiano(\''+slot+'\','+it.cnum+','+it.rnum+')">'+
+      '<div class="rnum">&#127860;</div>'+
+      '<div class="rmain"><div class="rt">'+esc(it.title)+'</div><div class="rmeta">'+esc(it.ctitle)+'</div></div>'+
+      '</button>';
+  }).join('');
+}
+window.onPickFilter = function(val){
+  var route = parseHash();
+  var el = document.getElementById('pickResults');
+  if(el) el.innerHTML = pickResultsHtml(route.slot, val);
+};
+function renderPianoPick(slot){
+  var parts = slot.split('-');
+  var day = pianoDayByKey(parts[0]);
+  var meal = pianoMealByKey(parts[1]);
+  var label = (day?day.label:'') + ' \u2014 ' + (meal?meal.label:'');
+  var html = topbar({back:'#/piano', title:label});
+  html += '<div class="hero" style="padding-bottom:6px;"><div class="search-wrap"><span class="sicon">&#128269;</span>'+
+    '<input id="searchInput" type="text" placeholder="Cerca una ricetta\u2026" oninput="onPickFilter(this.value)"></div></div>';
+  html += '<div id="pickResults" class="rlist pickrow">'+pickResultsHtml(slot, '')+'</div>';
+  return html;
+}
+
+function renderSpesa(){
+  var html = topbar({back:'#/piano', title:'Lista della spesa'});
+  html += '<div class="chero" style="padding-bottom:2px;"><h1>Lista della spesa</h1></div>';
+  var slots = Object.keys(piano);
+  if(!slots.length){
+    html += '<div class="empty">Non hai ancora pianificato nessun pasto.<br>Vai al piano settimanale per aggiungerne.</div>';
+    return html;
+  }
+  var lines = [];
+  var recipeNames = [];
+  slots.forEach(function(slot){
+    var a = piano[slot];
+    var found = recipeByNums(a.cnum, a.rnum);
+    if(found){
+      recipeNames.push(found.recipe.title);
+      found.recipe.ingredients.forEach(function(ing){ lines.push(ing); });
+    }
+  });
+  var items = buildShoppingList(lines);
+  html += '<div class="formnote">Dai pasti pianificati: '+esc(recipeNames.join(', '))+'</div>';
+  html += '<div>'+items.map(function(it){
+    var done = spesaChecked[it.key];
+    return '<div class="spesa-item '+(done?'done':'')+'" onclick="toggleSpesa(\''+it.key+'\')">'+
+      '<span class="box">'+(done?'&#10003;':'')+'</span><span class="txt">'+esc(it.label)+'</span></div>';
+  }).join('')+'</div>';
   return html;
 }
 
@@ -1208,6 +1649,9 @@ function render(){
   else if(route.view === 'search') html = renderSearch(route.q);
   else if(route.view === 'nuova') html = renderNewRecipeForm();
   else if(route.view === 'esporta') html = renderExport();
+  else if(route.view === 'piano') html = renderPiano();
+  else if(route.view === 'pianopick') html = renderPianoPick(route.slot);
+  else if(route.view === 'spesa') html = renderSpesa();
   else html = renderNotFound();
   appEl.innerHTML = html;
   window.scrollTo(0,0);
@@ -1222,10 +1666,19 @@ document.addEventListener('DOMContentLoaded', function(){
   appEl = document.getElementById('app');
   loadFavorites();
   loadCustomRecipes();
+  loadNotes();
+  loadPiano();
+  loadSpesaChecked();
   buildSearchIndex();
   render();
 });
 window.addEventListener('hashchange', render);
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
 
 })();
 </script>
