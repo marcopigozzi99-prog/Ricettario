@@ -796,6 +796,36 @@ body.timer-active .fab{ bottom:calc(88px + env(safe-area-inset-bottom)); }
 .spesa-item.done .box{background:var(--olive);border-color:var(--olive);}
 .spesa-item .txt{font-size:15.5px;color:var(--ink);line-height:1.4;}
 .spesa-item.done .txt{color:var(--ink-soft);text-decoration:line-through;}
+
+/* Versione e aggiornamenti */
+.version-tag{
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--ink-soft);
+  font-size:12px;
+  font-weight:600;
+  padding:6px 10px;
+  border-radius:999px;
+  flex:none;
+  cursor:pointer;
+  margin-right:2px;
+}
+#updateBtn.spinning{animation:spin 0.9s linear infinite;}
+@keyframes spin{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+.update-note{color:var(--olive-dark);}
+.update-note.ok{background:var(--gold-soft);}
+.version-entry{
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+.version-entry .vv{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:15px;
+  color:var(--gold);
+  margin-bottom:4px;
+}
+.version-entry .vn{font-size:14.5px;line-height:1.55;color:var(--ink);}
 </style>
 </head>
 <body>
@@ -831,6 +861,16 @@ body.timer-active .fab{ bottom:calc(88px + env(safe-area-inset-bottom)); }
 
 var DATA = JSON.parse(document.getElementById('data').textContent);
 var CHAPTERS = DATA.chapters;
+
+/* ---------- versione app ---------- */
+var APP_VERSION = '1.4.0';
+var VERSION_LOG = [
+  {v:'1.4.0', note:'Aggiunti: timer nei passaggi, piano settimanale (pranzo/cena), lista della spesa automatica, note personali, ricetta a sorpresa, app installabile (PWA) su iPhone e Android.'},
+  {v:'1.3.0', note:'Aggiunta la possibilit\u00e0 di aggiungere ricette proprie da telefono, con esportazione per inserirle nel libro ufficiale.'},
+  {v:'1.2.0', note:'Aggiunta la copertina iniziale e correzioni per un uso pi\u00f9 corretto su iPhone.'},
+  {v:'1.0.0', note:'Prima versione: tutte le ricette del libro organizzate per capitolo, con porzioni regolabili e preferiti.'}
+];
+var LS_UPDATE_FROM = 'ricettario_update_from_v1';
 
 function chapterByNum(n){
   if(n === CUSTOM_CHAPTER_NUM) return getCustomChapter();
@@ -908,6 +948,9 @@ function lsGet(key){
 }
 function lsSet(key, val){
   try{ localStorage.setItem(key, val); return true; }catch(e){ return false; }
+}
+function lsRemove(key){
+  try{ localStorage.removeItem(key); }catch(e){}
 }
 
 var favorites = {};
@@ -1211,6 +1254,9 @@ function parseHash(){
   if(parts[0] === 'random'){
     return {view:'random'};
   }
+  if(parts[0] === 'novita'){
+    return {view:'novita'};
+  }
   return {view:'home'};
 }
 function nav(hash){ location.hash = hash; }
@@ -1309,7 +1355,52 @@ function topbar(opts){
   if(opts.favToggle){
     fav = '<button class="topbar-fav '+(opts.favActive?'active':'')+'" onclick="toggleFav('+opts.favToggle.c+','+opts.favToggle.r+',event)" aria-label="Preferito">'+(opts.favActive?'&#9733;':'&#9734;')+'</button>';
   }
-  return '<div class="topbar">'+back+'<div class="topbar-title">'+esc(opts.title||'Il nostro ricettario')+'</div>'+fav+'</div>';
+  var update = '';
+  if(opts.updateBtn){
+    update = '<button class="version-tag" onclick="nav(\'#/novita\')">v'+APP_VERSION+'</button>'+
+      '<button id="updateBtn" class="iconbtn" onclick="checkForUpdate()" aria-label="Cerca aggiornamenti">&#8635;</button>';
+  }
+  return '<div class="topbar">'+back+'<div class="topbar-title">'+esc(opts.title||'Il nostro ricettario')+'</div>'+update+fav+'</div>';
+}
+
+function updateBanner(){
+  var from = lsGet(LS_UPDATE_FROM);
+  if(from === null) return '';
+  lsRemove(LS_UPDATE_FROM);
+  if(from === APP_VERSION){
+    return '<div class="formnote update-note">Sei gi\u00e0 alla versione pi\u00f9 recente (v'+APP_VERSION+').</div>';
+  }
+  return '<div class="formnote update-note ok">Aggiornata alla versione v'+APP_VERSION+' (prima: v'+esc(from)+').</div>';
+}
+
+window.checkForUpdate = function(){
+  var btn = document.getElementById('updateBtn');
+  if(btn) btn.classList.add('spinning');
+  lsSet(LS_UPDATE_FROM, APP_VERSION);
+  var tasks = [];
+  if(window.caches && caches.keys){
+    tasks.push(caches.keys().then(function(keys){
+      return Promise.all(keys.map(function(k){ return caches.delete(k); }));
+    }).catch(function(){}));
+  }
+  if('serviceWorker' in navigator){
+    tasks.push(navigator.serviceWorker.getRegistration().then(function(reg){
+      return reg && reg.update();
+    }).catch(function(){}));
+  }
+  Promise.all(tasks).catch(function(){}).then(function(){
+    location.reload();
+  });
+};
+
+function renderNovita(){
+  var html = topbar({back:'#/', title:'Novit\u00e0'});
+  html += '<div class="chero" style="padding-bottom:2px;"><h1>Cosa \u00e8 cambiato</h1></div>';
+  html += '<div class="formnote">Stai usando la versione v'+APP_VERSION+'.</div>';
+  html += '<div class="block">'+VERSION_LOG.map(function(entry){
+    return '<div class="version-entry"><div class="vv">v'+esc(entry.v)+'</div><div class="vn">'+esc(entry.note)+'</div></div>';
+  }).join('')+'</div>';
+  return html;
 }
 
 function renderHome(){
@@ -1329,7 +1420,8 @@ function renderHome(){
       '<div class="toc-arrow">&#8250;</div></button>';
   }
 
-  return topbar({}) +
+  return topbar({updateBtn:true}) +
+    updateBanner() +
     '<div class="hero">'+
       '<p class="kicker">'+totalRecipes+' ricette in '+CHAPTERS.length+' capitoli</p>'+
       '<h1>Il nostro ricettario</h1>'+
@@ -1659,6 +1751,7 @@ function render(){
   else if(route.view === 'piano') html = renderPiano();
   else if(route.view === 'pianopick') html = renderPianoPick(route.slot);
   else if(route.view === 'spesa') html = renderSpesa();
+  else if(route.view === 'novita') html = renderNovita();
   else html = renderNotFound();
   appEl.innerHTML = html;
   window.scrollTo(0,0);
