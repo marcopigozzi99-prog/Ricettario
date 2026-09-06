@@ -1208,6 +1208,9 @@ function parseHash(){
   if(parts[0] === 'spesa'){
     return {view:'spesa'};
   }
+  if(parts[0] === 'random'){
+    return {view:'random'};
+  }
   return {view:'home'};
 }
 function nav(hash){ location.hash = hash; }
@@ -1642,6 +1645,10 @@ window.onSearchInput = function(val){
 
 function render(){
   var route = parseHash();
+  if(route.view === 'random'){
+    pickRandomRecipe();
+    return;
+  }
   var html;
   if(route.view === 'home') html = renderHome();
   else if(route.view === 'chapter') html = renderChapter(route.cnum);
