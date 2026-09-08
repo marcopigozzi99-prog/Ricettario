@@ -1,7 +1,7 @@
 // Service worker del "Nostro ricettario".
 // Cache-first per l'app shell: dopo la prima visita, l'app si apre anche offline.
 // Quando il contenuto (ricette) viene aggiornato, cambia CACHE_NAME per invalidare la cache vecchia.
-var CACHE_NAME = 'ricettario-v2';
+var CACHE_NAME = 'ricettario-v3';
 var FILES_TO_CACHE = [
   './',
   './index.html',
