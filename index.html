@@ -860,6 +860,7 @@ body.timer-active .fab{ bottom:calc(88px + env(safe-area-inset-bottom)); }
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
 }
+.chip-active{background:var(--olive);color:#F4F0DF;border-color:var(--olive);}
 
 /* Azioni ricetta (modalità cucina / leggi / condividi) */
 .actionpill{
@@ -987,8 +988,9 @@ var DATA = JSON.parse(document.getElementById('data').textContent);
 var CHAPTERS = DATA.chapters;
 
 /* ---------- versione app ---------- */
-var APP_VERSION = '1.9.2';
+var APP_VERSION = '1.10.0';
 var VERSION_LOG = [
+  {v:'1.10.0', note:'Nel piano settimanale, quando scegli una ricetta ora puoi filtrare per Primi/Secondi/Vegetariano/Pesce/Carne/Dolci. Nel capitolo 1, la sezione "lista della spesa in tre zone" ha un tasto per aprirla come lista spuntabile veloce. I "visti di recente" ora mostrano al massimo 3 ricette.'},
   {v:'1.9.2', note:'Aggiunta alla pogaça una variante veloce con pasta sfoglia pronta al posto dell\u2019impasto lievitato.'},
   {v:'1.9.1', note:'Aggiunta ai Dolci la ricetta della pogaça in maglia al cioccolato cremoso.'},
   {v:'1.9.0', note:'Spostata la ricetta delle polpette di ceci, tonno e ricotta in "Legumi e cucina vegetariana". Il capitolo dolci ora si chiama semplicemente "Dolci" e include anche la torta agli amaretti. I dolci non vengono pi\u00f9 proposti dal tasto Sorprendimi n\u00e9 dal piano settimanale. Aggiunto un tasto per cancellare tutto il piano in un colpo solo.'},
@@ -1209,7 +1211,7 @@ function loadRecents(){
 function trackRecent(cnum, rnum){
   recents = recents.filter(function(r){ return !(r.cnum===cnum && r.rnum===rnum); });
   recents.unshift({cnum:cnum, rnum:rnum});
-  if(recents.length > 8) recents = recents.slice(0,8);
+  if(recents.length > 3) recents = recents.slice(0,3);
   lsSet(LS_RECENTS, JSON.stringify(recents));
 }
 
@@ -1664,6 +1666,9 @@ function parseHash(){
   if(parts[0] === 'filtro' && parts[1]){
     return {view:'filtro', tipo:parts[1]};
   }
+  if(parts[0] === 'lista-base'){
+    return {view:'listabase'};
+  }
   return {view:'home'};
 }
 function nav(hash){ location.hash = hash; }
@@ -1899,8 +1904,11 @@ function renderProseSections(sections){
   return sections.map(function(s){
     var tag = s.level === 1 ? 'h3' : (s.level === 2 ? 'h4' : (s.level >= 3 ? 'h5' : null));
     var head = (tag && s.title) ? '<'+tag+'>'+esc(s.title)+'</'+tag+'>' : '';
+    var shortcut = (s.title === 'La lista della spesa in tre zone')
+      ? '<p><button class="btn-ghost" style="margin:2px 0 10px;display:inline-block;width:auto;padding:10px 18px;" onclick="nav(\'#/lista-base\')">&#128722; Apri come lista spuntabile</button></p>'
+      : '';
     var body = paraHtml(s.text) + listHtml(s.items) + tableHtml(s.table);
-    return head + body;
+    return head + shortcut + body;
   }).join('');
 }
 
@@ -2125,10 +2133,36 @@ window.clearPiano = function(){
   render();
 };
 
-function pickResultsHtml(slot, q){
+var PICKER_FILTERS = [
+  {key:'primi', label:'Primi'},
+  {key:'secondi', label:'Secondi'},
+  {key:'vegetariano', label:'Vegetariano'},
+  {key:'pesce', label:'Pesce'},
+  {key:'carne', label:'Carne'},
+  {key:'dolci', label:'Dolci'},
+  {key:'tutti', label:'Tutti'}
+];
+function pickerFilterPool(filterKey){
+  if(filterKey === 'vegetariano') return searchIndex.filter(function(it){ return it.cnum === 4; });
+  if(filterKey === 'pesce') return searchIndex.filter(function(it){ return it.cnum === 5; });
+  if(filterKey === 'carne') return searchIndex.filter(function(it){ return it.cnum === 3; });
+  if(filterKey === 'dolci') return searchIndex.filter(function(it){ return it.cnum === 6; });
+  if(filterKey === 'primi') return searchIndex.filter(function(it){ return it.cnum !== 6 && recipeTipo(it.cnum,it.rnum) === 'primo'; });
+  if(filterKey === 'secondi') return searchIndex.filter(function(it){ return it.cnum !== 6 && recipeTipo(it.cnum,it.rnum) === 'secondo'; });
+  return searchIndex;
+}
+var pickerState = {slot:null, filter:null, query:''};
+function ensurePickerState(slot){
+  if(pickerState.slot !== slot){
+    var mealKey = slot.split('-')[1];
+    pickerState = {slot:slot, filter:(mealKey==='pranzo'?'primi':'secondi'), query:''};
+  }
+}
+function pickResultsHtml(slot, q, filterKey){
   var nq = normalize(q);
-  var list = nq ? searchIndex.filter(function(it){ return it.hay.indexOf(nq) !== -1; }) : searchIndex;
-  if(!list.length) return '<div class="empty">Nessuna ricetta trovata.</div>';
+  var pool = pickerFilterPool(filterKey);
+  var list = nq ? pool.filter(function(it){ return it.hay.indexOf(nq) !== -1; }) : pool;
+  if(!list.length) return '<div class="empty">Nessuna ricetta trovata con questo filtro.</div>';
   return list.map(function(it){
     return '<button class="rrow" onclick="assignToPiano(\''+slot+'\','+it.cnum+','+it.rnum+')">'+
       '<div class="rnum">&#127860;</div>'+
@@ -2137,19 +2171,28 @@ function pickResultsHtml(slot, q){
   }).join('');
 }
 window.onPickFilter = function(val){
-  var route = parseHash();
+  pickerState.query = val;
   var el = document.getElementById('pickResults');
-  if(el) el.innerHTML = pickResultsHtml(route.slot, val);
+  if(el) el.innerHTML = pickResultsHtml(pickerState.slot, pickerState.query, pickerState.filter);
+};
+window.setPickerFilter = function(key){
+  pickerState.filter = key;
+  render();
 };
 function renderPianoPick(slot){
+  ensurePickerState(slot);
   var parts = slot.split('-');
   var day = pianoDayByKey(parts[0]);
   var meal = pianoMealByKey(parts[1]);
   var label = (day?day.label:'') + ' \u2014 ' + (meal?meal.label:'');
   var html = topbar({back:'#/piano', title:label});
   html += '<div class="hero" style="padding-bottom:6px;"><div class="search-wrap"><span class="sicon">&#128269;</span>'+
-    '<input id="searchInput" type="text" placeholder="Cerca una ricetta\u2026" oninput="onPickFilter(this.value)"></div></div>';
-  html += '<div id="pickResults" class="rlist pickrow">'+pickResultsHtml(slot, '')+'</div>';
+    '<input id="searchInput" type="text" placeholder="Cerca una ricetta\u2026" value="'+escAttr(pickerState.query)+'" oninput="onPickFilter(this.value)"></div></div>';
+  html += '<div class="chips-row">'+PICKER_FILTERS.map(function(f){
+    var active = f.key === pickerState.filter;
+    return '<button class="chip'+(active?' chip-active':'')+'" onclick="setPickerFilter(\''+f.key+'\')">'+esc(f.label)+'</button>';
+  }).join('')+'</div>';
+  html += '<div id="pickResults" class="rlist pickrow">'+pickResultsHtml(slot, pickerState.query, pickerState.filter)+'</div>';
   return html;
 }
 
@@ -2284,6 +2327,35 @@ window.rerollPianoSlot = function(slot, ev){
   render();
 };
 
+/* ---------- lista della spesa base (spuntabile, indipendente dal piano) ---------- */
+var LISTA_BASE_GROUPS = [
+  {cat:'Dispensa', icon:'\ud83c\udf3e', items:[
+    'Pasta corta','Spaghetti','Riso','Cous cous','Farro','Ceci','Lenticchie',
+    'Fagioli borlotti o cannellini','Passata di pomodoro','Pomodori pelati',
+    'Tonno in scatola','Sgombro in scatola',"Olio extravergine d'oliva",'Sale','Aceto',
+    'Farina','Pangrattato'
+  ]},
+  {cat:'Frigorifero', icon:'\ud83e\uddca', items:[
+    'Insalata','Pomodori','Zucchine','Carote','Verdure di stagione',
+    'Mozzarella','Ricotta','Parmigiano','Uova','Pollo o tacchino','Pesce fresco'
+  ]}
+];
+function renderListaBase(){
+  var html = topbar({back:'#/c/1', title:'Lista della spesa base'});
+  html += '<div class="chero" style="padding-bottom:2px;"><h1>Lista della spesa veloce</h1></div>';
+  html += '<div class="formnote">Gli alimenti che teniamo sempre sott\u0027occhio, pronti da spuntare per una spesa rapida \u2014 indipendente dal piano settimanale.</div>';
+  LISTA_BASE_GROUPS.forEach(function(g){
+    html += '<div class="week-label">'+g.icon+' '+esc(g.cat)+'</div>';
+    g.items.forEach(function(it){
+      var key = 'base_'+safeKey(it);
+      var done = spesaChecked[key];
+      html += '<div class="spesa-item '+(done?'done':'')+'" onclick="toggleSpesa(\''+key+'\')">'+
+        '<span class="box">'+(done?'&#10003;':'')+'</span><span class="txt">'+esc(it)+'</span></div>';
+    });
+  });
+  return html;
+}
+
 function renderSearch(q){
   var nq = normalize(q);
   var results = nq ? searchIndex.filter(function(it){ return it.hay.indexOf(nq) !== -1; }) : [];
@@ -2344,6 +2416,7 @@ function render(){
   else if(route.view === 'dispensa') html = renderDispensa();
   else if(route.view === 'impostazioni') html = renderImpostazioni();
   else if(route.view === 'filtro') html = renderFiltro(route.tipo);
+  else if(route.view === 'listabase') html = renderListaBase();
   else html = renderNotFound();
 
   var navigated = (location.hash !== lastRenderedHash);
