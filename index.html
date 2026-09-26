@@ -989,8 +989,9 @@ var DATA = JSON.parse(document.getElementById('data').textContent);
 var CHAPTERS = DATA.chapters;
 
 /* ---------- versione app ---------- */
-var APP_VERSION = '1.16.0';
+var APP_VERSION = '1.17.0';
 var VERSION_LOG = [
+  {v:'1.17.0', note:'Corretta alla radice la normalizzazione degli ingredienti: dispensa, "svuota il frigo" e categorizzazione della lista della spesa ora riconoscono come lo stesso prodotto varianti come "pomodoro/pomodori", "mozzarella/mozzarelle", "uovo/uova/tuorlo", "½ cipolla" o "un pizzico di sale". Corretta anche la categorizzazione di carota e cipolla al singolare.'},
   {v:'1.16.0', note:'Aggiunta la ricetta delle crêpes base 1-2-3 (dolci o salate) tra i Dolci. Nuovo tasto in home "Svuota il frigo": selezioni gli ingredienti in scadenza e l\u2019app suggerisce le ricette del libro che li usano di pi\u00f9.'},
   {v:'1.15.0', note:'Ragù di carne (senza più i passaggi della pasta) spostato in Carne rossa; il pasticcio alla bolognese spostato tra i Primi. Tutte le ricette di ogni capitolo sono ora in ordine alfabetico.'},
   {v:'1.14.0', note:'Il ragù torna a essere una ricetta unica (solo tra i Primi), collegata con un pulsante al pasticcio alla bolognese (una vera lasagna, non più a base di maccheroni) in Carne rossa, e viceversa.'},
@@ -1519,14 +1520,57 @@ var LS_DISPENSA = 'ricettario_dispensa_v1';
 var dispensa = {};
 var ALL_INGREDIENT_NAMES = null;
 var UNIT_WORDS = ['g','gr','grammi','kg','chilo','chili','ml','cl','l','litro','litri',
-  'cucchiai','cucchiaino','cucchiaini','cucchiaio','tazza','tazze','pizzico','pizzichi','fetta','fette'];
+  'cucchiai','cucchiaino','cucchiaini','cucchiaio','tazza','tazze','pizzico','pizzichi','fetta','fette',
+  'confezione','confezioni','spicchio','spicchi','rametto','rametti','foglia','foglie','bicchiere','costa'];
 function bareIngredientName(rest){
   var t = (rest || '').trim();
+  // frazioni unicode iniziali (½ bicchiere di vino, ½ cipolla...) trattate come quantità
+  t = t.replace(/^[½¼¾⅓⅔]\s*/, '');
+  // articoli indeterminativi iniziali (un pizzico di sale, una confezione di...)
+  t = t.replace(/^(un|una|uno)\s+/i, '');
   for(var i=0;i<UNIT_WORDS.length;i++){
     var re = new RegExp('^'+UNIT_WORDS[i]+"\\b\\s*(di\\s+|d['\u2019]\\s*)?", 'i');
     if(re.test(t)){ return t.replace(re, '').trim(); }
   }
   return t;
+}
+/* Sinonimi noti: variante scritta -> nome canonico, per evitare doppioni in
+   dispensa, svuota-il-frigo e categorizzazione (es. "mozzarella" e "mozzarelle"
+   sono lo stesso prodotto, non due voci diverse). Le chiavi sono già passate
+   da bareIngredientName + normalize(). */
+var INGREDIENT_SYNONYMS = {
+  'carote':'carota',
+  'ceci cotti':'ceci', 'ceci gia cotti':'ceci',
+  'fagioli cotti':'fagioli',
+  'formaggio a scelta':'formaggio', 'formaggio grattugiato':'formaggio',
+  'gamberi freschi':'gamberi',
+  'mozzarelle':'mozzarella',
+  'pane raffermo':'pane', 'pane raffermo ammollato nel latte':'pane',
+  'pangrattato per rotolare':'pangrattato', 'pangrattato q.b.':'pangrattato',
+  'parmigiano (facoltativo)':'parmigiano', 'parmigiano grattugiato':'parmigiano',
+  'patate (facoltative)':'patate',
+  'pecorino romano grattugiato fine':'pecorino romano grattugiato',
+  'peperoncino (facoltativo)':'peperoncino', 'peperoncino a piacere':'peperoncino',
+  'peperoncino fresco o secco':'peperoncino', 'peperoncino q.b.':'peperoncino',
+  'pomodori':'pomodoro',
+  'ricotta o formaggio cremoso':'ricotta', 'ricotta o formaggio spalmabile':'ricotta',
+  'sale q.b.':'sale', 'pizzico di sale':'sale',
+  'sale e pepe q.b.':'sale e pepe',
+  "spicchi d'aglio":'aglio', "spicchi di aglio, aperti a meta":'aglio', "spicchio d'aglio":'aglio',
+  'tonno sott\'olio':'tonno', 'tonno sott\'olio sgocciolato':'tonno', 'tranci di tonno fresco':'tonno',
+  'tuorlo':'uova', "tuorlo d'uovo (per spennellare)":'uova', 'uovo':'uova',
+  'verdure a scelta':'verdure', 'verdure di stagione':'verdure', 'verdure grigliate':'verdure', 'verdure miste':'verdure',
+  'zucchine medie':'zucchine',
+  'tranci di salmone fresco':'salmone', 'salmone fresco':'salmone',
+  'orate pulite':'orata',
+  'filetti di branzino fresco':'branzino',
+  'fettine sottili di pollo':'pollo', 'petto di pollo':'pollo', 'macinato di pollo':'pollo',
+  'sovracosce di pollo (speziate o al naturale, a piacere)':'sovracosce di pollo'
+};
+function canonicalIngredientName(rest){
+  var bare = bareIngredientName(rest);
+  var key = normalize(bare);
+  return INGREDIENT_SYNONYMS[key] || bare;
 }
 function collectAllIngredientNames(){
   if(ALL_INGREDIENT_NAMES) return ALL_INGREDIENT_NAMES;
@@ -1536,8 +1580,8 @@ function collectAllIngredientNames(){
       r.ingredients.forEach(function(ing){
         var m = NUM_RE.exec(ing);
         var rest = m ? m[2].trim() : ing.trim();
-        var bare = bareIngredientName(rest);
-        if(bare) set[normalize(bare)] = bare;
+        var canon = canonicalIngredientName(rest);
+        if(canon) set[normalize(canon)] = canon;
       });
     });
   });
@@ -1554,7 +1598,7 @@ function loadDispensa(){
 }
 function saveDispensa(){ lsSet(LS_DISPENSA, JSON.stringify(dispensa)); }
 function isPantryStaple(rest){
-  return !!dispensa[normalize(bareIngredientName(rest))] || !!dispensa[normalize(rest)];
+  return !!dispensa[normalize(canonicalIngredientName(rest))] || !!dispensa[normalize(bareIngredientName(rest))] || !!dispensa[normalize(rest)];
 }
 window.toggleDispensa = function(key){
   if(dispensa[key]) delete dispensa[key]; else dispensa[key] = true;
@@ -1574,7 +1618,7 @@ var CATEGORY_LIST = [
   {name:'Carne e pesce', icon:'&#127831;', words:['pollo','tacchino','gamber','merluzzo','salmone','tonno','branzin','orat','polpo','prosciutto','manzo','maiale','vitello','pesce']},
   {name:'Latticini e uova', icon:'&#129370;', words:['uov','mozzarell','parmigian','ricotta','formagg','latte','burro','yogurt','grana','stracchino']},
   {name:'Dispensa', icon:'&#129380;', words:['pasta','riso','farina','farro','cous cous','ceci','fagiol','lenticchi','pane','pangrattato','passata','brodo','olio','sale','pepe','pesto','piadine','zucchero','lievito','aceto']},
-  {name:'Verdura e frutta', icon:'&#129365;', words:['carote','cipolla','melanzan','mais','peperon','pomodor','zucchin','verdur','fung','patat','basilic','insalata','limone','aglio','rosmarino','prezzemolo','spinaci']}
+  {name:'Verdura e frutta', icon:'&#129365;', words:['carot','cipoll','melanzan','mais','peperon','pomodor','zucchin','verdur','fung','patat','basilic','insalata','limone','aglio','rosmarino','prezzemolo','spinaci']}
 ];
 function categoryFor(text){
   var n = normalize(text);
