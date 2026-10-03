@@ -55,7 +55,7 @@ a{-webkit-tap-highlight-color:transparent;}
   padding-bottom:calc(56px + env(safe-area-inset-bottom));
   position:relative;
 }
-body.timer-active .app{ padding-bottom:calc(56px + 78px + env(safe-area-inset-bottom)); }
+body.timer-active .app{ padding-bottom:calc(56px + var(--timers-count, 1) * 58px + env(safe-area-inset-bottom)); }
 /* Header */
 .topbar{
   position:sticky;
@@ -511,6 +511,32 @@ footer.appfooter{
   color:var(--ink-soft);
 }
 
+.recipe-nav{
+  display:flex;
+  gap:10px;
+  padding:22px 20px 0;
+  border-top:1px solid var(--line);
+  margin-top:14px;
+}
+.recipe-nav button{
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+  border:none;
+  background:none;
+  padding:10px 0;
+  color:var(--olive-dark);
+  font-weight:600;
+  font-size:13.5px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.recipe-nav button.next{justify-content:flex-end;text-align:right;}
+.recipe-nav .rn-t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.recipe-nav .rn-arrow{flex:none;font-size:18px;opacity:0.7;}
+
 /* Splash / copertina */
 #splash{
   position:fixed;
@@ -575,7 +601,7 @@ footer.appfooter{
   -webkit-tap-highlight-color:transparent;
 }
 .fab:active{transform:scale(0.94);}
-body.timer-active .fab{ bottom:calc(88px + env(safe-area-inset-bottom)); }
+body.timer-active .fab{ bottom:calc(10px + var(--timers-count, 1) * 58px + env(safe-area-inset-bottom)); }
 
 /* Form aggiungi ricetta */
 .form-wrap{padding:6px 20px 40px;}
@@ -679,18 +705,24 @@ body.timer-active .fab{ bottom:calc(88px + env(safe-area-inset-bottom)); }
   background:var(--olive-dark);
   color:#F4F0DF;
   display:flex;
-  align-items:center;
-  gap:12px;
-  padding:0 16px;
+  flex-direction:column;
   max-height:0;
   overflow:hidden;
   transition:max-height 0.25s ease, padding 0.25s ease;
 }
 #timerbar.show{
-  max-height:120px;
-  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  max-height:360px;
+  padding:4px 0 calc(4px + env(safe-area-inset-bottom));
 }
-#timerbar.done{background:var(--brick);}
+#timerbar .trow{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 16px;
+  border-top:1px solid rgba(244,240,223,0.15);
+}
+#timerbar .trow:first-child{border-top:none;}
+#timerbar .trow.done{background:var(--brick);}
 #timerbar .tlabel{flex:1;min-width:0;}
 #timerbar .tlabel .tt{font-size:12px;opacity:0.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 #timerbar .tlabel .tv{font-family:var(--serif);font-size:22px;font-weight:600;}
@@ -866,6 +898,10 @@ body.timer-active .fab{ bottom:calc(88px + env(safe-area-inset-bottom)); }
   -webkit-tap-highlight-color:transparent;
 }
 .chip-active{background:var(--olive);color:#F4F0DF;border-color:var(--olive);}
+.piano-stats{margin:0 20px 16px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-md);}
+.piano-stats-title{font-family:var(--serif);font-weight:600;font-size:14.5px;color:var(--olive-dark);margin-bottom:8px;}
+.piano-stats-row{display:flex;flex-wrap:wrap;gap:8px;}
+.piano-stats .stat-pill{font-size:12.5px;font-weight:600;color:var(--olive-dark);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:5px 11px;}
 
 /* Azioni ricetta (modalità cucina / leggi / condividi) */
 .actionpill{
@@ -1008,8 +1044,10 @@ var DATA = JSON.parse(document.getElementById('data').textContent);
 var CHAPTERS = DATA.chapters;
 
 /* ---------- versione app ---------- */
-var APP_VERSION = '1.21.0';
+var APP_VERSION = '1.23.0';
 var VERSION_LOG = [
+  {v:'1.23.0', note:'Rimosso il tasto "Stampa" dalla ricetta: su iPhone, quando l\u2019app \u00e8 installata sulla schermata Home, non apriva correttamente il foglio di stampa. Aggiunte le notifiche per i timer (in Impostazioni): quando un timer finisce, oltre al suono nell\u2019app arriva un avviso di sistema, utile se nel frattempo si guarda altro sul telefono.'},
+  {v:'1.22.0', note:'Si possono avviare pi\u00f9 timer insieme (fino a 4), e il tempo rimanente si ricalcola da solo se lo schermo si spegne o si esce un attimo dall\u2019app (il suono per\u00f2 parte solo quando si riapre). Aggiunta la navigazione tra la ricetta precedente e successiva dello stesso capitolo. Nel piano settimanale, un nuovo riepilogo mostra l\u2019equilibrio tra le categorie della settimana (es. quante volte carne, pesce, legumi).'},
   {v:'1.21.0', note:'Il libro \u00e8 stato riordinato in una sequenza logica: Filosofia, Antipasti e salati, Primi, Carne bianca, Carne rossa, Pesce, Legumi, Contorni, Dolci. Aggiunto il nuovo capitolo Antipasti e salati (12 ricette, incluse due torte salate). Corretta e migliorata la pasta al salmone (era duplicata in due capitoli). Nel piano settimanale la cena ora ha una riga separata per il contorno, che scompare automaticamente se quella sera si esce o si sgarra (evidenziata con un colore diverso).'},
   {v:'1.20.0', note:'Carne rossa si arricchisce di 6 ricette: spezzatino di manzo, bistecca in padella, arrosto di manzo, involtini di manzo, chili con carne e straccetti di manzo con rucola. Ora il capitolo copre tecniche diverse, non solo carne macinata.'},
   {v:'1.19.0', note:'Il capitolo Dolci si arricchisce con tre classici: tiramisù, torta di mele e budino al cioccolato.'},
@@ -1435,35 +1473,92 @@ function fmtClock(s){
   var m = Math.floor(s/60), sec = s%60;
   return (m<10?'0':'')+m+':'+(sec<10?'0':'')+sec;
 }
-var timer = null;
+/* Pi\u00f9 timer insieme, basati su un orario di fine (endAt) invece che su un
+   conteggio a scatti: cos\u00ec, anche se lo schermo si spegne o l'app va in
+   background e il browser smette di far scorrere i secondi, non appena si
+   torna sull'app il tempo rimanente viene ricalcolato dall'orologio reale
+   del telefono e "recupera" subito il tempo passato. Il suono e la
+   vibrazione, per\u00f2, possono scattare solo mentre l'app \u00e8 aperta: se lo
+   schermo resta spento non si sentono finch\u00e9 non si riapre l'app. */
+var timers = []; /* {id, key, label, duration, endAt, pausedRemaining, state} */
+var timersIntervalId = null;
+function timerRemaining(t){
+  if(t.state === 'paused') return t.pausedRemaining;
+  if(t.state === 'done') return 0;
+  return Math.max(0, (t.endAt - Date.now()) / 1000);
+}
+function resyncTimers(){
+  var justFinished = [];
+  timers.forEach(function(t){
+    if(t.state === 'running' && timerRemaining(t) <= 0){
+      t.state = 'done';
+      justFinished.push(t);
+    }
+  });
+  if(justFinished.length){
+    if(navigator.vibrate){ try{ navigator.vibrate([200,100,200,100,200]); }catch(e){} }
+    playBeep();
+    notifyTimersDone(justFinished);
+  }
+  renderTimerBar();
+}
+/* Notifica di sistema quando un timer finisce (oltre al bip in-app): richiede
+   che l'utente l'abbia attivata una volta dalle Impostazioni. Su iOS funziona
+   solo se l'app \u00e8 stata aggiunta alla schermata Home (richiede iOS 16.4+) e
+   va mostrata tramite il service worker, non con un semplice "new Notification". */
+function notifyTimersDone(doneTimers){
+  if(!('Notification' in window) || Notification.permission !== 'granted' || !('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.ready.then(function(reg){
+    doneTimers.forEach(function(t){
+      reg.showNotification('\u23f0 Timer finito', {
+        body: t.label,
+        icon: 'icon-192.png',
+        badge: 'icon-192.png',
+        tag: 'timer-'+t.id,
+        vibrate: [200,100,200,100,200]
+      }).catch(function(){});
+    });
+  }).catch(function(){});
+}
+window.requestTimerNotifications = function(){
+  if(!('Notification' in window) || !('serviceWorker' in navigator)) { render(); return; }
+  if(Notification.permission === 'granted'){ render(); return; }
+  if(Notification.permission === 'denied'){
+    alert('Le notifiche sono bloccate per questa app. Per attivarle, vai nelle impostazioni del telefono alla voce di questa app (o di Safari) e consenti le notifiche, poi torna qui.');
+    return;
+  }
+  Notification.requestPermission().then(function(){ render(); });
+};
+document.addEventListener('visibilitychange', function(){
+  if(!document.hidden) resyncTimers();
+});
+window.addEventListener('focus', resyncTimers);
+window.addEventListener('pageshow', resyncTimers);
 function renderTimerBar(){
   var el = document.getElementById('timerbar');
   if(!el) return;
-  if(!timer){
+  if(!timers.length){
     el.className = '';
     el.innerHTML = '';
     document.body.classList.remove('timer-active');
+    document.body.style.removeProperty('--timers-count');
     return;
   }
   document.body.classList.add('timer-active');
-  el.className = 'show' + (timer.state==='done' ? ' done' : '');
-  var icon = timer.state==='running' ? '&#10074;&#10074;' : '&#9654;';
-  el.innerHTML =
-    '<div class="tlabel"><div class="tt">'+esc(timer.label)+'</div><div class="tv">'+(timer.state==='done' ? 'Fatto! \u2713' : fmtClock(timer.remaining))+'</div></div>'+
-    (timer.state!=='done' ? '<button onclick="toggleTimerPause()" aria-label="Pausa">'+icon+'</button>' : '') +
-    '<button onclick="cancelTimer()" aria-label="Chiudi">&#10005;</button>';
+  document.body.style.setProperty('--timers-count', String(timers.length));
+  el.className = 'show';
+  el.innerHTML = timers.map(function(t){
+    var icon = t.state==='running' ? '&#10074;&#10074;' : '&#9654;';
+    return '<div class="trow'+(t.state==='done'?' done':'')+'">'+
+      '<div class="tlabel"><div class="tt">'+esc(t.label)+'</div><div class="tv">'+(t.state==='done' ? 'Fatto! \u2713' : fmtClock(timerRemaining(t)))+'</div></div>'+
+      (t.state!=='done' ? '<button onclick="toggleTimerPause(\''+t.id+'\')" aria-label="Pausa">'+icon+'</button>' : '') +
+      '<button onclick="cancelTimer(\''+t.id+'\')" aria-label="Chiudi">&#10005;</button>'+
+      '</div>';
+  }).join('');
 }
-function timerTick(){
-  if(!timer || timer.state!=='running') return;
-  timer.remaining -= 1;
-  if(timer.remaining <= 0){
-    timer.remaining = 0;
-    timer.state = 'done';
-    clearInterval(timer.intervalId);
-    if(navigator.vibrate){ try{ navigator.vibrate([200,100,200,100,200]); }catch(e){} }
-    playBeep();
-  }
-  renderTimerBar();
+function timersTick(){
+  if(!timers.length){ clearInterval(timersIntervalId); timersIntervalId = null; return; }
+  resyncTimers();
 }
 function playBeep(){
   try{
@@ -1480,27 +1575,38 @@ function playBeep(){
     });
   }catch(e){}
 }
-function startTimerInternal(seconds, label){
-  if(timer && timer.intervalId) clearInterval(timer.intervalId);
-  timer = {remaining:seconds, label:label, state:'running'};
-  timer.intervalId = setInterval(timerTick, 1000);
+var timerSeq = 0;
+function startTimerInternal(seconds, label, key){
+  key = key || label;
+  var existing = timers.find(function(t){ return t.key === key; });
+  if(existing){
+    existing.duration = seconds;
+    existing.endAt = Date.now() + seconds*1000;
+    existing.state = 'running';
+  } else {
+    if(timers.length >= 4) timers.shift(); /* non pi\u00f9 di 4 insieme, per restare leggibili */
+    timers.push({id:'t'+(++timerSeq), key:key, label:label, duration:seconds, endAt:Date.now()+seconds*1000, pausedRemaining:null, state:'running'});
+  }
+  if(!timersIntervalId) timersIntervalId = setInterval(timersTick, 1000);
   renderTimerBar();
 }
 window.startStepTimerFromBtn = function(btn, ev){
   if(ev) ev.stopPropagation();
   var secs = parseInt(btn.getAttribute('data-secs'), 10);
   var label = btn.getAttribute('data-label');
-  startTimerInternal(secs, label);
+  var key = btn.getAttribute('data-key') || label;
+  startTimerInternal(secs, label, key);
 };
-window.toggleTimerPause = function(){
-  if(!timer) return;
-  if(timer.state==='running'){ timer.state='paused'; clearInterval(timer.intervalId); }
-  else if(timer.state==='paused'){ timer.state='running'; timer.intervalId=setInterval(timerTick,1000); }
+window.toggleTimerPause = function(id){
+  var t = timers.find(function(x){ return x.id === id; });
+  if(!t) return;
+  if(t.state==='running'){ t.pausedRemaining = timerRemaining(t); t.state='paused'; }
+  else if(t.state==='paused'){ t.endAt = Date.now() + t.pausedRemaining*1000; t.state='running'; }
   renderTimerBar();
 };
-window.cancelTimer = function(){
-  if(timer && timer.intervalId) clearInterval(timer.intervalId);
-  timer = null;
+window.cancelTimer = function(id){
+  timers = timers.filter(function(t){ return t.id !== id; });
+  if(!timers.length && timersIntervalId){ clearInterval(timersIntervalId); timersIntervalId = null; }
   renderTimerBar();
 };
 
@@ -1927,6 +2033,17 @@ function renderImpostazioni(){
     '<div class="switch '+(isDarkTheme()?'on':'')+'"><div class="knob"></div></div>'+
     '</div>';
 
+  var notifSupported = ('Notification' in window) && ('serviceWorker' in navigator);
+  var notifState = notifSupported ? Notification.permission : 'unsupported';
+  var notifDesc = notifState==='granted' ? 'Attive: ricevi un avviso quando un timer finisce'
+    : notifState==='denied' ? 'Bloccate dal telefono \u2014 tocca per sapere come riattivarle'
+    : notifState==='unsupported' ? 'Richiedono di aggiungere l\u2019app alla schermata Home (iOS 16.4+)'
+    : 'Tocca per attivarle: un avviso quando un timer finisce';
+  html += '<div class="settings-row" onclick="requestTimerNotifications()">'+
+    '<div class="sr-main"><div class="sr-t">Notifiche per i timer</div><div class="sr-d">'+esc(notifDesc)+'</div></div>'+
+    (notifSupported ? '<div class="switch '+(notifState==='granted'?'on':'')+'"><div class="knob"></div></div>' : '')+
+    '</div>';
+
   html += '<button class="settings-row" onclick="nav(\'#/dispensa\')">'+
     '<div class="sr-main"><div class="sr-t">Dispensa fissa</div><div class="sr-d">Ingredienti sempre disponibili, esclusi dalla lista della spesa</div></div>'+
     '<span class="toc-arrow">&#8250;</span></button>';
@@ -2095,7 +2212,7 @@ function renderRecipe(cnum, rnum){
   html += '<div class="metarow">';
   var timeDur = r.time ? parseDurationSeconds(r.time) : null;
   if(r.time && timeDur){
-    html += '<button class="pill" data-secs="'+timeDur+'" data-label="'+esc(r.title)+'" onclick="startStepTimerFromBtn(this,event)" style="cursor:pointer;">&#9201; '+esc(r.time)+' &middot; avvia timer</button>';
+    html += '<button class="pill" data-secs="'+timeDur+'" data-label="'+esc(r.title)+'" data-key="'+esc(key)+'-recipe" onclick="startStepTimerFromBtn(this,event)" style="cursor:pointer;">&#9201; '+esc(r.time)+' &middot; avvia timer</button>';
   } else if(r.time){
     html += '<div class="pill">&#9201; '+esc(r.time)+'</div>';
   }
@@ -2114,7 +2231,6 @@ function renderRecipe(cnum, rnum){
     '<button class="pill actionpill '+(document.body.classList.contains('cooking-mode')?'active':'')+'" onclick="toggleCookingMode()">&#128293; Modalit\u00e0 cucina</button>'+
     (('speechSynthesis' in window) ? '<button class="pill actionpill" data-steps="'+escAttr(JSON.stringify(r.steps))+'" data-title="'+escAttr(r.title)+'" onclick="readStepsAloudBtn(this)">&#128266; Leggi</button>' : '')+
     '<button class="pill actionpill" onclick="shareRecipe('+cnum+','+rnum+')">&#128228; Condividi</button>'+
-    '<button class="pill actionpill" onclick="window.print()">&#128424;\ufe0f Stampa</button>'+
     '</div>';
 
   if(r.ingredients.length){
@@ -2135,7 +2251,7 @@ function renderRecipe(cnum, rnum){
         var ck = key+'-step-'+i;
         var done = checkState[ck];
         var dur = parseDurationSeconds(step);
-        var timerBtn = dur ? '<button class="step-timer" data-secs="'+dur+'" data-label="'+esc(r.title)+'" onclick="startStepTimerFromBtn(this,event)">&#9201; Avvia timer ('+fmtDurationShort(dur)+')</button>' : '';
+        var timerBtn = dur ? '<button class="step-timer" data-secs="'+dur+'" data-label="'+esc(r.title)+' \u2014 passo '+(i+1)+'" data-key="'+esc(key)+'-step-'+i+'" onclick="startStepTimerFromBtn(this,event)">&#9201; Avvia timer ('+fmtDurationShort(dur)+')</button>' : '';
         return '<li class="step-item '+(done?'done':'')+'" onclick="toggleCheck(\''+ck+'\',event)">'+
           '<span class="snum">'+(i+1)+'</span>'+
           '<div class="txt-col"><span class="txt">'+esc(step)+'</span>'+timerBtn+'</div>'+
@@ -2175,6 +2291,16 @@ function renderRecipe(cnum, rnum){
     '<div><button class="savebtn" onclick="savePersonalNote(\''+key+'\',event)">Salva nota</button>'+
     '<span id="noteSaved" class="saved-msg" style="opacity:0;transition:opacity .3s;">Salvata \u2713</span></div></div>';
 
+  var idxInC = c.recipes.findIndex(function(x){ return x.num === r.num; });
+  var prevR = idxInC > 0 ? c.recipes[idxInC-1] : null;
+  var nextR = (idxInC >= 0 && idxInC < c.recipes.length-1) ? c.recipes[idxInC+1] : null;
+  if(prevR || nextR){
+    html += '<div class="recipe-nav">'+
+      (prevR ? '<button onclick="nav(\'#/c/'+cnum+'/r/'+prevR.num+'\')"><span class="rn-arrow">&#8249;</span><span class="rn-t">'+esc(prevR.title)+'</span></button>' : '<span></span>')+
+      (nextR ? '<button class="next" onclick="nav(\'#/c/'+cnum+'/r/'+nextR.num+'\')"><span class="rn-t">'+esc(nextR.title)+'</span><span class="rn-arrow">&#8250;</span></button>' : '<span></span>')+
+      '</div>';
+  }
+
   html += '<footer class="appfooter">'+esc(c.title)+(r.custom?'':(' \u2014 Capitolo '+c.num))+'</footer>';
   return html;
 }
@@ -2213,10 +2339,34 @@ function renderExport(){
   return html;
 }
 
+var PIANO_STATS_CATEGORIES = {3:'Primi', 4:'Carne bianca', 5:'Carne rossa', 6:'Pesce', 7:'Legumi e vegetariano'};
+function pianoStatsHtml(){
+  var counts = {};
+  var order = [];
+  function bump(label){
+    if(!counts[label]){ counts[label] = 0; order.push(label); }
+    counts[label]++;
+  }
+  PIANO_DAYS.forEach(function(day){
+    ['pranzo','cena'].forEach(function(mealKey){
+      var a = piano[day.key+'-'+mealKey];
+      if(!a) return;
+      if(a.special){ bump(PIANO_SPECIALS[a.special] ? 'Fuori casa' : 'Fuori casa'); return; }
+      var label = PIANO_STATS_CATEGORIES[a.cnum];
+      if(label) bump(label);
+    });
+  });
+  if(!order.length) return '';
+  return '<div class="piano-stats"><div class="piano-stats-title">Equilibrio della settimana</div>'+
+    '<div class="piano-stats-row">'+order.map(function(label){
+      return '<span class="stat-pill">'+esc(label)+' &times; '+counts[label]+'</span>';
+    }).join('')+'</div></div>';
+}
 function renderPiano(){
   var html = topbar({back:'#/', title:'Piano settimanale'});
   html += '<div class="chero" style="padding-bottom:2px;"><h1>Cosa cuciniamo</h1></div>';
   html += '<div class="formnote">Un piano settimanale generico da riusare ogni settimana \u2014 non \u00e8 legato a date precise. Pranzo pesca tra i primi, cena tra i secondi, con un contorno a parte. Tocca un pasto per assegnargli una ricetta, o usa il dado per una scelta rapida.</div>';
+  html += pianoStatsHtml();
   PIANO_DAYS.forEach(function(day){
     html += '<div class="week-label">'+day.label+'</div>';
     html += pianoRowHtml(day.key+'-pranzo', PIANO_MEALS[0]);
