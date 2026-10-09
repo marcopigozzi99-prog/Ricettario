@@ -1048,10 +1048,10 @@ body.cooking-mode .block h2{font-size:22px;}
   --grad:linear-gradient(135deg,var(--g1),var(--g2));
   --on-grad:#2A1A08;
   --tabh:64px;
-  --topbar-bg:rgba(250,245,234,.86);
-  --tab-bg:rgba(255,252,246,.92);
-  --shadow-card:0 14px 34px -16px rgba(60,35,90,.35);
-  --ambient:radial-gradient(120% 52% at 50% -8%, rgba(240,138,46,.16), transparent 62%);
+  --topbar-bg:rgba(226,208,176,.88);
+  --tab-bg:rgba(240,228,204,.94);
+  --shadow-card:0 14px 34px -16px rgba(58,30,20,.45);
+  --ambient:radial-gradient(120% 52% at 50% -8%, rgba(214,130,50,.22), transparent 62%), radial-gradient(90% 40% at 0% 100%, rgba(120,70,40,.14), transparent 60%);
   --cover-ink:#2A2036;
   --serif:"Cormorant Garamond", "Iowan Old Style", Georgia, serif;
   --sans:"Manrope", -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -1062,10 +1062,16 @@ html[data-season="A"]{--g1:#FFD36B;--g2:#F08A2E;}
 html[data-season="I"]{--g1:#C2B6FF;--g2:#5C8CFF;}
 
 html:not(.dark){
-  --bg:#FAF5EA; --card:#FFFFFF; --card-alt:#F2EADA;
-  --ink:#2A2036; --ink-soft:#6A5E78;
-  --olive:#E9A03A; --olive-dark:#3B2455;
-  --gold:#B9701A; --gold-soft:#F4DFB8; --brick:#D8503F; --line:#E8DECB;
+  --bg:#E2D1B2; --card:#F3E9D3; --card-alt:#D9C6A1;
+  --ink:#2A1E3D; --ink-soft:#5C4D66;
+  --olive:#D98E2E; --olive-dark:#34204F;
+  --gold:#8C500E; --gold-soft:#E6CC98; --brick:#B8402F; --line:#C6AE85;
+  --wood-line:rgba(105,58,18,.13);
+  /* venature del legno: strati sottili, solo tema chiaro */
+  --grain:repeating-radial-gradient(ellipse 160% 70% at 18% 160%,rgba(110,60,20,.13) 0 1.5px,transparent 1.5px 7px,rgba(110,60,20,.07) 7px 8px,transparent 8px 19px),
+          repeating-linear-gradient(93deg,transparent 0 23px,rgba(110,60,20,.05) 23px 24px,transparent 24px 41px);
+  --grain-soft:repeating-radial-gradient(ellipse 170% 80% at 85% 170%,rgba(90,48,16,.10) 0 2px,transparent 2px 13px);
+  --wood:linear-gradient(180deg,#E7CC9B,#D3AE78);
 }
 html.dark{
   color-scheme:dark;
@@ -1087,7 +1093,7 @@ body.timer-active .app{padding-bottom:calc(var(--tabh) + 34px + var(--timers-cou
 ::selection{background:var(--g2);color:#1a1020;}
 
 /* gradienti per capitolo: definiti sull'elemento, dove --h esiste */
-.cover,.ccover,.mini,.recipe-photo-wrap.ph,.rnum.ricon{--cl1:hsl(var(--h) 80% 85%);--cl2:hsl(var(--h) 64% 70%);}
+.cover,.ccover,.mini,.recipe-photo-wrap.ph,.rnum.ricon{--cl1:hsl(var(--h) 46% 72%);--cl2:hsl(var(--h) 40% 54%);}
 html.dark .cover,html.dark .ccover,html.dark .mini,html.dark .recipe-photo-wrap.ph,html.dark .rnum.ricon{--cl1:hsl(var(--h) 52% 40%);--cl2:hsl(var(--h) 48% 19%);}
 .mini .mi-art,.cover,.ccover{background:linear-gradient(150deg,var(--cl1),var(--cl2));}
 /* tipografia */
@@ -1338,6 +1344,21 @@ body.timer-active .fab{bottom:calc(var(--tabh) + 14px + var(--timers-count,1) * 
 .ccover .cv-ic{opacity:.2;}
 .cover .cv-t{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
 .dice-btn{color:var(--g2);}
+
+/* =====================================================================
+   Tema chiaro "legno": tonalità più scure + venature su alcune curve
+   ===================================================================== */
+html:not(.dark) .tabbar-in{background:var(--grain),var(--wood);border-top:1px solid #B8955F;box-shadow:0 -10px 26px -16px rgba(58,30,20,.5);}
+html:not(.dark) .tab{color:#44324F;}
+html:not(.dark) .tab.on{color:#2A1E3D;}
+html:not(.dark) .tab.on .tic{background:var(--grain),var(--grad);box-shadow:0 6px 16px -8px #8C4A0E,inset 0 0 0 1px rgba(255,240,210,.35);}
+html:not(.dark) .stasera{background:var(--card);border-color:#B8955F;}
+html:not(.dark) .stasera::before{background:var(--grain),linear-gradient(135deg,#B77B3A,#8A5427 45%,#C28D4C);opacity:.95;padding:3px;}
+html:not(.dark) .covers .cover,html:not(.dark) .ccover{background:var(--grain-soft),linear-gradient(150deg,var(--cl1),var(--cl2));border-color:rgba(60,30,15,.18);}
+html:not(.dark) .btn-primary,html:not(.dark) .chip-active,html:not(.dark) .actionpill.active,html:not(.dark) .stasera .btn-go,html:not(.dark) .dicecta,html:not(.dark) .dice-go{background:var(--grain),var(--grad) !important;}
+html:not(.dark) .topbar{border-bottom:1px solid var(--line);}
+html:not(.dark) .cover .cv-ic{opacity:.2;}
+html:not(.dark) .home-hero h1 em{background:linear-gradient(135deg,#C2661B,#8F3C0E);-webkit-background-clip:text;background-clip:text;}
 </style>
 </head>
 <body>
@@ -1654,7 +1675,7 @@ window.savePersonalNote = function(key, ev){
 var LS_THEME = 'ricettario_theme_v1';
 function applyThemeColor(){
   var m = document.querySelector('meta[name="theme-color"]');
-  if(m) m.setAttribute('content', document.documentElement.classList.contains('dark') ? '#14101C' : '#FAF5EA');
+  if(m) m.setAttribute('content', document.documentElement.classList.contains('dark') ? '#14101C' : '#E2D1B2');
 }
 function loadTheme(){
   var t = lsGet(LS_THEME);
