@@ -1065,7 +1065,7 @@ html:not(.dark){
   --bg:#E2D1B2; --card:#F3E9D3; --card-alt:#D9C6A1;
   --ink:#2A1E3D; --ink-soft:#5C4D66;
   --olive:#D98E2E; --olive-dark:#34204F;
-  --gold:#8C500E; --gold-soft:#E6CC98; --brick:#B8402F; --line:#C6AE85;
+  --gold:#74400A; --gold-soft:#E6CC98; --brick:#942E21; --line:#C6AE85;
   --wood-line:rgba(105,58,18,.13);
   /* venature del legno: strati sottili, solo tema chiaro */
   --grain:repeating-radial-gradient(ellipse 160% 70% at 18% 160%,rgba(110,60,20,.13) 0 1.5px,transparent 1.5px 7px,rgba(110,60,20,.07) 7px 8px,transparent 8px 19px),
@@ -1384,6 +1384,11 @@ html:not(.dark) .home-hero h1 em{background:linear-gradient(135deg,#C2661B,#8F3C
 .side-swap:active .ico{transform:rotate(180deg);transition:transform .3s;}
 @media (prefers-reduced-motion:reduce){.dice-card.choose .dice-die{animation:none;}}
 html:not(.dark) .dice-choice .dc-ic{background:var(--grain),var(--grad);}
+
+/* accessibilità: aree di tocco più comode */
+.rrow .rfav{padding:11px;margin:-11px;}
+.day-row-wrap .dx{min-width:40px;min-height:40px;}
+.danger-btn{min-height:42px;}
 </style>
 </head>
 <body>
@@ -1464,6 +1469,7 @@ function esc(s){
   return String(s)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
+function jsq(s){ return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 function escAttr(s){ return esc(s).replace(/"/g,'&quot;'); }
 function normalize(s){
   return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
@@ -1546,7 +1552,7 @@ function applyNumMigrations(){
   var verKey = function(id){ return id.split('.').map(Number); };
   NUM_MIGRATIONS.sort(function(a,b){ var x=verKey(a.id), y=verKey(b.id); for(var i=0;i<3;i++){ if(x[i]!==y[i]) return x[i]-y[i]; } return 0; });
   var applied = [];
-  try{ applied = JSON.parse(lsGet(LS_NUMIG) || '[]') || []; }catch(e){ applied = []; }
+  try{ applied = JSON.parse(lsGet(LS_NUMIG) || '[]') || []; if(!Array.isArray(applied)) applied = []; }catch(e){ applied = []; }
   var changed = false;
   NUM_MIGRATIONS.forEach(function(mig){
     if(applied.indexOf(mig.id) !== -1) return;
@@ -1600,7 +1606,7 @@ function favKey(cn, rn){ return cn+'-'+rn; }
 function loadFavorites(){
   var raw = lsGet(LS_FAV);
   if(raw){
-    try{ var arr = JSON.parse(raw); arr.forEach(function(k){ favorites[k] = true; }); }catch(e){}
+    try{ var arr = JSON.parse(raw); if(!Array.isArray(arr)) arr = []; arr.forEach(function(k){ favorites[k] = true; }); }catch(e){}
   }
 }
 function saveFavorites(){
@@ -1621,7 +1627,7 @@ var customRecipes = [];
 function loadCustomRecipes(){
   var raw = lsGet(LS_MINE);
   if(raw){
-    try{ customRecipes = JSON.parse(raw) || []; }catch(e){ customRecipes = []; }
+    try{ customRecipes = JSON.parse(raw) || []; if(!Array.isArray(customRecipes)) customRecipes = []; }catch(e){ customRecipes = []; }
   }
 }
 function saveCustomRecipes(){
@@ -1677,7 +1683,7 @@ var LS_NOTES = 'ricettario_note_v1';
 var personalNotes = {};
 function loadNotes(){
   var raw = lsGet(LS_NOTES);
-  if(raw){ try{ personalNotes = JSON.parse(raw) || {}; }catch(e){ personalNotes = {}; } }
+  if(raw){ try{ personalNotes = JSON.parse(raw) || {}; if(typeof personalNotes !== 'object' || Array.isArray(personalNotes)) personalNotes = {}; }catch(e){ personalNotes = {}; } }
 }
 function saveNoteFor(key, text){
   if(text) personalNotes[key] = text; else delete personalNotes[key];
@@ -1720,7 +1726,7 @@ var LS_RECENTS = 'ricettario_recents_v1';
 var recents = [];
 function loadRecents(){
   var raw = lsGet(LS_RECENTS);
-  if(raw){ try{ recents = JSON.parse(raw) || []; }catch(e){ recents = []; } }
+  if(raw){ try{ recents = JSON.parse(raw) || []; if(!Array.isArray(recents)) recents = []; }catch(e){ recents = []; } }
 }
 function trackRecent(cnum, rnum){
   recents = recents.filter(function(r){ return !(r.cnum===cnum && r.rnum===rnum); });
@@ -1854,7 +1860,7 @@ function renderFiltro(tipo){
     return '<button class="rrow" onclick="nav(\'#/c/'+it.cnum+'/r/'+it.rnum+'\')">'+
       iconCell(it.cnum, it.title)+
       '<div class="rmain"><div class="rt">'+esc(it.title)+'</div><div class="rmeta">'+esc(it.ctitle)+'</div></div>'+
-      '<span class="rfav '+(fav?'active':'')+'" onclick="toggleFav('+it.cnum+','+it.rnum+',event)">'+favIcon()+'</span>'+
+      '<span role="button" aria-label="Preferito" class="rfav '+(fav?'active':'')+'" onclick="toggleFav('+it.cnum+','+it.rnum+',event)">'+favIcon()+'</span>'+
       '</button>';
   }).join('')+'</div>';
   return html;
@@ -2251,7 +2257,7 @@ var LS_PIANO = 'ricettario_piano_v1';
 var piano = {};
 function loadPiano(){
   var raw = lsGet(LS_PIANO);
-  if(raw){ try{ piano = JSON.parse(raw) || {}; }catch(e){ piano = {}; } }
+  if(raw){ try{ piano = JSON.parse(raw) || {}; if(typeof piano !== 'object' || Array.isArray(piano)) piano = {}; }catch(e){ piano = {}; } }
   /* Pulizia: i pasti salvati puntano a una ricetta tramite capitolo+numero. Se
      il libro viene riordinato (capitoli o ricette spostati), un vecchio
      salvataggio pu\u00f2 puntare a una ricetta che non esiste pi\u00f9 in quel posto:
@@ -2380,7 +2386,7 @@ function collectAllIngredientNames(){
 }
 function loadDispensa(){
   var raw = lsGet(LS_DISPENSA);
-  if(raw){ try{ dispensa = JSON.parse(raw) || {}; }catch(e){ dispensa = {}; } }
+  if(raw){ try{ dispensa = JSON.parse(raw) || {}; if(typeof dispensa !== 'object' || Array.isArray(dispensa)) dispensa = {}; }catch(e){ dispensa = {}; } }
   else {
     dispensa = {}; ['sale', "olio extravergine d'oliva"].forEach(function(s){ dispensa[normalize(s)] = true; });
     saveDispensa();
@@ -2435,7 +2441,7 @@ var LS_SPESA = 'ricettario_spesa_check_v1';
 var spesaChecked = {};
 function loadSpesaChecked(){
   var raw = lsGet(LS_SPESA);
-  if(raw){ try{ spesaChecked = JSON.parse(raw) || {}; }catch(e){ spesaChecked = {}; } }
+  if(raw){ try{ spesaChecked = JSON.parse(raw) || {}; if(typeof spesaChecked !== 'object' || Array.isArray(spesaChecked)) spesaChecked = {}; }catch(e){ spesaChecked = {}; } }
 }
 function safeKey(s){ return normalize(s).replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''); }
 var UNIT_CANON = {
@@ -2517,7 +2523,7 @@ function parseHash(){
     return {view:'chapter', cnum:parseInt(parts[1],10)};
   }
   if(parts[0] === 'search'){
-    return {view:'search', q: decodeURIComponent(parts[1]||'')};
+    return {view:'search', q: (function(){ try{ return decodeURIComponent(parts[1]||''); }catch(e){ return parts[1]||''; } })()};
   }
   if(parts[0] === 'nuova'){
     return {view:'nuova'};
@@ -3105,7 +3111,7 @@ function renderPreferiti(){
     meta.push(it.c.title);
     return '<button class="rrow" onclick="nav(\'#/c/'+it.c.num+'/r/'+it.r.num+'\')">'+iconCell(it.c.num, it.r.title)+
       '<div class="rmain"><div class="rt">'+esc(it.r.title)+'</div><div class="rmeta">'+meta.map(esc).join(' &middot; ')+'</div></div>'+
-      '<span class="rfav active" onclick="toggleFav('+it.c.num+','+it.r.num+',event)">'+favIcon()+'</span></button>';
+      '<span role="button" aria-label="Preferito" class="rfav active" onclick="toggleFav('+it.c.num+','+it.r.num+',event)">'+favIcon()+'</span></button>';
   }).join('')+'</div>';
   return html;
 }
@@ -3245,7 +3251,7 @@ function renderChapter(cnum){
       return '<button class="rrow" onclick="nav(\'#/c/'+c.num+'/r/'+r.num+'\')">'+
         (isCustom ? iconCell(c.num, r.title) : '<div class="rnum">'+r.num+'</div>')+
         '<div class="rmain"><div class="rt">'+esc(r.title)+'</div><div class="rmeta">'+meta.map(esc).join(' &middot; ')+'</div></div>'+
-        '<span class="rfav '+(fav?'active':'')+'" onclick="toggleFav('+c.num+','+r.num+',event)">'+favIcon()+'</span>'+
+        '<span role="button" aria-label="Preferito" class="rfav '+(fav?'active':'')+'" onclick="toggleFav('+c.num+','+r.num+',event)">'+favIcon()+'</span>'+
         '</button>';
     }).join('')+'</div>';
   }
@@ -3643,7 +3649,7 @@ function renderSpesa(){
     }
     var done = spesaChecked[it.key];
     var src = it.recipes.length ? '<div class="spesa-src">'+esc(it.recipes.join(', '))+'</div>' : '';
-    html += '<div class="spesa-item '+(done?'done':'')+'" onclick="toggleSpesa(\''+it.key+'\')">'+
+    html += '<div class="spesa-item '+(done?'done':'')+'" onclick="toggleSpesa(\''+jsq(it.key)+'\')">'+
       '<span class="box">'+(done?'&#10003;':'')+'</span><div class="spesa-txtwrap"><span class="txt">'+esc(it.label)+'</span>'+src+'</div></div>';
   });
   return html;
@@ -3664,13 +3670,13 @@ function renderDispensa(){
   html += names.map(function(n){
     var k = normalize(n);
     var on = !!dispensa[k];
-    return '<div class="ing-item '+(on?'done':'')+'" onclick="toggleDispensa(\''+k+'\')" style="padding:9px 20px;">'+
+    return '<div class="ing-item '+(on?'done':'')+'" onclick="toggleDispensa(\''+jsq(k)+'\')" style="padding:9px 20px;">'+
       '<span class="box">'+(on?'&#10003;':'')+'</span><span class="txt">'+esc(n)+'</span></div>';
   }).join('');
   if(extra.length){
     html += '<div class="week-label">Aggiunti da te</div>';
     html += extra.map(function(k){
-      return '<div class="ing-item done" onclick="toggleDispensa(\''+k+'\')" style="padding:9px 20px;">'+
+      return '<div class="ing-item done" onclick="toggleDispensa(\''+jsq(k)+'\')" style="padding:9px 20px;">'+
         '<span class="box">&#10003;</span><span class="txt">'+esc(k)+'</span></div>';
     }).join('');
   }
@@ -4074,7 +4080,7 @@ function svuotaChipsHtml(){
   return names.map(function(n){
     var k = normalize(n);
     var active = !!svuotaFrigoSelected[k];
-    return '<button class="chip'+(active?' chip-active':'')+'" onclick="toggleSvuotaIngredient(\''+k+'\')">'+esc(n)+'</button>';
+    return '<button class="chip'+(active?' chip-active':'')+'" onclick="toggleSvuotaIngredient(\''+jsq(k)+'\')">'+esc(n)+'</button>';
   }).join('');
 }
 function renderSvuotaFrigo(){
@@ -4112,7 +4118,7 @@ function renderSvuotaFrigo(){
 var quaderno = [];
 function loadQuaderno(){
   var raw = lsGet(LS_QUADERNO);
-  if(raw){ try{ quaderno = JSON.parse(raw) || []; }catch(e){ quaderno = []; } }
+  if(raw){ try{ quaderno = JSON.parse(raw) || []; if(!Array.isArray(quaderno)) quaderno = []; }catch(e){ quaderno = []; } }
 }
 function saveQuaderno(){ lsSet(LS_QUADERNO, JSON.stringify(quaderno)); }
 function renderQuaderno(){
@@ -4170,7 +4176,7 @@ function renderListaBase(){
     g.items.forEach(function(it){
       var key = 'base_'+safeKey(it);
       var done = spesaChecked[key];
-      html += '<div class="spesa-item '+(done?'done':'')+'" onclick="toggleSpesa(\''+key+'\')">'+
+      html += '<div class="spesa-item '+(done?'done':'')+'" onclick="toggleSpesa(\''+jsq(key)+'\')">'+
         '<span class="box">'+(done?'&#10003;':'')+'</span><span class="txt">'+esc(it)+'</span></div>';
     });
   });
@@ -4182,7 +4188,7 @@ function searchRowHtml(it){
   return '<button class="rrow" onclick="nav(\'#/c/'+it.cnum+'/r/'+it.rnum+'\')">'+
     iconCell(it.cnum, it.title)+
     '<div class="rmain"><div class="rt">'+esc(it.title)+'</div><div class="rmeta">'+esc(it.ctitle)+'</div></div>'+
-    '<span class="rfav '+(fav?'active':'')+'" onclick="toggleFav('+it.cnum+','+it.rnum+',event)">'+favIcon()+'</span>'+
+    '<span role="button" aria-label="Preferito" class="rfav '+(fav?'active':'')+'" onclick="toggleFav('+it.cnum+','+it.rnum+',event)">'+favIcon()+'</span>'+
     '</button>';
 }
 function renderSearch(q){
