@@ -1,14 +1,14 @@
 // Service worker del "Nostro ricettario".
 // Cache-first per l'app shell: dopo la prima visita, l'app si apre anche offline.
 // Quando il contenuto (ricette) viene aggiornato, cambia CACHE_NAME per invalidare la cache vecchia.
-var CACHE_NAME = 'ricettario-v7';
+var CACHE_NAME = 'ricettario-v8';
 var FILES_TO_CACHE = [
   './',
   './index.html',
-  './nuova.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './icon-maskable-512.png'
 ];
 
 self.addEventListener('install', function(event){
@@ -44,6 +44,8 @@ self.addEventListener('notificationclick', function(event){
 });
 
 self.addEventListener('fetch', function(event){
+  /* vecchio indirizzo del ponte: porta sempre alla 2.0 alla radice */
+  try{ if(event.request.mode === 'navigate' && /\/nuova\.html$/.test(new URL(event.request.url).pathname)){ event.respondWith(Response.redirect(new URL('./index.html', self.registration.scope).href, 302)); return; } }catch(e){}
   if(event.request.method !== 'GET') return;
   /* richieste verso altri siti (Firebase per account e famiglia): mai dalla cache */
   try{ if(new URL(event.request.url).origin !== self.location.origin) return; }catch(e){ return; }
