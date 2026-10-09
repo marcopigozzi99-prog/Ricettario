@@ -15,7 +15,7 @@ self.addEventListener('install', function(event){
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache){
-      return cache.addAll(FILES_TO_CACHE);
+      return cache.addAll(FILES_TO_CACHE.map(function(u){ return new Request(u, {cache: 'reload'}); }));
     })
   );
 });

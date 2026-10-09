@@ -3297,6 +3297,7 @@ function renderImpostazioni(){
     '<label class="btn-ghost" style="display:block;text-align:center;">Importa backup'+
     '<input type="file" accept="application/json" onchange="importBackupFile(this)" style="display:none;"></label>'+
     '</div>';
+  html += bridgeBackHtml();
   return html;
 }
 
@@ -4451,6 +4452,20 @@ function renderPrivacy(){
   '</div>';
   h += '<div class="form-wrap"><button class="btn-ghost" onclick="nav(\'#/account\')">Vai ad Account e Famiglia</button></div>';
   return h;
+}
+
+/* ---- versione ponte: tornare alla vecchia versione (solo se si è arrivati dal tasto nella v1) ---- */
+function isBridgePage(){ return /nuova\.html$/.test(location.pathname); }
+window.backToV1 = function(){
+  if(!confirm('Tornare alla versione precedente? I tuoi dati restano com’erano.')) return;
+  try{ localStorage.removeItem('ricettario_go_v2'); }catch(e){}
+  location.replace('index.html');
+};
+function bridgeBackHtml(){
+  if(!isBridgePage()) return '';
+  return '<div class="week-label">Versione dell’app</div>'+
+    '<div class="formnote">Stai usando la nuova versione 2.0. Se qualcosa non ti convince puoi tornare alla vecchia e riprovare quando vuoi.</div>'+
+    '<div class="form-wrap"><button class="btn-ghost" onclick="backToV1()">Torna alla versione precedente</button></div>';
 }
 
 /* =====================================================================
