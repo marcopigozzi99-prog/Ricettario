@@ -1,13 +1,14 @@
 // Service worker del "Nostro ricettario".
 // Cache-first per l'app shell: dopo la prima visita, l'app si apre anche offline.
 // Quando il contenuto (ricette) viene aggiornato, cambia CACHE_NAME per invalidare la cache vecchia.
-var CACHE_NAME = 'ricettario-v4';
+var CACHE_NAME = 'ricettario-v5';
 var FILES_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './icon-maskable-512.png'
 ];
 
 self.addEventListener('install', function(event){
