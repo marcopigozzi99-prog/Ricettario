@@ -1476,7 +1476,7 @@ var CHAPTERS = DATA.chapters;
 /* ---------- versione app ---------- */
 var APP_VERSION = '2.0.0';
 var VERSION_LOG = [
-  {v:'2.0.0', note:'Nuova versione ufficiale: rebranding \u201cCucina serale\u201d con logo “tavola apparecchiata”, titoli in Cormorant, sfumature che cambiano con la stagione e tema scuro o avorio. Barra in basso (Ricette, Piano, Spesa, Frigo, Io), nuova home con la card \u201cStasera\u201d (il piatto del piano di oggi o un\u2019idea di stagione), dado animato per \u201cSorprendimi\u201d che chiede se vuoi un primo o un secondo (il secondo arriva con un contorno in accompagnamento), copertine per ogni capitolo, icone nuove al posto delle emoji, illustrazioni per le ricette senza foto e nuova schermata iniziale animata. Nuova pagina \u201cIo\u201d con i Preferiti, le tue ricette, il quaderno e le impostazioni. Nuova sezione \u201cFamiglia\u201d: accedi con email e password, crea la famiglia o entra con un codice invito e condividi tra pi\u00f9 telefoni il piano settimanale, la lista della spesa, i preferiti, la dispensa, il quaderno e le note. Aspetto scuro, chiaro o automatico (segue il telefono), giro di benvenuto alla prima apertura e pagina Privacy con la possibilità di eliminare il tuo account e i tuoi dati. Slogan: Cosa mangiamo stasera?'},
+  {v:'2.0.0', note:'Nuova versione ufficiale: rebranding \u201cCucina serale\u201d con logo “tavola apparecchiata”, titoli in Cormorant, sfumature che cambiano con la stagione e tema scuro o avorio. Barra in basso (Ricette, Piano, Spesa, Frigo, Io), nuova home con la card \u201cStasera\u201d (il piatto del piano di oggi o un\u2019idea di stagione), dado animato per \u201cSorprendimi\u201d che chiede se vuoi un primo o un secondo (il secondo arriva con un contorno in accompagnamento), copertine per ogni capitolo, icone nuove al posto delle emoji, illustrazioni per le ricette senza foto e nuova schermata iniziale animata. Nuova pagina \u201cIo\u201d con i Preferiti, le tue ricette, il quaderno e le impostazioni. Nuova sezione \u201cAccount e Famiglia\u201d: accedi con email e password, crea la famiglia o entra con un codice invito e condividi tra pi\u00f9 telefoni il piano settimanale, la lista della spesa, i preferiti, la dispensa, il quaderno e le note. Aspetto scuro, chiaro o automatico (segue il telefono), giro di benvenuto alla prima apertura e pagina Privacy con la possibilità di eliminare il tuo account e i tuoi dati. Slogan: Cosa mangiamo stasera?'},
   {v:'1.32.0', note:'Revisione completa delle 310 ricette: corrette dosi, ingredienti dimenticati o inutilizzati, tempi totali (compresi riposi, lievitazioni e raffreddamenti), temperature del forno con il valore per il ventilato e passaggi in ordine sbagliato in 114 ricette; tolto il peperoncino da amatriciana, puttanesca, aglio olio e tonno, broccoli e tacos. L\u2019interruttore \u201cEvita piatti a base di maiale\u201d ora riguarda solo la carne di maiale: pancetta, guanciale e prosciutto come condimento sono ammessi e segnalati con \u201cContiene salumi\u201d.'},
   {v:'1.31.0', note:'Altre 48 ricette di stagione (310 in totale): ora ci sono almeno 25 piatti specifici per ogni stagione (primavera 26, estate 58, autunno 25, inverno 25), oltre ai piatti adatti a pi\u00f9 stagioni e a quelli di tutto l\u2019anno. Novit\u00e0 di primavera: asparagi, carciofi, piselli, fave, fragole e agnello. Estate: panzanella, gazpacho, caponata, semifreddo al limone. Autunno: funghi porcini, zucca, polenta, castagnaccio, schiacciata all\u2019uva. Inverno: broccoli, cavolfiore, verza, cavolo nero, pollo alle arance.'},
   {v:'1.30.0', note:'Piatti di stagione: 90 ricette sono ora segnate come primaverili-estive o autunnali-invernali (con un\u2019etichetta nella scheda) e il piano automatico e \u201cSorprendimi\u201d preferiscono quelli adatti al periodo; l\u2019interruttore \u201cPreferisci i piatti di stagione\u201d si trova nel piano e nelle impostazioni. Riscritte con dosi e passaggi completi 43 ricette che erano troppo sintetiche (cous cous, farro, pasta e legumi, molti secondi di pollo, pesce e vegetariani).'},
@@ -3171,7 +3171,7 @@ function renderIo(){
   var nf = favCount();
   return '<div class="io-head"><div class="io-av">'+ico('chef')+'</div><div><h1>Io</h1><p>La tua cucina, su questo telefono</p></div></div>'+
     '<div class="io-list">'+
-      ioRow('users', 'Famiglia', accIoDesc(), '#/account')+
+      ioRow('users', 'Account e Famiglia', accIoDesc(), '#/account')+
     '</div>'+
     '<div class="io-list">'+
       ioRow('star', 'Preferiti', nf ? nf+(nf===1?' ricetta salvata':' ricette salvate') : 'Le ricette che ami di più', '#/preferiti')+
@@ -4445,11 +4445,11 @@ function renderPrivacy(){
     '<h2>Se crei un account</h2>'+
     '<p>Servono un’email e una password. Sono gestite da Firebase, il servizio di Google: la password non la vediamo mai. Se entri in una famiglia, piano, spesa, preferiti, dispensa, quaderno e note vengono salvati sui server Firebase di Google e li vedono soltanto i membri della famiglia. Le tue ricette e le foto non vengono caricate.</p>'+
     '<h2>Cancellare tutto</h2>'+
-    '<p>In “Famiglia” trovi “Elimina il mio account”: cancella l’account e il tuo profilo e ti fa uscire dalla famiglia. Se eri l’ultima persona, la famiglia e i suoi dati condivisi vengono eliminati; se ci sono altri membri, i dati condivisi restano a loro. Quello che hai su questo telefono resta finché non lo cancelli dalle impostazioni del browser o rimuovi l’app.</p>'+
+    '<p>In “Account e Famiglia” trovi “Elimina il mio account”: cancella l’account e il tuo profilo e ti fa uscire dalla famiglia. Se eri l’ultima persona, la famiglia e i suoi dati condivisi vengono eliminati; se ci sono altri membri, i dati condivisi restano a loro. Quello che hai su questo telefono resta finché non lo cancelli dalle impostazioni del browser o rimuovi l’app.</p>'+
     '<h2>Copia di sicurezza</h2>'+
     '<p>In Impostazioni puoi esportare un backup dei tuoi dati e ripristinarlo su un altro telefono.</p>'+
   '</div>';
-  h += '<div class="form-wrap"><button class="btn-ghost" onclick="nav(\'#/account\')">Vai a Famiglia</button></div>';
+  h += '<div class="form-wrap"><button class="btn-ghost" onclick="nav(\'#/account\')">Vai ad Account e Famiglia</button></div>';
   return h;
 }
 
@@ -4818,7 +4818,7 @@ function syncInit(){
 window.syncPollOnce = syncPollOnce;
 window.__sync = SYNC;
 
-/* ---- pagina Famiglia ---- */
+/* ---- pagina Account e Famiglia ---- */
 var accState = {busy:false, msg:'', err:''};
 function accSet(o){ accState = {busy:!!o.busy, msg:o.msg || '', err:o.err || ''}; if(/^#\/account/.test(location.hash)) render(); }
 function accRun(promiseFn, okMsg){
@@ -4899,7 +4899,7 @@ window.accCopyCode = function(){
 };
 window.accShareCode = function(){
   var c = SYNC.code || '';
-  var text = 'Entra nella nostra famiglia su “Il nostro ricettario”: apri l’app, vai su Io → Famiglia e scrivi il codice ' + c;
+  var text = 'Entra nella nostra famiglia su “Il nostro ricettario”: apri l’app, vai su Io → Account e Famiglia e scrivi il codice ' + c;
   try{ if(navigator.share){ navigator.share({title:'Il nostro ricettario', text:text}).catch(function(){}); return; } }catch(e){}
   window.accCopyCode();
 };
@@ -4947,8 +4947,8 @@ function accIoDesc(){
   return 'Condividi piano e spesa con chi vuoi';
 }
 function renderAccount(){
-  var h = topbar({back:'#/io', title:'Famiglia'});
-  h += '<div class="chero" style="padding-bottom:2px;"><h1>Famiglia</h1></div>';
+  var h = topbar({back:'#/io', title:'Account e Famiglia'});
+  h += '<div class="chero" style="padding-bottom:2px;"><h1>Account e Famiglia</h1></div>';
   var fb = '';
   if(accState.err) fb = '<div class="acc-msg err" role="alert">'+esc(accState.err)+'</div>';
   else if(accState.msg) fb = '<div class="acc-msg ok" role="status">'+esc(accState.msg)+'</div>';
