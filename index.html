@@ -1389,6 +1389,33 @@ html:not(.dark) .dice-choice .dc-ic{background:var(--grain),var(--grad);}
 .rrow .rfav{padding:11px;margin:-11px;}
 .day-row-wrap .dx{min-width:40px;min-height:40px;}
 .danger-btn{min-height:42px;}
+
+/* famiglia / account */
+.field input[type=email],.field input[type=password]{width:100%;box-sizing:border-box;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:var(--sans);font-size:16px;}
+.field input[type=email]:focus,.field input[type=password]:focus{outline:2px solid var(--g2);outline-offset:1px;}
+.acc-form .btn-primary,.acc-form .btn-ghost,.acc-card .btn-primary,.acc-card .btn-ghost{width:100%;margin-top:10px;}
+.acc-link{display:block;margin:14px auto 0;border:none;background:none;color:var(--ink-soft);font-family:var(--sans);font-weight:700;font-size:13.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:8px;}
+.acc-who{display:flex;align-items:center;gap:10px;margin:6px 20px 0;color:var(--ink-soft);font-weight:700;font-size:14px;}
+.acc-who .ico{width:20px;height:20px;}
+.acc-card{margin:14px 16px 0;padding:18px 18px 18px;border-radius:22px;background:var(--card);border:1px solid var(--line);}
+.acc-card h2{font-family:var(--serif);font-size:25px;font-weight:600;margin:0 0 12px;}
+.acc-hint{font-size:12.5px;color:var(--ink-soft);margin:10px 0 0;line-height:1.45;}
+.acc-msg{margin:12px 20px 0;padding:11px 14px;border-radius:14px;font-size:14px;font-weight:600;line-height:1.4;}
+.acc-form .acc-msg{margin:0 0 12px;}
+.acc-msg.err{background:rgba(216,80,63,.14);color:var(--brick);border:1px solid rgba(216,80,63,.4);}
+.acc-msg.ok{background:var(--gold-soft);color:var(--ink);border:1px solid var(--line);}
+.acc-busy{margin:10px 20px;font-size:13px;font-weight:700;color:var(--ink-soft);}
+.acc-fam{margin:14px 20px 0;}
+.acc-fn{font-family:var(--serif);font-size:30px;font-weight:600;line-height:1.05;}
+.acc-fm{font-size:13.5px;color:var(--ink-soft);font-weight:600;margin-top:4px;}
+.acc-st.bad{color:var(--brick);}
+.acc-codebox{margin:16px 16px 0;padding:18px;border-radius:22px;background:var(--card);border:1px solid var(--line);text-align:center;}
+.acc-cl{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;color:var(--gold);}
+.acc-code{font-family:var(--serif);font-size:42px;font-weight:700;letter-spacing:.14em;margin:6px 0 12px;color:var(--ink);user-select:all;-webkit-user-select:all;font-variant-numeric:lining-nums;}
+.acc-cbtns{display:flex;gap:10px;}
+.acc-cbtns button{flex:1;margin:0;}
+.acc-foot{margin:18px 20px 40px;display:flex;flex-direction:column;gap:6px;align-items:stretch;}
+.acc-foot .danger-btn{width:100%;}
 </style>
 </head>
 <body>
@@ -1414,7 +1441,7 @@ var CHAPTERS = DATA.chapters;
 /* ---------- versione app ---------- */
 var APP_VERSION = '2.0.0';
 var VERSION_LOG = [
-  {v:'2.0.0', note:'Nuova versione ufficiale: rebranding \u201cCucina serale\u201d con logo “tavola apparecchiata”, titoli in Cormorant, sfumature che cambiano con la stagione e tema scuro o avorio. Barra in basso (Ricette, Piano, Spesa, Frigo, Io), nuova home con la card \u201cStasera\u201d (il piatto del piano di oggi o un\u2019idea di stagione), dado animato per \u201cSorprendimi\u201d che chiede se vuoi un primo o un secondo (il secondo arriva con un contorno in accompagnamento), copertine per ogni capitolo, icone nuove al posto delle emoji, illustrazioni per le ricette senza foto e nuova schermata iniziale animata. Nuova pagina \u201cIo\u201d con i Preferiti, le tue ricette, il quaderno e le impostazioni. Slogan: Cosa mangiamo stasera?'},
+  {v:'2.0.0', note:'Nuova versione ufficiale: rebranding \u201cCucina serale\u201d con logo “tavola apparecchiata”, titoli in Cormorant, sfumature che cambiano con la stagione e tema scuro o avorio. Barra in basso (Ricette, Piano, Spesa, Frigo, Io), nuova home con la card \u201cStasera\u201d (il piatto del piano di oggi o un\u2019idea di stagione), dado animato per \u201cSorprendimi\u201d che chiede se vuoi un primo o un secondo (il secondo arriva con un contorno in accompagnamento), copertine per ogni capitolo, icone nuove al posto delle emoji, illustrazioni per le ricette senza foto e nuova schermata iniziale animata. Nuova pagina \u201cIo\u201d con i Preferiti, le tue ricette, il quaderno e le impostazioni. Nuova sezione \u201cFamiglia\u201d: accedi con email e password, crea la famiglia o entra con un codice invito e condividi tra pi\u00f9 telefoni il piano settimanale, la lista della spesa, i preferiti, la dispensa, il quaderno e le note. Slogan: Cosa mangiamo stasera?'},
   {v:'1.32.0', note:'Revisione completa delle 310 ricette: corrette dosi, ingredienti dimenticati o inutilizzati, tempi totali (compresi riposi, lievitazioni e raffreddamenti), temperature del forno con il valore per il ventilato e passaggi in ordine sbagliato in 114 ricette; tolto il peperoncino da amatriciana, puttanesca, aglio olio e tonno, broccoli e tacos. L\u2019interruttore \u201cEvita piatti a base di maiale\u201d ora riguarda solo la carne di maiale: pancetta, guanciale e prosciutto come condimento sono ammessi e segnalati con \u201cContiene salumi\u201d.'},
   {v:'1.31.0', note:'Altre 48 ricette di stagione (310 in totale): ora ci sono almeno 25 piatti specifici per ogni stagione (primavera 26, estate 58, autunno 25, inverno 25), oltre ai piatti adatti a pi\u00f9 stagioni e a quelli di tutto l\u2019anno. Novit\u00e0 di primavera: asparagi, carciofi, piselli, fave, fragole e agnello. Estate: panzanella, gazpacho, caponata, semifreddo al limone. Autunno: funghi porcini, zucca, polenta, castagnaccio, schiacciata all\u2019uva. Inverno: broccoli, cavolfiore, verza, cavolo nero, pollo alle arance.'},
   {v:'1.30.0', note:'Piatti di stagione: 90 ricette sono ora segnate come primaverili-estive o autunnali-invernali (con un\u2019etichetta nella scheda) e il piano automatico e \u201cSorprendimi\u201d preferiscono quelli adatti al periodo; l\u2019interruttore \u201cPreferisci i piatti di stagione\u201d si trova nel piano e nelle impostazioni. Riscritte con dosi e passaggi completi 43 ricette che erano troppo sintetiche (cous cous, farro, pasta e legumi, molti secondi di pollo, pesce e vegetariani).'},
@@ -1529,10 +1556,13 @@ function lsGet(key){
   try{ return localStorage.getItem(key); }catch(e){ return null; }
 }
 function lsSet(key, val){
-  try{ localStorage.setItem(key, val); return true; }catch(e){ return false; }
+  try{ localStorage.setItem(key, val); }catch(e){ return false; }
+  try{ syncNoteChange(key); }catch(e){}
+  return true;
 }
 function lsRemove(key){
   try{ localStorage.removeItem(key); }catch(e){}
+  try{ syncNoteChange(key); }catch(e){}
 }
 
 
@@ -1930,6 +1960,7 @@ ICONS.sun='<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h
 ICONS.snow='<path d="M12 3v18M4.200 7.500l15.600 9M4.200 16.500l15.600-9M9.500 4.500L12 7l2.500-2.500M9.500 19.500L12 17l2.500 2.500"/>';
 ICONS.bell='<path d="M6 17.500V11a6 6 0 0 1 12 0v6.500l1.500 1.500h-15z"/><path d="M10 21a2 2 0 0 0 4 0"/>';
 ICONS.link='<path d="M10 14a4 4 0 0 0 5.700 0l3-3a4 4 0 0 0-5.700-5.700l-1 1"/><path d="M14 10a4 4 0 0 0-5.700 0l-3 3a4 4 0 0 0 5.700 5.700l1-1"/>';
+ICONS.users='<circle cx="9" cy="8.500" r="3.300"/><path d="M2.800 19.500c.6-3.400 3-5.200 6.200-5.200s5.600 1.800 6.200 5.200"/><path d="M15.500 5.500a3.300 3.300 0 0 1 0 6M18 14.600c1.900.7 3 2.300 3.300 4.900"/>';
 var FILLED_ICONS = {};
 function ico(name, size, cls){
   var p = ICONS[name] || ICONS.utensils;
@@ -2556,6 +2587,7 @@ function parseHash(){
     return {view:'filtro', tipo:parts[1]};
   }
   if(parts[0] === 'io'){ return {view:'io'}; }
+  if(parts[0] === 'account'){ return {view:'account'}; }
   if(parts[0] === 'preferiti'){ return {view:'preferiti'}; }
   if(parts[0] === 'lista-base'){
     return {view:'listabase'};
@@ -2803,7 +2835,7 @@ function tabFor(route){
   if(v === 'piano' || v === 'pianopick') return 'piano';
   if(v === 'spesa' || v === 'dispensa' || v === 'listabase') return 'spesa';
   if(v === 'svuotafrigo') return 'frigo';
-  if(v === 'io' || v === 'preferiti' || v === 'impostazioni' || v === 'novita' || v === 'quaderno' || v === 'quadernonuovo' || v === 'esporta') return 'io';
+  if(v === 'io' || v === 'account' || v === 'preferiti' || v === 'impostazioni' || v === 'novita' || v === 'quaderno' || v === 'quadernonuovo' || v === 'esporta') return 'io';
   if(v === 'chapter' && route.cnum === CUSTOM_CHAPTER_NUM) return 'io';
   return 'ricette';
 }
@@ -3078,6 +3110,9 @@ function favCount(){ return Object.keys(favorites).filter(function(k){ return fa
 function renderIo(){
   var nf = favCount();
   return '<div class="io-head"><div class="io-av">'+ico('chef')+'</div><div><h1>Io</h1><p>La tua cucina, su questo telefono</p></div></div>'+
+    '<div class="io-list">'+
+      ioRow('users', 'Famiglia', accIoDesc(), '#/account')+
+    '</div>'+
     '<div class="io-list">'+
       ioRow('star', 'Preferiti', nf ? nf+(nf===1?' ricetta salvata':' ricette salvate') : 'Le ricette che ami di più', '#/preferiti')+
       ioRow('plus', 'Aggiungi una ricetta', 'Scrivi o fotografa una tua ricetta', '#/nuova')+
@@ -4258,6 +4293,7 @@ function render(){
   else if(route.view === 'svuotafrigo') html = renderSvuotaFrigo();
   else if(route.view === 'quaderno') html = renderQuaderno();
   else if(route.view === 'quadernonuovo') html = renderQuadernoNuovo();
+  else if(route.view === 'account') html = renderAccount();
   else if(route.view === 'io') html = renderIo();
   else if(route.view === 'preferiti') html = renderPreferiti();
   else html = renderNotFound();
@@ -4279,6 +4315,504 @@ function render(){
   }
 }
 
+/* =====================================================================
+   Account e famiglia (Firebase, solo REST: nessuna libreria esterna)
+   - accesso con email e password
+   - famiglia con codice invito
+   - sincronizza: piano, spesa, dispensa, preferiti, quaderno, note
+   Se non si accede, l'app funziona come sempre, solo su questo telefono.
+   ===================================================================== */
+var FB_CFG = {apiKey:'AIzaSyCnd5RVqfp7tMSG8dRcwf8epWaDhEEqzFU', projectId:'ricettario-famiglia-b5837'};
+var FB_HOSTS = {auth:'https://identitytoolkit.googleapis.com', token:'https://securetoken.googleapis.com', fs:'https://firestore.googleapis.com'};
+var SYNC_POLL_MS = 45000;
+try{
+  /* solo per i test automatici, solo in locale */
+  if(location.hostname === 'localhost' && window.__FB_TEST__){
+    FB_HOSTS = window.__FB_TEST__.hosts || FB_HOSTS;
+    if(window.__FB_TEST__.poll) SYNC_POLL_MS = window.__FB_TEST__.poll;
+  }
+}catch(e){}
+
+var LS_SYNC = 'ricettario_sync_v1';
+var SYNC_DOCS = {
+  piano:     {key:LS_PIANO,     empty:'{}', label:'Piano settimanale'},
+  spesa:     {key:LS_SPESA,     empty:'{}', label:'Lista della spesa'},
+  dispensa:  {key:LS_DISPENSA,  empty:null, label:'Dispensa'},
+  preferiti: {key:LS_FAV,       empty:'[]', label:'Preferiti'},
+  quaderno:  {key:LS_QUADERNO,  empty:'[]', label:'Quaderno'},
+  note:      {key:LS_NOTES,     empty:'{}', label:'Note'}
+};
+var SYNC_BYKEY = {};
+Object.keys(SYNC_DOCS).forEach(function(n){ SYNC_BYKEY[SYNC_DOCS[n].key] = n; });
+
+var SYNC = (function(){
+  var s = null;
+  try{ s = JSON.parse(lsGet(LS_SYNC) || 'null'); }catch(e){ s = null; }
+  if(!s || typeof s !== 'object' || Array.isArray(s)) s = {};
+  s.seen = (s.seen && typeof s.seen === 'object') ? s.seen : {};
+  s.pending = (s.pending && typeof s.pending === 'object') ? s.pending : {};
+  return s;
+})();
+var syncMem = {idToken:null, exp:0, busy:false, err:'', info:'', online:true, timer:null, flushT:null, applying:false, polling:false};
+function syncSave(){ try{ localStorage.setItem(LS_SYNC, JSON.stringify(SYNC)); }catch(e){} }
+function syncSignedIn(){ return !!(SYNC.uid && SYNC.refresh); }
+function syncActive(){ return syncSignedIn() && !!SYNC.fid; }
+
+/* ---- rete ---- */
+function fbFetch(url, opts){
+  return fetch(url, opts).then(function(r){
+    return r.text().then(function(t){
+      var j = {}; try{ j = t ? JSON.parse(t) : {}; }catch(e){ j = {}; }
+      if(!r.ok){
+        var err = new Error((j && j.error && (j.error.message || j.error.status)) || ('HTTP '+r.status));
+        err.status = r.status; err.fb = j && j.error; throw err;
+      }
+      return j;
+    });
+  });
+}
+function fbErrText(e){
+  var m = String((e && e.message) || e || '');
+  if(e && e.name === 'TypeError') return 'Nessuna connessione. Riprova quando sei online.';
+  if(/EMAIL_EXISTS/.test(m)) return 'Esiste già un account con questa email. Usa “Accedi”.';
+  if(/EMAIL_NOT_FOUND|INVALID_PASSWORD|INVALID_LOGIN_CREDENTIALS/.test(m)) return 'Email o password non corrette.';
+  if(/WEAK_PASSWORD/.test(m)) return 'La password deve avere almeno 6 caratteri.';
+  if(/INVALID_EMAIL|MISSING_EMAIL/.test(m)) return 'Controlla l’indirizzo email.';
+  if(/MISSING_PASSWORD/.test(m)) return 'Scrivi la password.';
+  if(/TOO_MANY_ATTEMPTS/.test(m)) return 'Troppi tentativi. Aspetta qualche minuto e riprova.';
+  if(/OPERATION_NOT_ALLOWED/.test(m)) return 'L’accesso con email e password non è attivo nel progetto Firebase (Authentication → Metodo di accesso → Email/password).';
+  if(/USER_DISABLED/.test(m)) return 'Questo account è stato disattivato.';
+  if(/TOKEN_EXPIRED|INVALID_REFRESH_TOKEN|USER_NOT_FOUND/.test(m)) return 'Sessione scaduta: accedi di nuovo.';
+  if(/has not been used|SERVICE_DISABLED|is disabled/i.test(m)) return 'Il database Firestore non è attivo: in Firebase apri Firestore Database e premi “Crea database”.';
+  if(/does not exist/i.test(m)) return 'Il database Firestore non risulta creato (Firebase → Firestore Database → Crea database).';
+  if(/PERMISSION_DENIED|Missing or insufficient permissions/i.test(m) || (e && e.status === 403)) return 'Permesso negato dal database. Controlla di aver incollato le regole di sicurezza in Firestore.';
+  if(/NOT_FOUND/.test(m) || (e && e.status === 404)) return 'Il database Firestore non risulta creato (Firebase → Firestore Database → Crea database).';
+  if(/CODE_NOT_VALID/.test(m)) return 'Codice invito non valido.';
+  return 'Qualcosa non ha funzionato (' + m.slice(0, 80) + ').';
+}
+function fbIsAuthDead(e){ return /TOKEN_EXPIRED|INVALID_REFRESH_TOKEN|USER_NOT_FOUND|USER_DISABLED/.test(String((e && e.message) || '')); }
+
+/* ---- autenticazione ---- */
+function fbSetSession(j){
+  syncMem.idToken = j.idToken || j.id_token || syncMem.idToken;
+  var secs = parseInt(j.expiresIn || j.expires_in || '3600', 10) || 3600;
+  syncMem.exp = Date.now() + secs * 1000;
+  SYNC.refresh = j.refreshToken || j.refresh_token || SYNC.refresh;
+  SYNC.uid = j.localId || j.user_id || SYNC.uid;
+  if(j.email) SYNC.email = j.email;
+  syncSave();
+}
+function fbAuth(path, body){
+  return fbFetch(FB_HOSTS.auth + '/v1/' + path + '?key=' + encodeURIComponent(FB_CFG.apiKey), {
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)
+  });
+}
+function fbToken(){
+  if(syncMem.idToken && Date.now() < syncMem.exp - 60000) return Promise.resolve(syncMem.idToken);
+  if(!SYNC.refresh) return Promise.reject(new Error('TOKEN_EXPIRED'));
+  return fbFetch(FB_HOSTS.token + '/v1/token?key=' + encodeURIComponent(FB_CFG.apiKey), {
+    method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:'grant_type=refresh_token&refresh_token=' + encodeURIComponent(SYNC.refresh)
+  }).then(function(j){ fbSetSession(j); return syncMem.idToken; });
+}
+
+/* ---- Firestore (REST) ---- */
+function fsBase(){ return FB_HOSTS.fs + '/v1/projects/' + FB_CFG.projectId + '/databases/(default)/documents'; }
+function fsName(path){ return 'projects/' + FB_CFG.projectId + '/databases/(default)/documents/' + path; }
+function fsReq(method, urlTail, body, retried){
+  return fbToken().then(function(tok){
+    var o = {method:method, headers:{'Authorization':'Bearer ' + tok}};
+    if(body !== undefined){ o.headers['Content-Type'] = 'application/json'; o.body = JSON.stringify(body); }
+    return fbFetch(fsBase() + urlTail, o);
+  }).catch(function(e){
+    if(e && e.status === 401 && !retried){ syncMem.idToken = null; return fsReq(method, urlTail, body, true); }
+    throw e;
+  });
+}
+function fsGet(path){
+  return fsReq('GET', '/' + path).catch(function(e){ if(e && e.status === 404 && !/does not exist/i.test(String(e.message))) return null; throw e; });
+}
+function fsCommit(writes){ return fsReq('POST', ':commit', {writes:writes}); }
+function fsStr(v){ return {stringValue:String(v)}; }
+function fsInt(v){ return {integerValue:String(v)}; }
+function fsField(doc, name){
+  var f = doc && doc.fields && doc.fields[name]; if(!f) return undefined;
+  if('stringValue' in f) return f.stringValue;
+  if('integerValue' in f) return parseInt(f.integerValue, 10);
+  if('arrayValue' in f) return ((f.arrayValue && f.arrayValue.values) || []).map(function(x){ return x.stringValue; });
+  if('mapValue' in f) return f.mapValue.fields || {};
+  if('nullValue' in f) return null;
+  return undefined;
+}
+function randId(n, alphabet){
+  var out = '', arr = new Uint32Array(n);
+  try{ crypto.getRandomValues(arr); }catch(e){ for(var i=0;i<n;i++) arr[i] = Math.floor(Math.random()*4294967296); }
+  for(var k=0;k<n;k++) out += alphabet.charAt(arr[k] % alphabet.length);
+  return out;
+}
+var CODE_ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function newInviteCode(){ return randId(8, CODE_ALPHA); }
+
+/* ---- profilo e famiglia ---- */
+function loadMyFamily(){
+  return fsGet('users/' + SYNC.uid).then(function(u){
+    var fid = u ? fsField(u, 'fid') : null;
+    if(!fid){ SYNC.fid = null; SYNC.fname = null; SYNC.code = null; SYNC.members = 0; syncSave(); return null; }
+    return fsGet('families/' + fid).then(function(f){
+      if(!f){ SYNC.fid = null; SYNC.fname = null; SYNC.code = null; SYNC.members = 0; syncSave(); return null; }
+      var members = fsField(f, 'members') || [];
+      if(members.indexOf(SYNC.uid) === -1){ SYNC.fid = null; SYNC.fname = null; SYNC.code = null; SYNC.members = 0; syncSave(); return null; }
+      SYNC.fid = fid; SYNC.fname = fsField(f, 'name') || 'La nostra famiglia';
+      SYNC.code = fsField(f, 'code') || ''; SYNC.members = members.length; syncSave();
+      return fid;
+    });
+  });
+}
+function setUserFid(fid){
+  var fields = fid ? {fid:fsStr(fid)} : {};
+  return fsCommit([{update:{name:fsName('users/' + SYNC.uid), fields:fields}, updateMask:{fieldPaths:['fid']}}]);
+}
+function createFamily(name){
+  var fid = randId(20, 'abcdefghijklmnopqrstuvwxyz0123456789');
+  var code = newInviteCode();
+  name = (name || '').trim().slice(0, 60) || 'La nostra famiglia';
+  return fsCommit([{update:{name:fsName('families/' + fid), fields:{
+      name:fsStr(name), code:fsStr(code), members:{arrayValue:{values:[fsStr(SYNC.uid)]}}}},
+      currentDocument:{exists:false}}])
+  .then(function(){
+    return fsCommit([{update:{name:fsName('invites/' + code), fields:{fid:fsStr(fid)}}, currentDocument:{exists:false}}]);
+  }).then(function(){
+    return setUserFid(fid);
+  }).then(function(){
+    SYNC.fid = fid; SYNC.fname = name; SYNC.code = code; SYNC.members = 1; SYNC.seen = {}; syncSave();
+    /* i dati di questo telefono diventano quelli della famiglia */
+    Object.keys(SYNC_DOCS).forEach(function(n){ SYNC.pending[n] = Date.now(); });
+    syncSave();
+    return syncFlush();
+  });
+}
+function joinFamily(code){
+  code = String(code || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if(code.length < 6) return Promise.reject(new Error('CODE_NOT_VALID'));
+  return fsGet('invites/' + code).then(function(inv){
+    var fid = inv ? fsField(inv, 'fid') : null;
+    if(!fid) throw new Error('CODE_NOT_VALID');
+    return fsCommit([{transform:{document:fsName('families/' + fid), fieldTransforms:[
+      {fieldPath:'members', appendMissingElements:{values:[fsStr(SYNC.uid)]}}]}}]).then(function(){ return fid; });
+  }).then(function(fid){
+    return setUserFid(fid).then(function(){ return loadMyFamily(); });
+  }).then(function(){
+    /* i dati della famiglia sostituiscono quelli di questo telefono; quello che manca in famiglia viene caricato */
+    SYNC.seen = {}; SYNC.pending = {}; syncSave();
+    return syncPull(true);
+  });
+}
+function leaveFamily(){
+  var fid = SYNC.fid, code = SYNC.code, last = (SYNC.members || 0) <= 1;
+  var p = Promise.resolve();
+  if(last){
+    /* ultimo membro: ripulisce tutto (finché è ancora membro) */
+    p = fsCommit(Object.keys(SYNC_DOCS).concat(['meta']).map(function(n){ return {'delete':fsName('families/' + fid + '/state/' + n)}; }))
+      .then(function(){ return code ? fsCommit([{'delete':fsName('invites/' + code)}]) : null; })
+      .then(function(){ return fsCommit([{'delete':fsName('families/' + fid)}]); });
+  } else {
+    p = fsCommit([{transform:{document:fsName('families/' + fid), fieldTransforms:[
+      {fieldPath:'members', removeAllFromArray:{values:[fsStr(SYNC.uid)]}}]}}]);
+  }
+  return p.then(function(){ return setUserFid(null); }).then(function(){
+    SYNC.fid = null; SYNC.fname = null; SYNC.code = null; SYNC.members = 0; SYNC.seen = {}; SYNC.pending = {}; syncSave();
+  });
+}
+function renewCode(){
+  var old = SYNC.code, code = newInviteCode(), fid = SYNC.fid;
+  return fsCommit([{update:{name:fsName('invites/' + code), fields:{fid:fsStr(fid)}}, currentDocument:{exists:false}}])
+  .then(function(){
+    return fsCommit([{update:{name:fsName('families/' + fid), fields:{code:fsStr(code)}}, updateMask:{fieldPaths:['code']}, currentDocument:{exists:true}}]);
+  }).then(function(){
+    SYNC.code = code; syncSave();
+    return old ? fsCommit([{'delete':fsName('invites/' + old)}]).catch(function(){}) : null;
+  });
+}
+
+/* ---- sincronizzazione dei dati ---- */
+function syncLocalRaw(n){
+  var d = SYNC_DOCS[n], raw = lsGet(d.key);
+  if(raw === null || raw === undefined) raw = d.empty;
+  return raw;
+}
+function syncApply(n, raw){
+  var d = SYNC_DOCS[n];
+  syncMem.applying = true;
+  try{
+    try{ localStorage.setItem(d.key, raw); }catch(e){}
+    if(n === 'piano'){ piano = {}; loadPiano(); }
+    else if(n === 'spesa'){ spesaChecked = {}; loadSpesaChecked(); }
+    else if(n === 'dispensa'){ dispensa = {}; loadDispensa(); }
+    else if(n === 'preferiti'){ favorites = {}; loadFavorites(); }
+    else if(n === 'quaderno'){ quaderno = []; loadQuaderno(); }
+    else if(n === 'note'){ personalNotes = {}; loadNotes(); }
+  } finally { syncMem.applying = false; }
+}
+function syncNoteChange(key){
+  if(syncMem.applying || !syncActive()) return;
+  var n = SYNC_BYKEY[key]; if(!n) return;
+  SYNC.pending[n] = Date.now(); syncSave();
+  syncSchedule(1200);
+}
+function syncSchedule(ms){
+  if(syncMem.flushT) clearTimeout(syncMem.flushT);
+  syncMem.flushT = setTimeout(function(){ syncMem.flushT = null; syncFlush().catch(function(){}); }, ms);
+}
+function syncPushDoc(n){
+  var raw = syncLocalRaw(n);
+  if(raw === null || raw === undefined){ delete SYNC.pending[n]; syncSave(); return Promise.resolve(false); }
+  var ts = Date.now();
+  var base = 'families/' + SYNC.fid + '/state/';
+  return fsCommit([
+    {update:{name:fsName(base + n), fields:{json:fsStr(raw), ts:fsInt(ts), by:fsStr(SYNC.uid)}}},
+    {update:{name:fsName(base + 'meta'), fields:{updated:{mapValue:{fields:(function(){ var o = {}; o[n] = fsInt(ts); return o; })()}}}}, updateMask:{fieldPaths:['updated.' + n]}}
+  ]).then(function(){ SYNC.seen[n] = ts; delete SYNC.pending[n]; syncSave(); return true; });
+}
+function syncFlush(){
+  if(!syncActive()) return Promise.resolve();
+  var names = Object.keys(SYNC.pending).filter(function(n){ return SYNC_DOCS[n]; });
+  var chain = Promise.resolve();
+  names.forEach(function(n){ chain = chain.then(function(){ return syncPushDoc(n); }); });
+  return chain.then(function(){ syncMem.err = ''; syncMem.online = true; SYNC.last = Date.now(); syncSave(); })
+    .catch(function(e){ syncFail(e); throw e; });
+}
+function syncFail(e){
+  if(e && e.name === 'TypeError'){ syncMem.online = false; syncMem.err = ''; return; }
+  syncMem.err = fbErrText(e);
+  if(fbIsAuthDead(e)){ SYNC.refresh = null; syncMem.idToken = null; syncSave(); syncStop(); }
+}
+/* scarica le novità. first=true: appena entrati in famiglia (la famiglia vince, ciò che manca viene caricato) */
+function syncPull(first){
+  if(!syncActive()) return Promise.resolve();
+  var fid0 = SYNC.fid;
+  var base = 'families/' + SYNC.fid + '/state/';
+  return fsGet(base + 'meta').then(function(meta){
+    var upd = (meta && fsField(meta, 'updated')) || {};
+    var todo = [], push = [];
+    Object.keys(SYNC_DOCS).forEach(function(n){
+      var rts = upd[n] && upd[n].integerValue ? parseInt(upd[n].integerValue, 10) : 0;
+      var seen = SYNC.seen[n] || 0;
+      var pend = SYNC.pending[n] || 0;
+      if(rts && rts > seen){
+        if(pend && pend > rts && !first) return;          /* modifica locale più recente: vince, verrà caricata */
+        todo.push({n:n, ts:rts});
+      } else if(!rts && first){
+        if(syncLocalRaw(n) !== null) push.push(n);         /* la famiglia non ha ancora questo dato */
+      }
+    });
+    push.forEach(function(n){ SYNC.pending[n] = Date.now(); });
+    var chain = Promise.resolve(), changed = false;
+    todo.forEach(function(t){
+      chain = chain.then(function(){
+        return fsGet(base + t.n).then(function(doc){
+          var raw = doc ? fsField(doc, 'json') : null;
+          if(typeof raw === 'string'){ syncApply(t.n, raw); changed = true; }
+          SYNC.seen[t.n] = t.ts; delete SYNC.pending[t.n];
+        });
+      });
+    });
+    return chain.then(function(){ syncSave(); return changed; });
+  }).then(function(changed){
+    SYNC.last = Date.now(); syncMem.err = ''; syncMem.online = true; syncSave();
+    if(changed) syncRefreshUI();
+    return syncFlush();
+  }).catch(function(e){
+    if(SYNC.fid !== fid0) return;                       /* nel frattempo sei uscito dalla famiglia */
+    if(e && e.status === 403){
+      /* forse non fai più parte della famiglia: ricontrolla */
+      return loadMyFamily().then(function(fid){
+        if(!fid){ syncStop(); syncMem.err = ''; accState = {busy:false, msg:'', err:'Non fai più parte della famiglia.'}; syncRefreshUI(); return; }
+        syncFail(e); throw e;
+      });
+    }
+    syncFail(e); throw e;
+  });
+}
+function syncRefreshUI(){
+  try{
+    var a = document.activeElement;
+    if(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA')) return;   /* non interrompere chi sta scrivendo */
+    if(document.getElementById('diceov') && document.getElementById('diceov').classList.contains('show')) return;
+    render();
+  }catch(e){}
+}
+function syncPollOnce(){
+  if(!syncActive() || syncMem.polling) return Promise.resolve();
+  syncMem.polling = true;
+  var pre = /^#\/account/.test(location.hash) ? loadMyFamily().catch(function(){}) : Promise.resolve();
+  return pre.then(function(){ return syncActive() ? syncPull(false) : null; }).catch(function(){}).then(function(){ syncMem.polling = false; if(/^#\/account/.test(location.hash)) syncRefreshUI(); });
+}
+function syncStart(){
+  syncStop();
+  if(!syncActive()) return;
+  syncMem.timer = setInterval(function(){ if(!document.hidden) syncPollOnce(); }, SYNC_POLL_MS);
+}
+function syncStop(){ if(syncMem.timer){ clearInterval(syncMem.timer); syncMem.timer = null; } }
+function syncInit(){
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) syncPollOnce(); });
+  window.addEventListener('online', function(){ syncMem.online = true; syncPollOnce(); });
+  window.addEventListener('offline', function(){ syncMem.online = false; });
+  if(syncActive()){ syncStart(); syncPollOnce(); }
+}
+window.syncPollOnce = syncPollOnce;
+window.__sync = SYNC;
+
+/* ---- pagina Famiglia ---- */
+var accState = {busy:false, msg:'', err:''};
+function accSet(o){ accState = {busy:!!o.busy, msg:o.msg || '', err:o.err || ''}; if(/^#\/account/.test(location.hash)) render(); }
+function accRun(promiseFn, okMsg){
+  accSet({busy:true});
+  var p; try{ p = promiseFn(); }catch(e){ p = Promise.reject(e); }
+  return p.then(function(){ accSet({msg:okMsg || ''}); }).catch(function(e){
+    accSet({err:fbErrText(e)});
+    if(fbIsAuthDead(e)){ SYNC.refresh = null; syncMem.idToken = null; syncSave(); syncStop(); render(); }
+  });
+}
+function accVal(id){ var e = document.getElementById(id); return e ? e.value : ''; }
+function accAfterSignIn(){
+  return loadMyFamily().then(function(fid){
+    if(fid){ SYNC.seen = {}; SYNC.pending = {}; syncSave(); syncStart(); return syncPull(true); }
+  });
+}
+window.accSignIn = function(ev){
+  if(ev) ev.preventDefault();
+  var email = accVal('accEmail').trim(), pw = accVal('accPass');
+  if(!email || !pw){ accSet({err:'Scrivi email e password.'}); return false; }
+  SYNC.email = email; syncSave();
+  accRun(function(){
+    return fbAuth('accounts:signInWithPassword', {email:email, password:pw, returnSecureToken:true})
+      .then(function(j){ fbSetSession(j); SYNC.email = email; syncSave(); return accAfterSignIn(); });
+  }, 'Accesso eseguito.');
+  return false;
+};
+window.accSignUp = function(){
+  var email = accVal('accEmail').trim(), pw = accVal('accPass');
+  if(!email || !pw){ accSet({err:'Scrivi email e password (almeno 6 caratteri).'}); return; }
+  SYNC.email = email; syncSave();
+  accRun(function(){
+    return fbAuth('accounts:signUp', {email:email, password:pw, returnSecureToken:true})
+      .then(function(j){ fbSetSession(j); SYNC.email = email; syncSave(); return accAfterSignIn(); });
+  }, 'Account creato.');
+};
+window.accReset = function(){
+  var email = accVal('accEmail').trim();
+  if(!email){ accSet({err:'Scrivi prima la tua email.'}); return; }
+  accRun(function(){ return fbAuth('accounts:sendOobCode', {requestType:'PASSWORD_RESET', email:email}); }, 'Ti abbiamo scritto un’email per scegliere una nuova password (controlla anche lo spam).');
+};
+window.accCreateFamily = function(ev){
+  if(ev) ev.preventDefault();
+  var name = accVal('famName');
+  accRun(function(){ return createFamily(name).then(function(){ syncStart(); }); }, 'Famiglia creata. Ora condividi il codice con chi vuoi.');
+  return false;
+};
+window.accJoinFamily = function(ev){
+  if(ev) ev.preventDefault();
+  var code = accVal('famCode');
+  if(!code.trim()){ accSet({err:'Scrivi il codice invito.'}); return false; }
+  if(!confirm('Il piano, la spesa, i preferiti, la dispensa, il quaderno e le note di questo telefono saranno sostituiti da quelli della famiglia (quello che la famiglia non ha ancora verrà aggiunto). Continuare?')) return false;
+  accRun(function(){ return joinFamily(code).then(function(){ syncStart(); syncRefreshUI(); }); }, 'Sei entrato nella famiglia.');
+  return false;
+};
+window.accLeave = function(){
+  var last = (SYNC.members || 0) <= 1;
+  if(!confirm(last ? 'Sei l’unico membro: la famiglia e i dati condivisi online verranno eliminati. Le cose salvate su questo telefono restano. Continuare?' : 'Uscire dalla famiglia? Le cose salvate su questo telefono restano, ma non verranno più condivise.')) return;
+  accRun(function(){ return leaveFamily().then(function(){ syncStop(); }); }, 'Sei uscito dalla famiglia.');
+};
+window.accRenew = function(){
+  if(!confirm('Creare un nuovo codice? Il vecchio smetterà di funzionare (chi è già in famiglia resta).')) return;
+  accRun(function(){ return renewCode(); }, 'Nuovo codice creato.');
+};
+window.accSyncNow = function(){
+  accRun(function(){ return loadMyFamily().then(function(){ return syncFlush(); }).then(function(){ return syncPull(false); }); }, 'Tutto aggiornato.');
+};
+window.accSignOut = function(){
+  if(!confirm('Uscire dall’account? Le cose salvate su questo telefono restano; non verranno più sincronizzate finché non accedi di nuovo.')) return;
+  syncStop();
+  SYNC.refresh = null; SYNC.uid = null; SYNC.fid = null; SYNC.fname = null; SYNC.code = null; SYNC.members = 0; SYNC.seen = {}; SYNC.pending = {};
+  syncMem.idToken = null; syncSave(); accSet({msg:'Sei uscito dall’account.'});
+};
+window.accCopyCode = function(){
+  var c = SYNC.code || '';
+  try{ navigator.clipboard.writeText(c).then(function(){ accSet({msg:'Codice copiato: ' + c}); }, function(){ accSet({msg:'Codice: ' + c}); }); }
+  catch(e){ accSet({msg:'Codice: ' + c}); }
+};
+window.accShareCode = function(){
+  var c = SYNC.code || '';
+  var text = 'Entra nella nostra famiglia su “Il nostro ricettario”: apri l’app, vai su Io → Famiglia e scrivi il codice ' + c;
+  try{ if(navigator.share){ navigator.share({title:'Il nostro ricettario', text:text}).catch(function(){}); return; } }catch(e){}
+  window.accCopyCode();
+};
+function accStatusLine(){
+  if(!syncActive()) return '';
+  if(syncMem.err) return syncMem.err;
+  if(!syncMem.online) return 'Senza rete: le modifiche verranno inviate appena torni online.';
+  var pend = Object.keys(SYNC.pending).length;
+  if(pend) return 'Invio delle modifiche in corso…';
+  if(SYNC.last){ var d = new Date(SYNC.last); return 'Sincronizzato alle ' + ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2); }
+  return 'Pronto';
+}
+function accIoDesc(){
+  if(syncActive()) return (SYNC.fname || 'Famiglia') + ' · ' + (SYNC.members || 1) + (SYNC.members === 1 ? ' persona' : ' persone');
+  if(syncSignedIn()) return 'Accesso eseguito: crea o scegli la famiglia';
+  return 'Condividi piano e spesa con chi vuoi';
+}
+function renderAccount(){
+  var h = topbar({back:'#/io', title:'Famiglia'});
+  h += '<div class="chero" style="padding-bottom:2px;"><h1>Famiglia</h1></div>';
+  var fb = '';
+  if(accState.err) fb = '<div class="acc-msg err" role="alert">'+esc(accState.err)+'</div>';
+  else if(accState.msg) fb = '<div class="acc-msg ok" role="status">'+esc(accState.msg)+'</div>';
+  var dis = accState.busy ? ' disabled' : '';
+  var busy = accState.busy ? '<div class="acc-busy">Un momento…</div>' : '';
+
+  if(!syncSignedIn()){
+    h += '<div class="formnote">Crea un account per condividere il piano settimanale, la lista della spesa, i preferiti, la dispensa, il quaderno e le note con chi vuoi, per esempio con tua moglie. Senza account l’app funziona come sempre, solo su questo telefono.</div>';
+    h += '<form class="form-wrap acc-form" onsubmit="return accSignIn(event)">'+
+      '<div class="field"><label for="accEmail">Email</label><input type="email" id="accEmail" autocomplete="email" inputmode="email" autocapitalize="off" value="'+escAttr(SYNC.email || '')+'"></div>'+
+      '<div class="field"><label for="accPass">Password</label><input type="password" id="accPass" autocomplete="current-password" placeholder="Almeno 6 caratteri"></div>'+
+      fb + busy +
+      '<button type="submit" class="btn-primary"'+dis+'>Accedi</button>'+
+      '<button type="button" class="btn-ghost" onclick="accSignUp()"'+dis+'>Crea un nuovo account</button>'+
+      '<button type="button" class="acc-link" onclick="accReset()"'+dis+'>Password dimenticata?</button>'+
+    '</form>';
+    return h;
+  }
+  if(!syncActive()){
+    h += '<div class="acc-who">'+ico('user')+'<span>'+esc(SYNC.email || 'Account')+'</span></div>';
+    h += fb + busy;
+    h += '<form class="form-wrap acc-card" onsubmit="return accCreateFamily(event)">'+
+      '<h2>Crea la tua famiglia</h2>'+
+      '<div class="field"><label for="famName">Nome</label><input type="text" id="famName" maxlength="60" value="La nostra famiglia"></div>'+
+      '<button type="submit" class="btn-primary"'+dis+'>Crea la famiglia</button>'+
+      '<p class="acc-hint">I dati di questo telefono diventano quelli della famiglia. Poi avrai un codice da dare agli altri.</p>'+
+    '</form>';
+    h += '<form class="form-wrap acc-card" onsubmit="return accJoinFamily(event)">'+
+      '<h2>Hai un codice invito?</h2>'+
+      '<div class="field"><label for="famCode">Codice</label><input type="text" id="famCode" maxlength="12" autocapitalize="characters" autocomplete="off" placeholder="Per esempio K7M2Q9XP"></div>'+
+      '<button type="submit" class="btn-ghost"'+dis+'>Entra nella famiglia</button>'+
+    '</form>';
+    h += '<div class="acc-foot"><button class="acc-link" onclick="accSignOut()">Esci dall’account</button></div>';
+    return h;
+  }
+  /* in famiglia */
+  h += '<div class="acc-who">'+ico('user')+'<span>'+esc(SYNC.email || 'Account')+'</span></div>';
+  h += '<div class="acc-fam"><div class="acc-fn">'+esc(SYNC.fname || 'Famiglia')+'</div>'+
+       '<div class="acc-fm">'+(SYNC.members || 1)+((SYNC.members || 1) === 1 ? ' persona' : ' persone')+' · <span class="acc-st'+(syncMem.err ? ' bad' : '')+'">'+esc(accStatusLine())+'</span></div></div>';
+  h += fb + busy;
+  h += '<div class="acc-codebox"><div class="acc-cl">Codice invito</div><div class="acc-code" aria-label="Codice invito">'+esc(SYNC.code || '')+'</div>'+
+       '<div class="acc-cbtns"><button class="btn-ghost" onclick="accCopyCode()">Copia</button><button class="btn-primary" onclick="accShareCode()">Condividi</button></div>'+
+       '<button class="acc-link" onclick="accRenew()"'+dis+'>Crea un nuovo codice</button></div>';
+  h += '<div class="formnote">Condividete: ' + Object.keys(SYNC_DOCS).map(function(n){ return SYNC_DOCS[n].label.toLowerCase(); }).join(', ') + '. Le ricette che aggiungi tu restano su questo telefono.</div>';
+  h += '<div class="form-wrap"><button class="btn-ghost" onclick="accSyncNow()"'+dis+'>Sincronizza ora</button></div>';
+  h += '<div class="acc-foot"><button class="danger-btn" onclick="accLeave()"'+dis+'>Esci dalla famiglia</button><button class="acc-link" onclick="accSignOut()">Esci dall’account</button></div>';
+  return h;
+}
+
 document.addEventListener('DOMContentLoaded', function(){
   appEl = document.getElementById('app');
   applyNumMigrations();
@@ -4292,6 +4826,7 @@ document.addEventListener('DOMContentLoaded', function(){
   loadQuaderno();
   buildSearchIndex();
   render();
+  syncInit();
 });
 window.addEventListener('hashchange', render);
 loadTheme();

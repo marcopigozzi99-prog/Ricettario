@@ -45,6 +45,8 @@ self.addEventListener('notificationclick', function(event){
 
 self.addEventListener('fetch', function(event){
   if(event.request.method !== 'GET') return;
+  /* richieste verso altri siti (Firebase per account e famiglia): mai dalla cache */
+  try{ if(new URL(event.request.url).origin !== self.location.origin) return; }catch(e){ return; }
   event.respondWith(
     caches.match(event.request).then(function(cached){
       var network = fetch(event.request).then(function(resp){
