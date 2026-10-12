@@ -1483,8 +1483,9 @@ var DATA = JSON.parse(document.getElementById('data').textContent);
 var CHAPTERS = DATA.chapters;
 
 /* ---------- versione app ---------- */
-var APP_VERSION = '2.0.0';
+var APP_VERSION = '2.0.1';
 var VERSION_LOG = [
+  {v:'2.0.1', note:'Piano settimanale: i tasti \u201cUsciamo a mangiare fuori\u201d e \u201cSgarro\u201d sono ora disponibili sia a pranzo sia a cena, e le note libere si vedono come semplice testo, senza icona.'},
   {v:'2.0.0', note:'Nuova versione ufficiale: rebranding \u201cCucina serale\u201d con logo “tavola apparecchiata”, titoli in Cormorant, sfumature che cambiano con la stagione e tema scuro o avorio. Barra in basso (Ricette, Piano, Spesa, Frigo, Io), nuova home con la card \u201cStasera\u201d (il piatto del piano di oggi o un\u2019idea di stagione), dado animato per \u201cSorprendimi\u201d che chiede se vuoi un primo o un secondo (il secondo arriva con un contorno in accompagnamento), copertine per ogni capitolo, icone nuove al posto delle emoji, illustrazioni per le ricette senza foto e nuova schermata iniziale animata. Nuova pagina \u201cIo\u201d con i Preferiti, le tue ricette, il quaderno e le impostazioni. Nuova sezione \u201cAccount e Famiglia\u201d: accedi con email e password, crea la famiglia o entra con un codice invito e condividi tra pi\u00f9 telefoni il piano settimanale, la lista della spesa, i preferiti, la dispensa, il quaderno e le note. Aspetto scuro, chiaro o automatico (segue il telefono), giro di benvenuto alla prima apertura e pagina Privacy con la possibilità di eliminare il tuo account e i tuoi dati. Slogan: Cosa mangiamo stasera?'},
   {v:'1.32.0', note:'Revisione completa delle 310 ricette: corrette dosi, ingredienti dimenticati o inutilizzati, tempi totali (compresi riposi, lievitazioni e raffreddamenti), temperature del forno con il valore per il ventilato e passaggi in ordine sbagliato in 114 ricette; tolto il peperoncino da amatriciana, puttanesca, aglio olio e tonno, broccoli e tacos. L\u2019interruttore \u201cEvita piatti a base di maiale\u201d ora riguarda solo la carne di maiale: pancetta, guanciale e prosciutto come condimento sono ammessi e segnalati con \u201cContiene salumi\u201d.'},
   {v:'1.31.0', note:'Altre 48 ricette di stagione (310 in totale): ora ci sono almeno 25 piatti specifici per ogni stagione (primavera 26, estate 58, autunno 25, inverno 25), oltre ai piatti adatti a pi\u00f9 stagioni e a quelli di tutto l\u2019anno. Novit\u00e0 di primavera: asparagi, carciofi, piselli, fave, fragole e agnello. Estate: panzanella, gazpacho, caponata, semifreddo al limone. Autunno: funghi porcini, zucca, polenta, castagnaccio, schiacciata all\u2019uva. Inverno: broccoli, cavolfiore, verza, cavolo nero, pollo alle arance.'},
@@ -2399,7 +2400,7 @@ var PIANO_SPECIALS = {
 window.markPianoSpecial = function(slot, kind){
   piano[slot] = {special: kind};
   var day = slot.split('-')[0];
-  delete piano[day+'-contorno']; /* la cena fuori non ha bisogno di un contorno */
+  if(slot.split('-')[1] === 'cena') delete piano[day+'-contorno']; /* la cena fuori non ha bisogno di un contorno */
   savePiano();
   nav('#/piano');
 };
@@ -3598,7 +3599,7 @@ function pianoRowHtml(slot, meal){
     mainLabel = '<div class="rt">'+esc(PIANO_SPECIALS[assigned.special] ? PIANO_SPECIALS[assigned.special].label : 'Uscita')+'</div>';
     mainHref = '#/piano/pick/'+slot;
   } else if(isWish){
-    mainLabel = '<div class="rt" style="font-style:italic;color:var(--ink-soft);">'+ico('note')+' '+esc(assigned.customText)+'</div>';
+    mainLabel = '<div class="rt" style="font-style:italic;color:var(--ink-soft);">'+esc(assigned.customText)+'</div>';
     mainHref = '#/piano/pick/'+slot;
   } else if(rec){
     mainLabel = '<div class="rt">'+esc(rec.recipe.title)+'</div>';
@@ -3698,7 +3699,7 @@ function renderPianoPick(slot){
   var meal = pianoMealByKey(parts[1]);
   var label = (day?day.label:'') + ' \u2014 ' + (meal?meal.label:'');
   var html = topbar({back:'#/piano', title:label});
-  if(parts[1] === 'cena'){
+  if(parts[1] !== 'contorno'){
     html += '<div class="form-wrap" style="padding-bottom:0;">'+
       Object.keys(PIANO_SPECIALS).map(function(k){
         var s = PIANO_SPECIALS[k];
