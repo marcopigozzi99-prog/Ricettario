@@ -1485,7 +1485,7 @@ var CHAPTERS = DATA.chapters;
 /* ---------- versione app ---------- */
 var APP_VERSION = '2.0.1';
 var VERSION_LOG = [
-  {v:'2.0.1', note:'Otto nuovi hamburger di carne (318 ricette in totale): di tacchino, di tacchino e zucchine, di pollo e ricotta, di scottona con cipolla caramellata, cheeseburger con pancetta croccante, di vitello alle erbe, alla pizzaiola e di agnello con yogurt e menta. Piano settimanale: i tasti \u201cUsciamo a mangiare fuori\u201d e \u201cSgarro\u201d sono ora disponibili sia a pranzo sia a cena, e le note libere si vedono come semplice testo, senza icona.'},
+  {v:'2.0.1', note:'Otto nuovi hamburger di carne (318 ricette in totale): di tacchino, di tacchino e zucchine, di pollo e ricotta, di scottona con cipolla caramellata, cheeseburger con pancetta croccante, di vitello alle erbe, alla pizzaiola e di agnello con yogurt e menta. Piano settimanale: i tasti \u201cUsciamo a mangiare fuori\u201d e \u201cSgarro\u201d sono ora disponibili sia a pranzo sia a cena, e le note libere si vedono come semplice testo, senza icona. Nelle Impostazioni trovi \u201cSchermo sempre acceso\u201d. Da Io puoi anche \u201cImportare da Instagram\u201d: incolli il testo di un post e l\u2019app riconosce titolo, ingredienti e passaggi, che controlli prima di salvare.'},
   {v:'2.0.0', note:'Nuova versione ufficiale: rebranding \u201cCucina serale\u201d con logo “tavola apparecchiata”, titoli in Cormorant, sfumature che cambiano con la stagione e tema scuro o avorio. Barra in basso (Ricette, Piano, Spesa, Frigo, Io), nuova home con la card \u201cStasera\u201d (il piatto del piano di oggi o un\u2019idea di stagione), dado animato per \u201cSorprendimi\u201d che chiede se vuoi un primo o un secondo (il secondo arriva con un contorno in accompagnamento), copertine per ogni capitolo, icone nuove al posto delle emoji, illustrazioni per le ricette senza foto e nuova schermata iniziale animata. Nuova pagina \u201cIo\u201d con i Preferiti, le tue ricette, il quaderno e le impostazioni. Nuova sezione \u201cAccount e Famiglia\u201d: accedi con email e password, crea la famiglia o entra con un codice invito e condividi tra pi\u00f9 telefoni il piano settimanale, la lista della spesa, i preferiti, la dispensa, il quaderno e le note. Aspetto scuro, chiaro o automatico (segue il telefono), giro di benvenuto alla prima apertura e pagina Privacy con la possibilità di eliminare il tuo account e i tuoi dati. Slogan: Cosa mangiamo stasera?'},
   {v:'1.32.0', note:'Revisione completa delle 310 ricette: corrette dosi, ingredienti dimenticati o inutilizzati, tempi totali (compresi riposi, lievitazioni e raffreddamenti), temperature del forno con il valore per il ventilato e passaggi in ordine sbagliato in 114 ricette; tolto il peperoncino da amatriciana, puttanesca, aglio olio e tonno, broccoli e tacos. L\u2019interruttore \u201cEvita piatti a base di maiale\u201d ora riguarda solo la carne di maiale: pancetta, guanciale e prosciutto come condimento sono ammessi e segnalati con \u201cContiene salumi\u201d.'},
   {v:'1.31.0', note:'Altre 48 ricette di stagione (310 in totale): ora ci sono almeno 25 piatti specifici per ogni stagione (primavera 26, estate 58, autunno 25, inverno 25), oltre ai piatti adatti a pi\u00f9 stagioni e a quelli di tutto l\u2019anno. Novit\u00e0 di primavera: asparagi, carciofi, piselli, fave, fragole e agnello. Estate: panzanella, gazpacho, caponata, semifreddo al limone. Autunno: funghi porcini, zucca, polenta, castagnaccio, schiacciata all\u2019uva. Inverno: broccoli, cavolfiore, verza, cavolo nero, pollo alle arance.'},
@@ -2626,7 +2626,7 @@ function parseHash(){
     return {view:'search', q: (function(){ try{ return decodeURIComponent(parts[1]||''); }catch(e){ return parts[1]||''; } })()};
   }
   if(parts[0] === 'nuova'){
-    return {view:'nuova'};
+    return {view:'nuova', imported: parts[1] === 'importata'};
   }
   if(parts[0] === 'esporta'){
     return {view:'esporta'};
@@ -2657,6 +2657,7 @@ function parseHash(){
   }
   if(parts[0] === 'io'){ return {view:'io'}; }
   if(parts[0] === 'account'){ return {view:'account'}; }
+  if(parts[0] === 'importa'){ return {view:'importa'}; }
   if(parts[0] === 'privacy'){ return {view:'privacy'}; }
   if(parts[0] === 'preferiti'){ return {view:'preferiti'}; }
   if(parts[0] === 'lista-base'){
@@ -2742,7 +2743,7 @@ window.submitNewRecipe = function(ev){
     notes: notes,
     photo: pendingPhotoData || null
   };
-  var num = addCustomRecipe(recipe);
+  var num = addCustomRecipe(recipe); importDraft = null;
   pendingPhotoData = null;
   nav('#/c/'+CUSTOM_CHAPTER_NUM+'/r/'+num);
   return false;
@@ -2905,7 +2906,7 @@ function tabFor(route){
   if(v === 'piano' || v === 'pianopick') return 'piano';
   if(v === 'spesa' || v === 'dispensa' || v === 'listabase') return 'spesa';
   if(v === 'svuotafrigo') return 'frigo';
-  if(v === 'io' || v === 'account' || v === 'privacy' || v === 'preferiti' || v === 'impostazioni' || v === 'novita' || v === 'quaderno' || v === 'quadernonuovo' || v === 'esporta') return 'io';
+  if(v === 'io' || v === 'account' || v === 'privacy' || v === 'preferiti' || v === 'impostazioni' || v === 'novita' || v === 'quaderno' || v === 'quadernonuovo' || v === 'esporta' || v === 'nuova' || v === 'importa') return 'io';
   if(v === 'chapter' && route.cnum === CUSTOM_CHAPTER_NUM) return 'io';
   return 'ricette';
 }
@@ -3187,6 +3188,7 @@ function renderIo(){
     '<div class="io-list">'+
       ioRow('star', 'Preferiti', nf ? nf+(nf===1?' ricetta salvata':' ricette salvate') : 'Le ricette che ami di più', '#/preferiti')+
       ioRow('plus', 'Aggiungi una ricetta', 'Scrivi o fotografa una tua ricetta', '#/nuova')+
+      ioRow('download', 'Importa da Instagram', 'Incolla il testo di un post e lo trasformo in ricetta', '#/importa')+
       ioRow('chef', 'Le mie ricette', customRecipes.length ? customRecipes.length+' aggiunte da te' : 'Aggiungi le tue ricette', '#/c/'+CUSTOM_CHAPTER_NUM)+
       ioRow('note', 'Quaderno delle idee', 'Appunti per le ricette da provare', '#/quaderno')+
     '</div>'+
@@ -3195,7 +3197,7 @@ function renderIo(){
       ioRow('list', 'Lista base della spesa', 'Le tre zone, da spuntare', '#/lista-base')+
     '</div>'+
     '<div class="io-list">'+
-      ioRow('sliders', 'Impostazioni', 'Tema, stagione, maiale, notifiche, backup', '#/impostazioni')+
+      ioRow('sliders', 'Impostazioni', 'Tema, schermo acceso, stagione, maiale, notifiche, backup', '#/impostazioni')+
       ioRow('sparkles', 'Novità', 'Cosa c’è di nuovo nella versione '+APP_VERSION, '#/novita')+
       '<button class="io-row" onclick="openWelcome()"><span class="iic">'+ico('help')+'</span><span class="im"><div class="it">Come funziona</div><div class="id">Il giro di benvenuto, quando vuoi</div></span><span class="ch">'+ico('chevron')+'</span></button>'+
       ioRow('shield', 'Privacy e dati', 'Cosa salva l’app e come cancellare tutto', '#/privacy')+
@@ -3285,6 +3287,7 @@ function renderImpostazioni(){
     '</div>';
 
   html += themeSettingsHtml();
+  html += awakeSettingsHtml();
 
   var notifSupported = ('Notification' in window) && ('serviceWorker' in navigator);
   var notifState = notifSupported ? Notification.permission : 'unsupported';
@@ -3504,21 +3507,24 @@ function renderRecipe(cnum, rnum){
   return html;
 }
 
-function renderNewRecipeForm(){
+function renderNewRecipeForm(imported){
+  var D = (imported && importDraft) ? importDraft : {};
   var html = topbar({back:'#/c/'+CUSTOM_CHAPTER_NUM, title:'Nuova ricetta'});
   html += '<div class="chero" style="padding-bottom:2px;"><h1>Aggiungi una ricetta</h1></div>';
   html += '<div class="formnote">Viene salvata solo su questo telefono, dentro \u201cLe mie ricette\u201d. Puoi esportarla in qualsiasi momento e mandarmela per inserirla nel libro ufficiale.</div>';
+  if(D.title !== undefined) html += '<div class="formnote" style="border-left:3px solid var(--g2);">Ho letto il testo: controlla titolo, ingredienti e passaggi prima di salvare.'+esc(D.warn||'')+'</div>';
+  else html += '<div class="form-wrap" style="padding-bottom:0;"><button class="btn-ghost" onclick="nav(\'#/importa\')" style="margin-top:0;">'+ico('note')+' Importa da Instagram o da un testo</button></div>';
   html += '<form class="form-wrap" onsubmit="return submitNewRecipe(event)">'+
-    '<div class="field"><label>Titolo</label><input type="text" name="titolo" required placeholder="Es. Zuppa di ceci e rosmarino"></div>'+
+    '<div class="field"><label>Titolo</label><input type="text" name="titolo" required value="'+escAttr(D.title||'')+'" placeholder="Es. Zuppa di ceci e rosmarino"></div>'+
     '<div class="row2">'+
-      '<div class="field"><label>Persone</label><input type="number" name="persone" min="1" max="20" placeholder="2"></div>'+
-      '<div class="field"><label>Tempo</label><input type="text" name="tempo" placeholder="20 minuti"></div>'+
+      '<div class="field"><label>Persone</label><input type="number" name="persone" min="1" max="20" value="'+escAttr(D.servings||'')+'" placeholder="2"></div>'+
+      '<div class="field"><label>Tempo</label><input type="text" name="tempo" value="'+escAttr(D.time||'')+'" placeholder="20 minuti"></div>'+
     '</div>'+
-    '<div class="field"><label>Descrizione</label><textarea name="descrizione" placeholder="Due righe su questo piatto\u2026" style="min-height:60px;"></textarea></div>'+
-    '<div class="field"><label>Ingredienti</label><textarea name="ingredienti" required placeholder="Un ingrediente per riga, es.\n200 g di ceci\n1 rametto di rosmarino\nolio extravergine d\'oliva"></textarea><p class="hint">Un ingrediente per riga. Le quantit\u00e0 all\'inizio della riga verranno adattate se cambi il numero di persone.</p></div>'+
-    '<div class="field"><label>Preparazione</label><textarea name="preparazione" required placeholder="Un passaggio per riga, es.\nSoffriggere il rosmarino nell\'olio.\nAggiungere i ceci e coprire d\'acqua."></textarea><p class="hint">Un passaggio per riga.</p></div>'+
+    '<div class="field"><label>Descrizione</label><textarea name="descrizione" placeholder="Due righe su questo piatto\u2026" style="min-height:60px;">'+esc(D.description||'')+'</textarea></div>'+
+    '<div class="field"><label>Ingredienti</label><textarea name="ingredienti" required style="min-height:'+impH(D.ingredients)+'px;" placeholder="Un ingrediente per riga, es.\n200 g di ceci\n1 rametto di rosmarino\nolio extravergine d\'oliva">'+esc((D.ingredients||[]).join('\n'))+'</textarea><p class="hint">Un ingrediente per riga. Le quantit\u00e0 all\'inizio della riga verranno adattate se cambi il numero di persone.</p></div>'+
+    '<div class="field"><label>Preparazione</label><textarea name="preparazione" required style="min-height:'+impH(D.steps)+'px;" placeholder="Un passaggio per riga, es.\nSoffriggere il rosmarino nell\'olio.\nAggiungere i ceci e coprire d\'acqua.">'+esc((D.steps||[]).join('\n'))+'</textarea><p class="hint">Un passaggio per riga.</p></div>'+
     '<div class="field"><label>Foto (facoltativa)</label><input type="file" accept="image/*" onchange="onNewRecipePhoto(this)"><div id="photoPreview"></div></div>'+
-    '<div class="field"><label>Nota (facoltativa)</label><textarea name="note" placeholder="Varianti, consigli, come conservarla\u2026" style="min-height:60px;"></textarea></div>'+
+    '<div class="field"><label>Nota (facoltativa)</label><textarea name="note" placeholder="Varianti, consigli, come conservarla\u2026" style="min-height:60px;">'+esc(D.note||'')+'</textarea></div>'+
     '<button type="submit" class="btn-primary">Salva ricetta</button>'+
   '</form>';
   return html;
@@ -4351,7 +4357,7 @@ function render(){
   else if(route.view === 'chapter') html = renderChapter(route.cnum);
   else if(route.view === 'recipe') html = renderRecipe(route.cnum, route.rnum);
   else if(route.view === 'search') html = renderSearch(route.q);
-  else if(route.view === 'nuova') html = renderNewRecipeForm();
+  else if(route.view === 'nuova') html = renderNewRecipeForm(route.imported);
   else if(route.view === 'esporta') html = renderExport();
   else if(route.view === 'piano') html = renderPiano();
   else if(route.view === 'pianopick') html = renderPianoPick(route.slot);
@@ -4365,6 +4371,7 @@ function render(){
   else if(route.view === 'quaderno') html = renderQuaderno();
   else if(route.view === 'quadernonuovo') html = renderQuadernoNuovo();
   else if(route.view === 'account') html = renderAccount();
+  else if(route.view === 'importa') html = renderImporta();
   else if(route.view === 'privacy') html = renderPrivacy();
   else if(route.view === 'io') html = renderIo();
   else if(route.view === 'preferiti') html = renderPreferiti();
@@ -4495,6 +4502,186 @@ function iconTipHtml(){
     '<div class="it-b"><button class="btn-primary" onclick="exportBackup()">Esporta backup</button>'+
     '<button class="btn-ghost" onclick="dismissIconTip()">Non mi serve</button></div></div>';
 }
+
+/* ---------- schermo sempre acceso (Screen Wake Lock) ---------- */
+var LS_AWAKE = 'ricettario_awake_v1';
+var awakeRef = null;
+function awakeOn(){ return lsGet(LS_AWAKE) === '1'; }
+function awakeSupported(){ return !!(navigator.wakeLock && navigator.wakeLock.request); }
+function awakeRequest(){
+  if(!awakeOn() || !awakeSupported() || awakeRef || document.visibilityState !== 'visible') return;
+  try{
+    navigator.wakeLock.request('screen').then(function(wl){
+      awakeRef = wl;
+      wl.addEventListener('release', function(){ if(awakeRef === wl) awakeRef = null; });
+    }).catch(function(){});
+  }catch(e){}
+}
+function awakeRelease(){
+  var w = awakeRef; awakeRef = null;
+  if(w){ try{ w.release().catch(function(){}); }catch(e){} }
+}
+document.addEventListener('visibilitychange', function(){ if(document.visibilityState === 'visible') awakeRequest(); });
+document.addEventListener('pointerdown', function(){ awakeRequest(); }, {passive:true});
+window.toggleAwake = function(){
+  var on = !awakeOn();
+  lsSet(LS_AWAKE, on ? '1' : '0');
+  if(on) awakeRequest(); else awakeRelease();
+  render();
+};
+function awakeSettingsHtml(){
+  var sup = awakeSupported(), on = sup && awakeOn();
+  return '<div class="settings-row"'+(sup ? ' onclick="toggleAwake()"' : ' style="opacity:.6;cursor:default;"')+'>'+
+    '<div class="sr-main"><div class="sr-t">Schermo sempre acceso</div><div class="sr-d">'+
+    (!sup ? 'Non disponibile su questo telefono o browser' :
+     on ? 'Attivo: lo schermo non si spegne finché l’app resta aperta (usa un po’ più di batteria)' :
+          'Disattivato: lo schermo si spegne come al solito. Attivalo per cucinare senza toccare il telefono')+
+    '</div></div><div class="switch '+(on ? 'on' : '')+'"><div class="knob"></div></div></div>';
+}
+setTimeout(awakeRequest, 0);
+
+/* ---------- importa una ricetta da un testo (Instagram, WhatsApp, siti…) ---------- */
+var importDraft = null;
+var IMP_EMOJI = /[←-⯿〰〽㊗㊙\ud83c-􏰀-\udfff️‍⃣]/g;
+var IMP_QTY = /^(\d|½|¼|¾|⅓|⅔|un[oa]?\s|mezz[oa]\s|q\.?\s?b\.?|qualche|pizzico|manciata|una manciata|bustina|ciuffo|rametto|foglie|spicchi?|cucchiai|filo\s)/i;
+var IMP_ING = /^(ingredienti|ingredients|occorrente|ti servono|ti serviranno|ci servono|cosa serve|cosa ti serve)\b/i;
+var IMP_STEP = /^(procedimento|preparazione|come si (prepara|fa)|come preparare|come procedere|istruzioni|metodo|passaggi|passaggio|steps?|directions|method|esecuzione|realizzazione|svolgimento)\b/i;
+var IMP_TIME = /^(tempo|tempi|cottura|preparazione|tempo di (cottura|preparazione)|pronto in)\b[^\d\n]{0,30}\d/i;
+var IMP_REST = /^(riposo|lievitazione|raffreddamento|in frigo)\b[^\d\n]{0,30}\d/i;
+var IMP_SERV1 = /(\d{1,2})\s*(persone|porzioni|pers\b|coperti)/i;
+var IMP_SERV2 = /\b(?:dosi per|per|porzioni|serve)\s*:?\s*(\d{1,2})\b(?!\s*(?:g\b|gr\b|ml\b|kg\b|min|cl\b|l\b|°))/i;
+var IMP_CTA = /(seguimi|seguici|\bsegui\b|salva (il|questo|questa|la|per)|salvalo|salvala|metti (un )?(like|mi piace)|commenta|condividi|link in bio|iscriviti|\btagga|taggami|buon appetito|alla prossima|ciao a tutti|buongiorno a tutti)/i;
+function impClean(l){
+  return String(l).replace(IMP_EMOJI, ' ').replace(/[​ ]/g, ' ').replace(/\s+/g, ' ')
+    .replace(/^[\s\-–—•·*>▪●○◦■□]+/, '').trim();
+}
+function impQty(l){ return IMP_QTY.test(l) || /\bq\.?\s?b\.?$/i.test(l); }
+function impLooksStep(l){
+  return !impQty(l) && (l.length > 70 || (/[.!?]$/.test(l) && l.length > 40 && /\s/.test(l)));
+}
+function impSubhead(l){ return l.length < 50 && /:$/.test(l) && !/\d/.test(l); }
+function impSentences(t){
+  return t.replace(/([.!?])\s+(?=[A-ZÀ-ÖØ-Ý])/g, '$1\u0001').split('\u0001').map(function(s){ return s.trim(); }).filter(Boolean);
+}
+function impDuration(l){
+  var m = l.match(/(\d+(?:[.,]\d)?\s*(?:ore|ora|h)\b(?:\s*e\s*\d+\s*(?:minuti|min)\b)?|\d+\s*(?:minuti|min)\b)/i);
+  if(!m) return '';
+  return m[1].replace(/\bmin\b/i, 'minuti').replace(/\bh\b/i, 'ore').replace(/\s+/g, ' ');
+}
+function parseRecipeText(raw){
+  var text = String(raw || '').replace(/\r/g, '');
+  var um = text.match(/https?:\/\/[^\s)]+/);
+  var source = um ? um[0].replace(/[.,;]+$/, '') : '';
+  text = text.replace(/https?:\/\/[^\s)]+/g, ' ').replace(/#[^\s#]+/g, ' ').replace(/(^|\s)@[\w.]+/g, ' ');
+  var lines = text.split('\n').map(impClean).filter(Boolean).filter(function(l){ return !(l.length < 110 && IMP_CTA.test(l)); });
+  var time = '', servings = null, sawIng = false, sawStep = false, extra = [];
+  var pre = [], ing = [], steps = [], sec = 'pre', hdrText = '';
+  lines.forEach(function(l){
+    var isT = IMP_TIME.test(l) && l.length < 70;
+    var isI = IMP_ING.test(l), isS = !isI && !isT && IMP_STEP.test(l);
+    if(!isI && !isS && IMP_REST.test(l) && l.length < 70){ extra.push(l); return; }
+    if(!isI && !isS && isT){ if(!time) time = impDuration(l); return; }
+    if(!isI && !isS && l.length < 45 && IMP_SERV1.test(l) && /^(dosi|per|porzioni|serve|ricetta per)/i.test(l)){
+      var sm = l.match(IMP_SERV1); if(servings === null) servings = parseInt(sm[1], 10); return;
+    }
+    if(isI || isS){
+      var ix = l.indexOf(':'), rest = (ix > -1 && ix < 45) ? l.slice(ix + 1).trim() : '';
+      if(isI){ sec = 'ing'; sawIng = true; hdrText += ' ' + l; if(rest) ing.push(rest); }
+      else { sec = 'step'; sawStep = true; if(rest) steps.push(rest); }
+      return;
+    }
+    if(sec === 'pre') pre.push(l);
+    else if(sec === 'ing'){
+      if(impSubhead(l)) return;
+      if(ing.length >= 2 && impLooksStep(l)){ sec = 'step'; steps.push(l); }
+      else ing.push(l);
+    } else { if(!impSubhead(l)) steps.push(l); }
+  });
+  /* nessuna intestazione degli ingredienti: li riconosco dalle quantità */
+  if(!sawIng){
+    var isQ = function(l){ return impQty(l) && l.length < 80; };
+    var qty = pre.filter(isQ);
+    if(qty.length >= 2){
+      var first = pre.findIndex(isQ), head = pre.slice(0, first).filter(function(l){ return !impSubhead(l); }), body = pre.slice(first), others = [];
+      body.forEach(function(l){ if(isQ(l)) ing.push(l); else if(!impSubhead(l)) others.push(l); });
+      pre = head;
+      if(!sawStep) steps = others.concat(steps); else pre = pre.concat(others);
+    } else if(!sawStep){ steps = pre.slice(1); pre = pre.slice(0, 1); }
+  }
+  if(servings === null){
+    var all = hdrText + ' ' + lines.join(' \n ');
+    var m1 = all.match(IMP_SERV1) || all.match(IMP_SERV2);
+    if(m1){ var n = parseInt(m1[1], 10); if(n >= 1 && n <= 20) servings = n; }
+  }
+  /* titolo e descrizione */
+  var title = (pre[0] || '').replace(/^ricetta\s*:\s*/i, '');
+  if(title.length > 80){
+    var cut = title.search(/[.!?:]|\s[-–]\s/); 
+    title = (cut > 8 && cut <= 80) ? title.slice(0, cut) : title.slice(0, 70).replace(/\s+\S*$/, '');
+  }
+  title = title.replace(/[\s:.!,\-–]+$/, '').trim();
+  var letters = title.replace(/[^A-Za-zÀ-ÿ]/g, '');
+  if(letters.length > 3 && title === title.toUpperCase()) title = title.charAt(0) + title.slice(1).toLowerCase();
+  var desc = pre.slice(1).join(' ');
+  if(desc.length > 220){ var d2 = impSentences(desc), acc = ''; for(var i = 0; i < d2.length && (acc + d2[i]).length <= 220; i++) acc += (acc ? ' ' : '') + d2[i]; desc = acc || desc.slice(0, 217).replace(/\s+\S*$/, '') + '…'; }
+  /* ingredienti */
+  ing = ing.map(function(s){ s = s.replace(/[;,]+$/, '').trim(); return /\bq\.?\s?b\.$/i.test(s) ? s : s.replace(/\.+$/, '').trim(); }).filter(function(s){ return s && !(s.length < 45 && IMP_SERV1.test(s) && /^(dosi|per)\b/i.test(s)); });
+  if(ing.length === 1 && (ing[0].match(/[,;]/g) || []).length >= 2){
+    ing = ing[0].split(/\s*[,;]\s*(?![^()]*\))/).map(function(s){ return s.trim(); }).filter(Boolean);
+  }
+  /* passaggi */
+  steps = steps.map(function(s){
+    return s.replace(/^((step|passo|passaggio|fase)\s*\d+\s*[:.\-)]?|\d{1,2}\s*[.)\-:])\s*/i, '').trim();
+  }).filter(Boolean);
+  if(steps.length <= 2){
+    var sp = []; steps.forEach(function(s){ sp = sp.concat(impSentences(s)); });
+    if(sp.length >= 3) steps = sp;
+  }
+  return {title: title, description: desc, servings: servings, time: time, ingredients: ing, steps: steps,
+          note: extra.concat(source ? ['Fonte: ' + source] : []).join('\n'), source: source, onlyLink: !!source && !lines.length};
+}
+window.parseRecipeText = parseRecipeText;
+function impH(a){
+  if(!a || !a.length) return 110;
+  var n = 0; a.forEach(function(l){ n += Math.max(1, Math.ceil(String(l).length / 34)); });
+  return Math.min(420, Math.max(110, n * 24 + 34));
+}
+function renderImporta(){
+  var html = topbar({back:'#/nuova', title:'Importa ricetta'});
+  html += '<div class="chero" style="padding-bottom:2px;"><h1>Importa una ricetta</h1></div>';
+  html += '<div class="formnote">Instagram non permette a un’app di leggere un post partendo dal link, quindi serve il testo. '+
+    'Apri il post, copia la didascalia (tieni premuto sul testo e scegli Copia; se non ci riesci, aprilo dal browser, dove il testo si può sempre selezionare) e incollala qui. '+
+    'Funziona anche con testi di WhatsApp o di un sito. Poi controlli tutto prima di salvare.</div>';
+  html += '<div class="form-wrap">'+
+    '<button class="btn-ghost" onclick="importPaste()" style="margin-top:0;">'+ico('note')+' Incolla dagli appunti</button>'+
+    '<div class="field" style="margin-top:12px;"><textarea id="importText" placeholder="Incolla qui il testo della ricetta…" style="min-height:220px;"></textarea></div>'+
+    '<div id="importMsg" class="hint" style="min-height:20px;margin:0 0 8px;"></div>'+
+    '<button class="btn-primary" onclick="importRun()">Leggi la ricetta</button></div>';
+  return html;
+}
+function importMsg(t){ var el = document.getElementById('importMsg'); if(el) el.textContent = t || ''; }
+window.importPaste = function(){
+  var ta = document.getElementById('importText');
+  if(navigator.clipboard && navigator.clipboard.readText){
+    navigator.clipboard.readText().then(function(t){
+      if(!t || !t.trim()){ importMsg('Gli appunti sono vuoti: copia prima il testo del post.'); return; }
+      ta.value = t; importMsg('');
+    }).catch(function(){ importMsg('Non riesco a leggere gli appunti: tieni premuto nella casella qui sotto e scegli Incolla.'); if(ta) ta.focus(); });
+  } else { importMsg('Tieni premuto nella casella qui sotto e scegli Incolla.'); if(ta) ta.focus(); }
+};
+window.importRun = function(){
+  var ta = document.getElementById('importText');
+  var raw = ta ? ta.value : '';
+  if(!raw.trim()){ importMsg('Incolla prima il testo della ricetta.'); return; }
+  var d = parseRecipeText(raw);
+  if(d.onlyLink){ importMsg('Questo è solo un link: Instagram non lascia leggere il testo da un link. Apri il post, copia la didascalia e incollala qui.'); return; }
+  d.warn = '';
+  if(!d.ingredients.length && !d.steps.length){ d.steps = raw.split('\n').map(impClean).filter(Boolean); d.warn = ' Non sono riuscito a riconoscere la ricetta: ho messo tutto il testo in Preparazione, sposta tu le righe degli ingredienti.'; }
+  else if(!d.ingredients.length) d.warn = ' Non ho trovato gli ingredienti: aggiungili a mano.';
+  else if(!d.steps.length) d.warn = ' Non ho trovato i passaggi: aggiungili a mano.';
+  importDraft = d;
+  nav('#/nuova/importata');
+};
 
 /* =====================================================================
    Account e famiglia (Firebase, solo REST: nessuna libreria esterna)
