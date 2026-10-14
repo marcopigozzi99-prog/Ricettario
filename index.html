@@ -1461,10 +1461,24 @@ html:not(.dark) .seg button.on{background:var(--grain),var(--grad);}
 .icontip .it-b{display:flex;gap:8px;}
 .icontip .it-b button{flex:1;min-height:44px;margin:0;}
 
-.imp-thumbs{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 12px;}
-.imp-th{position:relative;width:84px;height:84px;border-radius:14px;overflow:hidden;border:1px solid var(--line, rgba(255,255,255,.14));}
-.imp-th img{width:100%;height:100%;object-fit:cover;display:block;}
-.imp-th button{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,.62);color:#fff;font-size:13px;line-height:26px;padding:0;cursor:pointer;}
+
+/* collegamento a Claude */
+.cl-banner{display:flex;align-items:center;gap:12px;width:calc(100% - 40px);margin:-6px 20px 18px;padding:13px 14px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-align:left;font-family:var(--sans);cursor:pointer;box-shadow:var(--shadow-card);}
+.cl-banner .cl-ic{flex:none;width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--grad);color:var(--on-grad);}
+.cl-banner .cl-ic .ico{width:20px;height:20px;}
+.cl-banner .cl-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.cl-banner .cl-tx b{font-size:15px;font-weight:800;line-height:1.25;}
+.cl-banner .cl-tx small{font-size:12.5px;color:var(--ink-soft);font-weight:600;}
+.cl-banner .ch .ico{width:18px;height:18px;color:var(--ink-soft);}
+.cl-card{margin:12px 16px 0;padding:16px 16px 14px;border-radius:22px;background:var(--card);border:1px solid var(--line);}
+.cl-t{font-family:var(--serif);font-size:23px;font-weight:600;line-height:1.15;}
+.cl-d{font-size:14px;color:var(--ink-soft);margin-top:6px;line-height:1.4;}
+.cl-m{font-size:12.5px;color:var(--ink-soft);font-weight:700;margin-top:8px;}
+.cl-b{display:flex;gap:10px;margin-top:12px;}
+.cl-b .btn-primary{flex:1.6;margin:0;}
+.cl-b .btn-ghost{flex:1;margin:0;}
+.cl-in{width:100%;box-sizing:border-box;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:var(--sans);font-size:16px;}
+.cl-in:focus{outline:2px solid var(--g2);outline-offset:1px;}
 </style>
 </head>
 <body>
@@ -1490,7 +1504,7 @@ var CHAPTERS = DATA.chapters;
 /* ---------- versione app ---------- */
 var APP_VERSION = '2.0.1';
 var VERSION_LOG = [
-  {v:'2.0.1', note:'Otto nuovi hamburger di carne (318 ricette in totale): di tacchino, di tacchino e zucchine, di pollo e ricotta, di scottona con cipolla caramellata, cheeseburger con pancetta croccante, di vitello alle erbe, alla pizzaiola e di agnello con yogurt e menta. Piano settimanale: i tasti \u201cUsciamo a mangiare fuori\u201d e \u201cSgarro\u201d sono ora disponibili sia a pranzo sia a cena, e le note libere si vedono come semplice testo, senza icona. Nelle Impostazioni trovi \u201cSchermo sempre acceso\u201d. Da Io puoi anche \u201cImportare da Instagram\u201d: incolli il testo di un post e l\u2019app riconosce titolo, ingredienti e passaggi, che controlli prima di salvare. Con l\u2019assistente AI facoltativo (Impostazioni) importa anche da screenshot e da link di siti di ricette.'},
+  {v:'2.0.1', note:'Otto nuovi hamburger di carne (318 ricette in totale): di tacchino, di tacchino e zucchine, di pollo e ricotta, di scottona con cipolla caramellata, cheeseburger con pancetta croccante, di vitello alle erbe, alla pizzaiola e di agnello con yogurt e menta. Piano settimanale: i tasti \u201cUsciamo a mangiare fuori\u201d e \u201cSgarro\u201d sono ora disponibili sia a pranzo sia a cena, e le note libere si vedono come semplice testo, senza icona. Nelle Impostazioni trovi \u201cSchermo sempre acceso\u201d. Da Io puoi anche \u201cImportare da Instagram\u201d: incolli il testo di un post e l\u2019app riconosce titolo, ingredienti e passaggi, che controlli prima di salvare. Novit\u00e0: il \u201cCollegamento a Claude\u201d (in Io). Dalla chat di Claude, con il tuo abbonamento, mandi all\u2019app ricette lette da testi, screenshot o link di siti: le trovi in Home e le salvi dopo averle riviste.'},
   {v:'2.0.0', note:'Nuova versione ufficiale: rebranding \u201cCucina serale\u201d con logo “tavola apparecchiata”, titoli in Cormorant, sfumature che cambiano con la stagione e tema scuro o avorio. Barra in basso (Ricette, Piano, Spesa, Frigo, Io), nuova home con la card \u201cStasera\u201d (il piatto del piano di oggi o un\u2019idea di stagione), dado animato per \u201cSorprendimi\u201d che chiede se vuoi un primo o un secondo (il secondo arriva con un contorno in accompagnamento), copertine per ogni capitolo, icone nuove al posto delle emoji, illustrazioni per le ricette senza foto e nuova schermata iniziale animata. Nuova pagina \u201cIo\u201d con i Preferiti, le tue ricette, il quaderno e le impostazioni. Nuova sezione \u201cAccount e Famiglia\u201d: accedi con email e password, crea la famiglia o entra con un codice invito e condividi tra pi\u00f9 telefoni il piano settimanale, la lista della spesa, i preferiti, la dispensa, il quaderno e le note. Aspetto scuro, chiaro o automatico (segue il telefono), giro di benvenuto alla prima apertura e pagina Privacy con la possibilità di eliminare il tuo account e i tuoi dati. Slogan: Cosa mangiamo stasera?'},
   {v:'1.32.0', note:'Revisione completa delle 310 ricette: corrette dosi, ingredienti dimenticati o inutilizzati, tempi totali (compresi riposi, lievitazioni e raffreddamenti), temperature del forno con il valore per il ventilato e passaggi in ordine sbagliato in 114 ricette; tolto il peperoncino da amatriciana, puttanesca, aglio olio e tonno, broccoli e tacos. L\u2019interruttore \u201cEvita piatti a base di maiale\u201d ora riguarda solo la carne di maiale: pancetta, guanciale e prosciutto come condimento sono ammessi e segnalati con \u201cContiene salumi\u201d.'},
   {v:'1.31.0', note:'Altre 48 ricette di stagione (310 in totale): ora ci sono almeno 25 piatti specifici per ogni stagione (primavera 26, estate 58, autunno 25, inverno 25), oltre ai piatti adatti a pi\u00f9 stagioni e a quelli di tutto l\u2019anno. Novit\u00e0 di primavera: asparagi, carciofi, piselli, fave, fragole e agnello. Estate: panzanella, gazpacho, caponata, semifreddo al limone. Autunno: funghi porcini, zucca, polenta, castagnaccio, schiacciata all\u2019uva. Inverno: broccoli, cavolfiore, verza, cavolo nero, pollo alle arance.'},
@@ -2663,7 +2677,7 @@ function parseHash(){
   if(parts[0] === 'io'){ return {view:'io'}; }
   if(parts[0] === 'account'){ return {view:'account'}; }
   if(parts[0] === 'importa'){ return {view:'importa'}; }
-  if(parts[0] === 'assistente'){ return {view:'assistente'}; }
+  if(parts[0] === 'claude'){ return {view:'claude'}; }
   if(parts[0] === 'privacy'){ return {view:'privacy'}; }
   if(parts[0] === 'preferiti'){ return {view:'preferiti'}; }
   if(parts[0] === 'lista-base'){
@@ -2749,7 +2763,7 @@ window.submitNewRecipe = function(ev){
     notes: notes,
     photo: pendingPhotoData || null
   };
-  var num = addCustomRecipe(recipe); importDraft = null;
+  var num = addCustomRecipe(recipe); importDraft = null; claudeReviewDone();
   pendingPhotoData = null;
   nav('#/c/'+CUSTOM_CHAPTER_NUM+'/r/'+num);
   return false;
@@ -2912,7 +2926,7 @@ function tabFor(route){
   if(v === 'piano' || v === 'pianopick') return 'piano';
   if(v === 'spesa' || v === 'dispensa' || v === 'listabase') return 'spesa';
   if(v === 'svuotafrigo') return 'frigo';
-  if(v === 'io' || v === 'account' || v === 'privacy' || v === 'preferiti' || v === 'impostazioni' || v === 'novita' || v === 'quaderno' || v === 'quadernonuovo' || v === 'esporta' || v === 'nuova' || v === 'importa' || v === 'assistente') return 'io';
+  if(v === 'io' || v === 'account' || v === 'privacy' || v === 'preferiti' || v === 'impostazioni' || v === 'novita' || v === 'quaderno' || v === 'quadernonuovo' || v === 'esporta' || v === 'nuova' || v === 'importa' || v === 'claude') return 'io';
   if(v === 'chapter' && route.cnum === CUSTOM_CHAPTER_NUM) return 'io';
   return 'ricette';
 }
@@ -3035,6 +3049,7 @@ function renderHome(){
     '<div class="home-hero"><p class="kicker">'+searchIndex.length+' ricette · '+SEASON_NAMES[currentSeasonCode()]+'</p>'+
       '<h1>Cosa mangiamo <em>stasera?</em></h1></div>'+
     steraCard()+
+    claudeBannerHtml()+
     '<div class="search-wrap"><span class="sicon">'+ico('search')+'</span><input id="searchInput" type="text" placeholder="Cerca una ricetta o un ingrediente…" oninput="onSearchInput(this.value)"></div>'+
     '<div class="chips-row" style="padding-top:12px;">'+
       '<button class="chip" onclick="nav(\'#/filtro/veloci\')">'+ico('bolt')+'Veloci</button>'+
@@ -3195,6 +3210,7 @@ function renderIo(){
       ioRow('star', 'Preferiti', nf ? nf+(nf===1?' ricetta salvata':' ricette salvate') : 'Le ricette che ami di più', '#/preferiti')+
       ioRow('plus', 'Aggiungi una ricetta', 'Scrivi o fotografa una tua ricetta', '#/nuova')+
       ioRow('download', 'Importa da Instagram', 'Incolla il testo di un post e lo trasformo in ricetta', '#/importa')+
+      ioRow('sparkles', 'Collegamento a Claude', claudeDesc(), '#/claude')+
       ioRow('chef', 'Le mie ricette', customRecipes.length ? customRecipes.length+' aggiunte da te' : 'Aggiungi le tue ricette', '#/c/'+CUSTOM_CHAPTER_NUM)+
       ioRow('note', 'Quaderno delle idee', 'Appunti per le ricette da provare', '#/quaderno')+
     '</div>'+
@@ -3294,7 +3310,6 @@ function renderImpostazioni(){
 
   html += themeSettingsHtml();
   html += awakeSettingsHtml();
-  html += aiSettingsHtml();
 
   var notifSupported = ('Notification' in window) && ('serviceWorker' in navigator);
   var notifState = notifSupported ? Notification.permission : 'unsupported';
@@ -4379,7 +4394,7 @@ function render(){
   else if(route.view === 'quadernonuovo') html = renderQuadernoNuovo();
   else if(route.view === 'account') html = renderAccount();
   else if(route.view === 'importa') html = renderImporta();
-  else if(route.view === 'assistente') html = renderAssistente();
+  else if(route.view === 'claude') html = renderClaude();
   else if(route.view === 'privacy') html = renderPrivacy();
   else if(route.view === 'io') html = renderIo();
   else if(route.view === 'preferiti') html = renderPreferiti();
@@ -4473,8 +4488,8 @@ function renderPrivacy(){
     '<p>Servono un’email e una password. Sono gestite da Firebase, il servizio di Google: la password non la vediamo mai. Se entri in una famiglia, piano, spesa, preferiti, dispensa, quaderno e note vengono salvati sui server Firebase di Google e li vedono soltanto i membri della famiglia. Le tue ricette e le foto non vengono caricate.</p>'+
     '<h2>Cancellare tutto</h2>'+
     '<p>In “Account e Famiglia” trovi “Elimina il mio account”: cancella l’account e il tuo profilo e ti fa uscire dalla famiglia. Se eri l’ultima persona, la famiglia e i suoi dati condivisi vengono eliminati; se ci sono altri membri, i dati condivisi restano a loro. Quello che hai su questo telefono resta finché non lo cancelli dalle impostazioni del browser o rimuovi l’app.</p>'+
-    '<h2>Assistente AI (facoltativo)</h2>'+
-    '<p>Se lo attivi con una tua chiave, il testo, le immagini e i link che importi vengono inviati ad Anthropic (api.anthropic.com) per essere letti. La chiave resta solo su questo telefono. Se non lo attivi, non esce nulla.</p>'+
+    '<h2>Collegamento a Claude (facoltativo)</h2>'+
+    '<p>Se lo attivi, l’app chiede al tuo servizio personale (quello che hai creato tu su Cloudflare) se ci sono ricette nuove mandate da Claude. Non viene inviato nulla di tuo: l’app legge soltanto. Le ricette passano da Claude (con le regole del tuo abbonamento) e restano sul tuo servizio per 180 giorni.</p>'+
     '<h2>Copia di sicurezza</h2>'+
     '<p>In Impostazioni puoi esportare un backup dei tuoi dati e ripristinarlo su un altro telefono.</p>'+
   '</div>';
@@ -4657,101 +4672,10 @@ function impH(a){
   return Math.min(420, Math.max(110, n * 24 + 34));
 }
 
-/* ---------- assistente AI (facoltativo): chiave personale Anthropic, solo su questo telefono ---------- */
-var LS_AI_KEY = 'ricettario_ai_key_v1';
-var AI_MODEL = 'claude-sonnet-5-5';
-var AI_URL = 'https://api.anthropic.com/v1/messages';
-var AI_SYSTEM = 'Sei un assistente che trascrive ricette per un ricettario di famiglia italiano. Ricevi testo incollato (spesso la didascalia di un post social), screenshot o foto di una ricetta e, a volte, il link di una pagina web. '+
-  'Estrai la ricetta e consegnala SEMPRE chiamando lo strumento salva_ricetta. Scrivi in italiano. Non inventare nulla: se un dato non c’è lascialo vuoto. '+
-  'Titolo breve, senza emoji e senza tutto maiuscolo. Ingredienti: una voce per riga con quantità e unità metriche (g, ml, cucchiai, ecc.); converti tazze e once in grammi o millilitri quando ha senso. '+
-  'Passaggi: brevi, chiari, nell’ordine giusto, senza numerazione. Ignora hashtag, menzioni, inviti a seguire o salvare, pubblicità. '+
-  'Se sono presenti più immagini sono parti della stessa ricetta. Se non trovi una ricetta, chiama comunque lo strumento con titolo vuoto, liste vuote e spiega il motivo in "avviso". Se per leggere una pagina web serve lo strumento web_fetch, usalo sul link indicato.';
-var AI_TOOL = {name:'salva_ricetta', description:'Consegna la ricetta letta.', input_schema:{type:'object', properties:{
-  titolo:{type:'string'}, descrizione:{type:'string', description:'Una o due frasi, facoltativa'},
-  persone:{type:['integer','null']}, tempo:{type:'string', description:'Es. 30 minuti oppure 1 ora e 20 minuti; vuoto se non indicato'},
-  ingredienti:{type:'array', items:{type:'string'}}, passaggi:{type:'array', items:{type:'string'}},
-  note:{type:'string', description:'Consigli dell’autore o varianti, facoltativo'}, avviso:{type:'string', description:'Solo se qualcosa non è chiaro o manca'}},
-  required:['titolo','ingredienti','passaggi']}};
-function aiKey(){ return (lsGet(LS_AI_KEY) || '').trim(); }
-function aiSettingsHtml(){
-  return '<button class="settings-row" onclick="nav(\'#/assistente\')">'+
-    '<div class="sr-main"><div class="sr-t">Assistente AI per le ricette</div><div class="sr-d">'+
-    (aiKey() ? 'Attivo: legge screenshot, testi e link di siti di ricette' : 'Facoltativo: più preciso, legge anche screenshot e siti di ricette')+
-    '</div></div><span class="toc-arrow">&#8250;</span></button>';
-}
-function aiError(e){
-  if(e && e.aiCode === 'auth') return 'La chiave non è valida o è stata revocata. Controllala nell’assistente.';
-  if(e && e.aiCode === 'credit') return 'Il credito dell’account Anthropic è finito: ricaricalo su console.anthropic.com.';
-  if(e && e.aiCode === 'busy') return 'Il servizio è occupato o hai fatto troppe richieste: riprova tra un minuto.';
-  if(e && e.aiCode === 'net') return 'Nessuna connessione: l’assistente funziona solo online.';
-  return 'L’assistente non è riuscito a rispondere' + (e && e.message ? ' (' + e.message + ')' : '') + '.';
-}
-function aiCall(body, key){
-  return fetch(AI_URL, {method:'POST', headers:{'content-type':'application/json', 'x-api-key':key, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true'}, body:JSON.stringify(body)})
-    .catch(function(){ var er = new Error('rete'); er.aiCode = 'net'; throw er; })
-    .then(function(r){
-      return r.json().catch(function(){ return {}; }).then(function(j){
-        if(r.ok) return j;
-        var msg = (j && j.error && j.error.message) || ('errore ' + r.status), er = new Error(msg);
-        if(r.status === 401 || r.status === 403) er.aiCode = 'auth';
-        else if(/credit balance|billing/i.test(msg)) er.aiCode = 'credit';
-        else if(r.status === 429 || r.status === 529 || r.status === 503) er.aiCode = 'busy';
-        throw er;
-      });
-    });
-}
-function aiPrepImage(file){
-  return new Promise(function(resolve, reject){
-    var url = URL.createObjectURL(file), img = new Image();
-    img.onload = function(){
-      var max = 1600, w = img.naturalWidth, h = img.naturalHeight, k = Math.min(1, max / Math.max(w, h));
-      var c = document.createElement('canvas'); c.width = Math.round(w * k); c.height = Math.round(h * k);
-      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-      var d = c.toDataURL('image/jpeg', 0.85); URL.revokeObjectURL(url);
-      resolve({media_type:'image/jpeg', data:d.split(',')[1], url:d});
-    };
-    img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error('immagine non leggibile')); };
-    img.src = url;
-  });
-}
-function renderAssistente(){
-  var on = !!aiKey();
-  var h = topbar({back:'#/impostazioni', title:'Assistente AI'});
-  h += '<div class="chero" style="padding-bottom:2px;"><h1>Assistente AI</h1></div>';
-  h += '<div class="priv"><p>Facoltativo. Quando importi una ricetta, un assistente (Claude, di Anthropic) la legge al posto del lettore semplice: capisce meglio testi disordinati, <b>legge gli screenshot e le foto</b> e può aprire il <b>link di un sito di ricette</b>. '+
-    'Non può leggere i link di Instagram o TikTok: per quelli servono il testo copiato o uno screenshot.</p>'+
-    '<h2>Come attivarlo</h2><ol style="padding-left:20px;line-height:1.55;">'+
-    '<li>Vai su <b>console.anthropic.com</b>, crea un account e aggiungi un po’ di credito (l’abbonamento a Claude in chat è un’altra cosa e non basta).</li>'+
-    '<li>Da “API keys” crea una chiave e incollala qui sotto.</li></ol>'+
-    '<h2>Costo e privacy</h2>'+
-    '<p>Circa 1 centesimo a ricetta, solo quando importi. La chiave resta solo su questo telefono: non va nel backup e non viene condivisa con la famiglia, quindi ogni telefono ha la sua. Il testo, le immagini e i link che importi vengono inviati ad Anthropic per essere letti.</p></div>';
-  h += '<div class="form-wrap"><div class="field"><label>Chiave API'+(on ? ' (attiva)' : '')+'</label>'+
-    '<input type="password" id="aiKeyInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="'+(on ? '•••••••• incolla qui per sostituirla' : 'sk-ant-…')+'"></div>'+
-    '<div id="aiMsg" class="hint" style="min-height:20px;margin:0 0 8px;"></div>'+
-    '<button class="btn-primary" onclick="aiSaveKey()">Salva e prova</button>'+
-    (on ? '<button class="danger-btn" style="display:block;width:100%;text-align:center;margin-top:14px;" onclick="aiRemoveKey()">Rimuovi la chiave</button>' : '')+
-    '</div>';
-  return h;
-}
-function aiMsg(t){ var el = document.getElementById('aiMsg'); if(el) el.textContent = t || ''; }
-window.aiSaveKey = function(){
-  var el = document.getElementById('aiKeyInput'), v = el ? el.value.trim() : '';
-  if(!v){ aiMsg('Incolla prima la chiave.'); return; }
-  if(!/^sk-ant-/.test(v)){ aiMsg('Una chiave Anthropic inizia con “sk-ant-”: controlla di aver copiato tutto.'); return; }
-  aiMsg('Provo la chiave…');
-  aiCall({model:AI_MODEL, max_tokens:8, messages:[{role:'user', content:'Rispondi solo: ok'}]}, v).then(function(){
-    lsSet(LS_AI_KEY, v); aiMsg('Fatto: l’assistente è attivo.'); setTimeout(function(){ nav('#/importa'); }, 900);
-  }).catch(function(e){ aiMsg(aiError(e)); });
-};
-window.aiRemoveKey = function(){
-  if(!confirm('Rimuovere la chiave da questo telefono?')) return;
-  lsRemove(LS_AI_KEY); render();
-};
 
-/* ---------- importa: testo, screenshot, link ---------- */
-var importImages = [];
+/* ---------- importa da testo (Instagram, WhatsApp, siti) ---------- */
 function renderImporta(){
-  var on = !!aiKey();
+  var claudeOn = !!claudeCfg();
   var html = topbar({back:'#/nuova', title:'Importa ricetta'});
   html += '<div class="chero" style="padding-bottom:2px;"><h1>Importa una ricetta</h1></div>';
   html += '<div class="formnote">Instagram non permette a un’app di leggere un post partendo dal link, quindi serve il testo. '+
@@ -4759,35 +4683,15 @@ function renderImporta(){
     'Funziona anche con testi di WhatsApp o di un sito. Poi controlli tutto prima di salvare.</div>';
   html += '<div class="form-wrap">'+
     '<button class="btn-ghost" onclick="importPaste()" style="margin-top:0;">'+ico('note')+' Incolla dagli appunti</button>'+
-    '<div class="field" style="margin-top:12px;"><textarea id="importText" placeholder="'+(on ? 'Incolla qui il testo o il link di un sito di ricette…' : 'Incolla qui il testo della ricetta…')+'" style="min-height:'+(on ? 150 : 220)+'px;"></textarea></div>';
-  if(on){
-    html += '<div class="field"><label>Screenshot o foto (anche più di una)</label><input type="file" id="importFiles" accept="image/*" multiple onchange="importAddImages(this)"></div>'+
-      '<div id="importThumbs" class="imp-thumbs">'+importThumbsHtml()+'</div>';
-  } else {
-    html += '<div class="hint" style="margin:0 0 10px;">Hai solo uno screenshot? Su iPhone aprilo in Foto, tocca l’icona del testo in basso a destra, seleziona tutto e scegli Copia, poi incolla qui. '+
-      'Oppure <a href="#/assistente" style="color:inherit;text-decoration:underline;">attiva l’assistente AI</a>: legge gli screenshot e i link dei siti di ricette.</div>';
-  }
-  html += '<div id="importMsg" class="hint" style="min-height:20px;margin:0 0 8px;"></div>'+
+    '<div class="field" style="margin-top:12px;"><textarea id="importText" placeholder="Incolla qui il testo della ricetta…" style="min-height:220px;"></textarea></div>'+
+    '<div class="hint" style="margin:0 0 10px;">Hai solo uno screenshot? Su iPhone aprilo in Foto, tocca l’icona del testo in basso a destra, seleziona tutto e scegli Copia, poi incolla qui. '+
+    (claudeOn ? 'Oppure mandalo a Claude: <a href="#/claude" style="color:inherit;text-decoration:underline;">Collegamento a Claude</a>.'
+              : 'Per screenshot e link di siti puoi anche usare il <a href="#/claude" style="color:inherit;text-decoration:underline;">Collegamento a Claude</a>.')+'</div>'+
+    '<div id="importMsg" class="hint" style="min-height:20px;margin:0 0 8px;"></div>'+
     '<button class="btn-primary" id="importGo" onclick="importRun()">Leggi la ricetta</button></div>';
   return html;
 }
 function importMsg(t){ var el = document.getElementById('importMsg'); if(el) el.textContent = t || ''; }
-function importThumbsHtml(){
-  return importImages.map(function(im, i){
-    return '<span class="imp-th"><img src="'+im.url+'" alt=""><button type="button" aria-label="Togli" onclick="importDropImage('+i+')">&#10005;</button></span>';
-  }).join('');
-}
-function importThumbs(){
-  var el = document.getElementById('importThumbs'); if(el) el.innerHTML = importThumbsHtml();
-}
-window.importAddImages = function(inp){
-  var files = Array.prototype.slice.call(inp.files || []).slice(0, 4 - importImages.length);
-  importMsg(files.length ? 'Preparo le immagini…' : '');
-  Promise.all(files.map(aiPrepImage)).then(function(arr){
-    importImages = importImages.concat(arr).slice(0, 4); inp.value = ''; importThumbs(); importMsg('');
-  }).catch(function(e){ importMsg('Non riesco a leggere questa immagine.'); });
-};
-window.importDropImage = function(i){ importImages.splice(i, 1); importThumbs(); };
 window.importPaste = function(){
   var ta = document.getElementById('importText');
   if(navigator.clipboard && navigator.clipboard.readText){
@@ -4797,65 +4701,227 @@ window.importPaste = function(){
     }).catch(function(){ importMsg('Non riesco a leggere gli appunti: tieni premuto nella casella qui sotto e scegli Incolla.'); if(ta) ta.focus(); });
   } else { importMsg('Tieni premuto nella casella qui sotto e scegli Incolla.'); if(ta) ta.focus(); }
 };
-var IMP_SOCIAL = /instagram\.com|instagr\.am|tiktok\.com|facebook\.com|fb\.watch|youtu\.?be/i;
 function importFinish(d, raw){
   d.warn = d.warn || '';
   if(!d.ingredients.length && !d.steps.length){ d.steps = raw.split('\n').map(impClean).filter(Boolean); d.warn = ' Non sono riuscito a riconoscere la ricetta: ho messo tutto il testo in Preparazione, sposta tu le righe degli ingredienti.'; }
   else if(!d.ingredients.length) d.warn = d.warn || ' Non ho trovato gli ingredienti: aggiungili a mano.';
   else if(!d.steps.length) d.warn = d.warn || ' Non ho trovato i passaggi: aggiungili a mano.';
-  importDraft = d; importImages = [];
+  importDraft = d;
   nav('#/nuova/importata');
-}
-function importBusy(on){ var b = document.getElementById('importGo'); if(b){ b.disabled = on; b.textContent = on ? 'Leggo la ricetta…' : 'Leggi la ricetta'; } }
-function importAI(raw, key){
-  var urls = raw.match(/https?:\/\/[^\s)]+/g) || [];
-  var web = urls.filter(function(u){ return !IMP_SOCIAL.test(u); });
-  var content = importImages.map(function(im){ return {type:'image', source:{type:'base64', media_type:im.media_type, data:im.data}}; });
-  content.push({type:'text', text:(raw.trim() ? 'Testo incollato:\n"""\n'+raw.trim()+'\n"""' : 'Nessun testo: leggi le immagini.')+(web.length ? '\n\nLeggi anche la pagina: '+web[0] : '')});
-  var tools = [AI_TOOL]; if(web.length) tools.push({type:'web_fetch_20250910', name:'web_fetch', max_uses:2});
-  var msgs = [{role:'user', content:content}], round = 0;
-  function step(){
-    var body = {model:AI_MODEL, max_tokens:3000, system:AI_SYSTEM, tools:tools, messages:msgs};
-    body.tool_choice = web.length ? {type:'auto'} : {type:'tool', name:'salva_ricetta'};
-    return aiCall(body, key).then(function(resp){
-      var tu = (resp.content || []).filter(function(b){ return b.type === 'tool_use' && b.name === 'salva_ricetta'; })[0];
-      if(tu) return tu.input || {};
-      if(resp.stop_reason === 'pause_turn' && ++round < 4){ msgs.push({role:'assistant', content:resp.content}); return step(); }
-      var txt = (resp.content || []).filter(function(b){ return b.type === 'text'; }).map(function(b){ return b.text; }).join(' ').trim();
-      var er = new Error(txt ? txt.slice(0, 160) : 'nessuna ricetta'); er.aiNoRecipe = true; throw er;
-    });
-  }
-  return step().then(function(r){
-    var arr = function(a){ return (a || []).map(function(x){ return String(x).trim(); }).filter(Boolean); };
-    var n = parseInt(r.persone, 10);
-    var note = [String(r.note || '').trim(), urls.length ? 'Fonte: ' + urls[0] : ''].filter(Boolean).join('\n');
-    return {title:String(r.titolo || '').trim(), description:String(r.descrizione || '').trim(), servings:(n >= 1 && n <= 20) ? n : null,
-      time:String(r.tempo || '').trim(), ingredients:arr(r.ingredienti), steps:arr(r.passaggi), note:note, source:urls[0] || '',
-      warn:r.avviso ? ' ' + String(r.avviso).trim() : ''};
-  });
 }
 window.importRun = function(){
   var ta = document.getElementById('importText');
   var raw = ta ? ta.value : '';
-  var key = aiKey(), imgs = key ? importImages : [];
-  if(!raw.trim() && !imgs.length){ importMsg(key ? 'Incolla del testo, un link o aggiungi uno screenshot.' : 'Incolla prima il testo della ricetta.'); return; }
-  var onlyLink = !imgs.length && !raw.replace(/https?:\/\/[^\s)]+/g, '').trim();
-  var urls = raw.match(/https?:\/\/[^\s)]+/g) || [];
-  if(onlyLink && (!key || urls.every(function(u){ return IMP_SOCIAL.test(u); }))){
-    importMsg(key ? 'Instagram, TikTok e simili non lasciano leggere i link: copia la didascalia oppure aggiungi uno screenshot.' : 'Questo è solo un link: Instagram non lascia leggere il testo da un link. Apri il post, copia la didascalia e incollala qui.'); return;
-  }
-  if(!key){ importFinish(parseRecipeText(raw), raw); return; }
-  importMsg('Un attimo, la sto leggendo…'); importBusy(true);
-  importAI(raw, key).then(function(d){
-    importBusy(false);
-    if(!d.title && !d.ingredients.length && !d.steps.length){ importMsg(d.warn.trim() || 'Non ho trovato una ricetta in quello che hai inviato.'); return; }
-    importFinish(d, raw);
+  if(!raw.trim()){ importMsg('Incolla prima il testo della ricetta.'); return; }
+  var onlyLink = !raw.replace(/https?:\/\/[^\s)]+/g, '').trim();
+  if(onlyLink){ importMsg('Questo è solo un link: Instagram non lascia leggere il testo da un link. Apri il post, copia la didascalia e incollala qui.'); return; }
+  importFinish(parseRecipeText(raw), raw);
+};
+
+/* ---------- Collegamento a Claude: le ricette che Claude manda arrivano qui ---------- */
+var LS_CLAUDE = 'ricettario_claude_v1';
+var claudeInbox = [];           /* ricette in arrivo, non ancora accettate o scartate */
+var claudeState = 'idle';       /* idle | loading | ok | error */
+var claudeErr = '';
+var claudeLast = 0;
+var claudeReviewId = null;
+var claudeMsgTxt = '';
+function claudeCfg(){
+  try{ var o = JSON.parse(lsGet(LS_CLAUDE) || 'null'); if(o && typeof o.base === 'string' && o.base) { if(!Array.isArray(o.seen)) o.seen = []; return o; } }catch(e){}
+  return null;
+}
+function claudeSave(o){ if(o) lsSet(LS_CLAUDE, JSON.stringify(o)); else { try{ localStorage.removeItem(LS_CLAUDE); }catch(e){} } }
+/* accetta l'indirizzo incollato in vari modi (con /mcp, /inbox, spazi) e restituisce l'indirizzo base, oppure null */
+function claudeNormalize(s){
+  s = String(s || '').trim().replace(/\s+/g, '');
+  if(!s) return null;
+  if(!/^https?:\/\//i.test(s)) s = 'https://' + s;
+  var u; try{ u = new URL(s); }catch(e){ return null; }
+  var local = /^(localhost|127\.0\.0\.1)$/.test(u.hostname);
+  if(u.protocol !== 'https:' && !(u.protocol === 'http:' && local)) return null;
+  if(u.hostname.indexOf('.') === -1 && !local) return null;
+  var parts = u.pathname.split('/').filter(Boolean);
+  if(parts.length && /^(mcp|inbox)$/i.test(parts[parts.length - 1])) parts.pop();
+  if(parts.length !== 1) return null;       /* serve esattamente il codice segreto */
+  return u.origin + '/' + parts[0];
+}
+function claudePending(){ return claudeInbox.length; }
+function claudeCheck(force){
+  var cfg = claudeCfg();
+  if(!cfg || claudeState === 'loading') return Promise.resolve();
+  if(!force && Date.now() - claudeLast < 60000) return Promise.resolve();
+  claudeState = 'loading'; claudeLast = Date.now();
+  var ctl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+  var to = setTimeout(function(){ if(ctl) ctl.abort(); }, 12000);
+  return fetch(cfg.base + '/inbox', {cache:'no-store', signal: ctl ? ctl.signal : undefined}).then(function(r){
+    if(r.status === 404) throw new Error('addr');
+    if(!r.ok) throw new Error('http');
+    return r.json();
+  }).then(function(j){
+    clearTimeout(to);
+    var cur = claudeCfg() || cfg;
+    var seen = {}; cur.seen.forEach(function(id){ seen[id] = 1; });
+    claudeInbox = ((j && j.recipes) || []).filter(function(x){ return x && x.id && x.title && !seen[x.id]; });
+    /* ripulisce dai riferimenti a ricette ormai scadute sul servizio */
+    var live = {}; ((j && j.recipes) || []).forEach(function(x){ if(x && x.id) live[x.id] = 1; });
+    var keep = cur.seen.filter(function(id){ return live[id]; });
+    if(keep.length !== cur.seen.length){ cur.seen = keep; claudeSave(cur); }
+    claudeState = 'ok'; claudeErr = '';
+    claudeRefreshUi();
   }).catch(function(e){
-    importBusy(false);
-    if(e && e.aiCode === 'net' && !imgs.length && raw.trim() && !onlyLink){ importFinish(parseRecipeText(raw), raw); return; } /* offline: lettore semplice */
-    importMsg(e && e.aiNoRecipe ? 'Non ho trovato una ricetta: ' + e.message : aiError(e));
+    clearTimeout(to);
+    claudeState = 'error';
+    claudeErr = (e && e.message === 'addr') ? 'L’indirizzo non risulta valido: controllalo o ricollega.' :
+                (navigator.onLine === false ? 'Sei offline: riprova quando c’è connessione.' : 'Non riesco a raggiungere il collegamento. Riprova tra poco.');
+    claudeRefreshUi();
+  });
+}
+function claudeRefreshUi(){
+  var h = location.hash || '';
+  var ae = document.activeElement;
+  if(ae && /^(INPUT|TEXTAREA)$/.test(ae.tagName)) return;
+  if(h === '#/claude' || h === '#/' || h === '' || h === '#/home') render();
+}
+function claudeBannerHtml(){
+  var n = claudePending();
+  if(!claudeCfg() || !n) return '';
+  return '<button class="cl-banner" onclick="nav(\'#/claude\')"><span class="cl-ic">'+ico('sparkles')+'</span>'+
+    '<span class="cl-tx"><b>'+(n === 1 ? 'Claude ti ha mandato una ricetta' : 'Claude ti ha mandato '+n+' ricette')+'</b><small>Guardale e scegli se salvarle</small></span>'+
+    '<span class="ch">'+ico('chevron')+'</span></button>';
+}
+function claudeDesc(){
+  if(!claudeCfg()) return 'Manda ricette da Claude, anche da screenshot e link';
+  var n = claudePending();
+  return n ? (n === 1 ? '1 ricetta in arrivo' : n+' ricette in arrivo') : 'Collegato · nessuna ricetta in attesa';
+}
+function claudeRecipeFrom(x){
+  var notes = [];
+  if(x.note && String(x.note).trim()) notes.push({title:'Nota', level:1, text:String(x.note).trim(), items:[]});
+  var sv = x.servings ? parseInt(x.servings, 10) : null;
+  return {title:String(x.title), description:String(x.description || ''), servingsLabel: sv ? ('Ingredienti per '+sv+' persone') : 'Ingredienti',
+    servings: sv, ingredients:(x.ingredients || []).map(String), steps:(x.steps || []).map(String), time:String(x.time || ''), notes:notes, photo:null};
+}
+function claudeMark(id){
+  var cfg = claudeCfg(); if(!cfg) return;
+  if(cfg.seen.indexOf(id) === -1) cfg.seen.push(id);
+  claudeSave(cfg);
+  claudeInbox = claudeInbox.filter(function(x){ return x.id !== id; });
+}
+function claudeReviewDone(){
+  if(claudeReviewId){ claudeMark(claudeReviewId); claudeReviewId = null; }
+}
+function claudeMeta(x){
+  var m = [];
+  m.push((x.ingredients || []).length + ' ingredienti');
+  m.push((x.steps || []).length + ' passaggi');
+  if(x.time) m.push(x.time);
+  return m.join(' · ');
+}
+function renderClaude(){
+  var cfg = claudeCfg();
+  var h = topbar({back:'#/io', title:'Collegamento a Claude'});
+  h += '<div class="chero" style="padding-bottom:2px;"><h1>Collegamento a Claude</h1></div>';
+  if(!cfg){
+    h += '<div class="acc-card"><h2>Come funziona</h2>'+
+      '<p class="acc-hint" style="margin:0 0 8px;font-size:14px;">Nella chat di Claude (app o sito, con il tuo abbonamento) scrivi «aggiungi al ricettario questa ricetta» e incolli un testo, uno screenshot o il link di un sito. '+
+      'Claude legge la ricetta e la manda qui: tu la guardi e scegli se salvarla.</p>'+
+      '<p class="acc-hint" style="margin:0;">Serve un’impostazione una tantum, seguendo la guida passo passo. Poi basta incollare qui l’indirizzo.</p></div>'+
+      '<div class="acc-card acc-form"><h2>Collega</h2>'+
+      '<div class="field"><label>Indirizzo del collegamento</label><input class="cl-in" id="clAddr" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://ricettario.tuonome.workers.dev/…"></div>'+
+      '<div id="clMsg" class="acc-msg err" style="display:none;"></div>'+
+      '<button class="btn-primary" id="clGo" onclick="claudeLink()">Collega</button>'+
+      '<p class="acc-hint">Puoi incollare l’indirizzo anche con «/mcp» alla fine: lo sistemo io.</p></div>';
+    return h;
+  }
+  if(claudeState === 'loading' && !claudeInbox.length) h += '<div class="acc-busy">Controllo se c’è qualcosa di nuovo…</div>';
+  if(claudeState === 'error') h += '<div class="acc-msg err">'+esc(claudeErr)+'</div>';
+  if(claudeMsgTxt) h += '<div class="acc-msg ok">'+esc(claudeMsgTxt)+'</div>';
+  if(claudeInbox.length){
+    h += '<div class="section-label" style="padding-top:14px;">In arrivo da Claude</div>';
+    claudeInbox.forEach(function(x){
+      h += '<div class="cl-card"><div class="cl-t">'+esc(x.title)+'</div>'+
+        (x.description ? '<div class="cl-d">'+esc(x.description)+'</div>' : '')+
+        '<div class="cl-m">'+esc(claudeMeta(x))+'</div>'+
+        '<div class="cl-b"><button class="btn-primary" onclick="claudeReview(\''+escAttr(x.id)+'\')">Rivedi e salva</button>'+
+        '<button class="btn-ghost" onclick="claudeDiscard(\''+escAttr(x.id)+'\')">Scarta</button></div></div>';
+    });
+    if(claudeInbox.length > 1) h += '<div class="form-wrap" style="padding-top:6px;"><button class="btn-ghost" onclick="claudeAddAll()">Salva tutte ('+claudeInbox.length+') così come sono</button></div>';
+  } else if(claudeState === 'ok'){
+    h += '<div class="acc-card"><h2>Nessuna ricetta in attesa</h2>'+
+      '<p class="acc-hint" style="margin:0;font-size:14px;">Nella chat con Claude scrivi per esempio: «Leggi questa ricetta e aggiungila al ricettario», poi incolla il testo, lo screenshot o il link. Quando ha finito, torna qui e tocca «Controlla ora».</p></div>';
+  }
+  h += '<div class="form-wrap"><button class="btn-ghost" onclick="claudeNow()">'+ico('refresh')+' Controlla ora</button></div>';
+  h += '<div class="acc-card"><h2>Per Claude</h2>'+
+    '<p class="acc-hint" style="margin:0 0 8px;font-size:14px;">Questo è l’indirizzo da inserire in Claude (Impostazioni → Connettori → Aggiungi connettore personalizzato).</p>'+
+    '<button class="btn-ghost" onclick="claudeCopy()">Copia l’indirizzo per Claude</button>'+
+    '<button class="acc-link" onclick="claudeUnlink()">Scollega questo telefono</button></div>';
+  return h;
+}
+window.claudeNow = function(){ claudeMsgTxt = ''; claudeCheck(true).then(function(){ if(location.hash === '#/claude') render(); }); render(); };
+window.claudeLink = function(){
+  var el = document.getElementById('clAddr'), msg = document.getElementById('clMsg'), go = document.getElementById('clGo');
+  var showErr = function(t){ if(msg){ msg.style.display = 'block'; msg.textContent = t; } if(go){ go.disabled = false; go.textContent = 'Collega'; } };
+  var base = claudeNormalize(el ? el.value : '');
+  if(!base){ showErr('Questo non sembra l’indirizzo giusto: deve cominciare con https:// e finire con il tuo codice segreto.'); return; }
+  if(go){ go.disabled = true; go.textContent = 'Provo il collegamento…'; }
+  if(msg) msg.style.display = 'none';
+  fetch(base + '/inbox', {cache:'no-store'}).then(function(r){
+    if(r.status === 404) throw new Error('addr');
+    if(!r.ok) throw new Error('http');
+    return r.json();
+  }).then(function(j){
+    if(!j || !Array.isArray(j.recipes)) throw new Error('addr');
+    /* le ricette già presenti al momento del collegamento sono vecchie: restano da vedere, non le nascondo */
+    claudeSave({base:base, seen:[]});
+    claudeInbox = j.recipes.filter(function(x){ return x && x.id && x.title; });
+    claudeState = 'ok'; claudeLast = Date.now(); claudeErr = ''; claudeMsgTxt = 'Collegato!';
+    render();
+  }).catch(function(e){
+    showErr(e && e.message === 'addr' ? 'Indirizzo non trovato: controlla di averlo copiato per intero, con il codice segreto.' :
+      (navigator.onLine === false ? 'Sei offline: riprova con la connessione.' : 'Non riesco a raggiungere il servizio. Controlla l’indirizzo e riprova.'));
   });
 };
+window.claudeReview = function(id){
+  var x = claudeInbox.filter(function(r){ return r.id === id; })[0]; if(!x) return;
+  var r = claudeRecipeFrom(x);
+  importDraft = {title:r.title, description:r.description, servings:r.servings, time:r.time, ingredients:r.ingredients, steps:r.steps,
+    note:(x.note ? String(x.note) : ''), warn:' (Arrivata da Claude.)'};
+  claudeReviewId = id; claudeMsgTxt = '';
+  nav('#/nuova/importata');
+};
+window.claudeDiscard = function(id){
+  if(!confirm('Scartare questa ricetta?')) return;
+  claudeMark(id); claudeMsgTxt = ''; render();
+};
+window.claudeAddAll = function(){
+  if(!confirm('Salvare tutte le ricette in arrivo in “Le mie ricette”?')) return;
+  var base = Date.now(), n = 0;
+  claudeInbox.slice().forEach(function(x, i){
+    var r = claudeRecipeFrom(x); r.num = base + i; r.custom = true;
+    customRecipes.push(r); n++;
+  });
+  saveCustomRecipes();
+  claudeInbox.slice().forEach(function(x){ claudeMark(x.id); });
+  claudeMsgTxt = n + (n === 1 ? ' ricetta salvata' : ' ricette salvate') + ' in “Le mie ricette”.';
+  try{ buildSearchIndex(); }catch(e){}
+  render();
+};
+window.claudeCopy = function(){
+  var cfg = claudeCfg(); if(!cfg) return;
+  var t = cfg.base + '/mcp';
+  var done = function(){ claudeMsgTxt = 'Indirizzo copiato. Incollalo in Claude, nel nuovo connettore.'; render(); };
+  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done).catch(function(){ prompt('Copia questo indirizzo:', t); });
+  else prompt('Copia questo indirizzo:', t);
+};
+window.claudeUnlink = function(){
+  if(!confirm('Scollegare questo telefono da Claude? Le ricette già salvate restano.')) return;
+  claudeSave(null); claudeInbox = []; claudeState = 'idle'; claudeMsgTxt = ''; render();
+};
+function claudeInit(){
+  if(claudeCfg()) claudeCheck(true);
+  document.addEventListener('visibilitychange', function(){ if(document.visibilityState === 'visible') claudeCheck(false); });
+}
+window.__claudeTest = {normalize:claudeNormalize, cfg:claudeCfg, pending:claudePending, desc:claudeDesc};
 
 /* =====================================================================
    Account e famiglia (Firebase, solo REST: nessuna libreria esterna)
@@ -5417,6 +5483,7 @@ document.addEventListener('DOMContentLoaded', function(){
   buildSearchIndex();
   render();
   syncInit();
+  claudeInit();
 });
 window.addEventListener('hashchange', render);
 loadTheme();
