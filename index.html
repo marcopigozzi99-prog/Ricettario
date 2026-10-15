@@ -1479,6 +1479,12 @@ html:not(.dark) .seg button.on{background:var(--grain),var(--grad);}
 .cl-b .btn-ghost{flex:1;margin:0;}
 .cl-in{width:100%;box-sizing:border-box;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:var(--sans);font-size:16px;}
 .cl-in:focus{outline:2px solid var(--g2);outline-offset:1px;}
+
+.cl-steps{margin:0;padding:0 0 0 22px;font-size:14.5px;line-height:1.5;color:var(--ink);}
+.cl-steps li{margin:0 0 12px;padding-left:4px;}
+.cl-steps li::marker{font-weight:800;color:var(--gold);}
+.cl-steps .btn-ghost{display:block;width:100%;margin-top:8px;}
+.cl-code{margin-top:8px;padding:11px 12px;border-radius:12px;border:1px dashed var(--line);background:var(--bg, transparent);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;word-break:break-all;user-select:all;-webkit-user-select:all;}
 </style>
 </head>
 <body>
@@ -2677,7 +2683,7 @@ function parseHash(){
   if(parts[0] === 'io'){ return {view:'io'}; }
   if(parts[0] === 'account'){ return {view:'account'}; }
   if(parts[0] === 'importa'){ return {view:'importa'}; }
-  if(parts[0] === 'claude'){ return {view:'claude'}; }
+  if(parts[0] === 'claude'){ return {view: parts[1] === 'guida' ? 'claudeguida' : 'claude'}; }
   if(parts[0] === 'privacy'){ return {view:'privacy'}; }
   if(parts[0] === 'preferiti'){ return {view:'preferiti'}; }
   if(parts[0] === 'lista-base'){
@@ -2926,7 +2932,7 @@ function tabFor(route){
   if(v === 'piano' || v === 'pianopick') return 'piano';
   if(v === 'spesa' || v === 'dispensa' || v === 'listabase') return 'spesa';
   if(v === 'svuotafrigo') return 'frigo';
-  if(v === 'io' || v === 'account' || v === 'privacy' || v === 'preferiti' || v === 'impostazioni' || v === 'novita' || v === 'quaderno' || v === 'quadernonuovo' || v === 'esporta' || v === 'nuova' || v === 'importa' || v === 'claude') return 'io';
+  if(v === 'io' || v === 'account' || v === 'privacy' || v === 'preferiti' || v === 'impostazioni' || v === 'novita' || v === 'quaderno' || v === 'quadernonuovo' || v === 'esporta' || v === 'nuova' || v === 'importa' || v === 'claude' || v === 'claudeguida') return 'io';
   if(v === 'chapter' && route.cnum === CUSTOM_CHAPTER_NUM) return 'io';
   return 'ricette';
 }
@@ -4395,6 +4401,7 @@ function render(){
   else if(route.view === 'account') html = renderAccount();
   else if(route.view === 'importa') html = renderImporta();
   else if(route.view === 'claude') html = renderClaude();
+  else if(route.view === 'claudeguida') html = renderClaudeGuida();
   else if(route.view === 'privacy') html = renderPrivacy();
   else if(route.view === 'io') html = renderIo();
   else if(route.view === 'preferiti') html = renderPreferiti();
@@ -4822,10 +4829,12 @@ function renderClaude(){
   var h = topbar({back:'#/io', title:'Collegamento a Claude'});
   h += '<div class="chero" style="padding-bottom:2px;"><h1>Collegamento a Claude</h1></div>';
   if(!cfg){
-    h += '<div class="acc-card"><h2>Come funziona</h2>'+
-      '<p class="acc-hint" style="margin:0 0 8px;font-size:14px;">Nella chat di Claude (app o sito, con il tuo abbonamento) scrivi «aggiungi al ricettario questa ricetta» e incolli un testo, uno screenshot o il link di un sito. '+
-      'Claude legge la ricetta e la manda qui: tu la guardi e scegli se salvarla.</p>'+
-      '<p class="acc-hint" style="margin:0;">Serve un’impostazione una tantum, seguendo la guida passo passo. Poi basta incollare qui l’indirizzo.</p></div>'+
+    h += '<div class="acc-card"><h2>Una funzione facoltativa</h2>'+
+      '<p class="acc-hint" style="margin:0 0 8px;font-size:14px;">Il ricettario funziona benissimo anche senza: <b>non è obbligatorio</b>. È un’aggiunta “social” per chi trova ricette su siti o su Instagram e vuole portarle qui senza ricopiarle.</p>'+
+      '<p class="acc-hint" style="margin:0 0 8px;font-size:14px;">Nella chat di Claude (con il tuo abbonamento) scrivi «aggiungi al ricettario questa ricetta» e incolli un testo, uno screenshot o il link di un sito. Claude la legge e la manda qui: tu la guardi e scegli se salvarla.</p>'+
+      '<p class="acc-hint" style="margin:0 0 8px;font-size:14px;">Le ricette arrivano <b>solo sul tuo dispositivo</b>, in “Le mie ricette”: non vengono condivise con nessuno.</p>'+
+      '<button class="btn-primary" onclick="nav(\'#/claude/guida\')" style="margin-top:6px;">Guida passo passo</button>'+
+      '<p class="acc-hint">Circa 20 minuti, una volta sola. Se hai già il tuo indirizzo, incollalo qui sotto.</p></div>'+
       '<div class="acc-card acc-form"><h2>Collega</h2>'+
       '<div class="field"><label>Indirizzo del collegamento</label><input class="cl-in" id="clAddr" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://ricettario.tuonome.workers.dev/…"></div>'+
       '<div id="clMsg" class="acc-msg err" style="display:none;"></div>'+
@@ -4922,6 +4931,69 @@ function claudeInit(){
   document.addEventListener('visibilitychange', function(){ if(document.visibilityState === 'visible') claudeCheck(false); });
 }
 window.__claudeTest = {normalize:claudeNormalize, cfg:claudeCfg, pending:claudePending, desc:claudeDesc};
+
+/* guida passo passo per chi vuole attivare il collegamento (facoltativo) */
+var CLAUDE_WORKER_URL = 'connettore/worker.js';
+var CLAUDE_WORKER_RAW = 'https://raw.githubusercontent.com/marcopigozzi99-prog/Ricettario/main/connettore/worker.js';
+function clgMsg(t, err){ var el = document.getElementById('clgMsg'); if(el){ el.className = 'acc-msg ' + (err ? 'err' : 'ok'); el.textContent = t; el.style.display = t ? 'block' : 'none'; try{ el.scrollIntoView({block:'nearest'}); }catch(e){} } }
+function clgCopy(t, okTxt){
+  var fallback = function(){ try{ prompt('Copia questo testo:', t); }catch(e){} };
+  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function(){ clgMsg(okTxt); }).catch(fallback);
+  else fallback();
+}
+function renderClaudeGuida(){
+  var h = topbar({back:'#/claude', title:'Guida al collegamento'});
+  h += '<div class="chero" style="padding-bottom:2px;"><h1>Collegare Claude</h1></div>';
+  h += '<div class="acc-card"><h2>Prima di cominciare</h2>'+
+    '<p class="acc-hint" style="margin:0 0 8px;font-size:14px;"><b>È facoltativo.</b> Serve solo se vuoi aggiungere al ricettario, dal tuo Claude, le ricette che trovi su siti o su Instagram. Le ricette arrivano soltanto su questo dispositivo, in “Le mie ricette”.</p>'+
+    '<p class="acc-hint" style="margin:0 0 8px;font-size:14px;">Ti servono: un account Claude, un account gratuito su Cloudflare (senza carta di credito) e circa 20 minuti. Conviene farlo da un computer, tenendo questa pagina aperta sul telefono.</p>'+
+    '<p class="acc-hint" style="margin:0;font-size:14px;">Il servizio sarà tuo: le ricette passano dal tuo spazio su Cloudflare e vi restano al massimo 180 giorni. Non passano da nessun altro.</p></div>';
+  h += '<div id="clgMsg" class="acc-msg ok" style="display:none;"></div>';
+  h += '<div class="acc-card"><h2>1 · Il servizio su Cloudflare</h2><ol class="cl-steps">'+
+    '<li>Vai su <b>dash.cloudflare.com</b>, scegli <b>Sign up</b> e crea l’account con email e password. Conferma l’email.</li>'+
+    '<li>Nel menu a sinistra apri <b>Workers &amp; Pages</b>, poi <b>Create</b>, poi <b>Create Worker</b> (o “Start with Hello World”). Chiamalo <b>ricettario</b> e premi <b>Deploy</b>.</li>'+
+    '<li>Premi <b>Edit code</b>, cancella tutto il testo e incolla il codice del servizio. Poi premi <b>Deploy</b>.'+
+      '<button class="btn-ghost" onclick="claudeGuidaCopyCode()">Copia il codice del servizio</button></li>'+
+    '<li>Nel menu a sinistra apri <b>Storage &amp; Databases → KV</b> e crea una memoria con <b>Create</b>, chiamandola <b>ricettario-kv</b>. Deve comparire nell’elenco.</li>'+
+    '<li>Torna sul Worker: <b>Settings → Bindings → Add → KV namespace</b>. In <b>Variable name</b> scrivi esattamente <b>RICETTARIO</b> (maiuscolo), scegli <b>ricettario-kv</b> e salva. Se la memoria non compare nel menu, ricarica la pagina.</li>'+
+    '<li>Sempre in Settings: <b>Variables and Secrets → Add</b>. Tipo <b>Secret</b>, nome <b>TOKEN</b> (maiuscolo), come valore incolla il codice segreto qui sotto. Salva e premi <b>Deploy</b>.'+
+      '<button class="btn-ghost" onclick="claudeGuidaToken()">Crea il mio codice segreto</button>'+
+      '<div id="clgToken" class="cl-code" style="display:none;"></div></li>'+
+    '<li>Apri nel browser l’indirizzo del Worker (in alto, tipo <b>https://ricettario.tuonome.workers.dev</b>): deve comparire “Servizio attivo”. Poi aggiungi in fondo <b>/IL-TUO-CODICE/inbox</b>: deve comparire <b>{"recipes":[]}</b>.</li>'+
+    '</ol><p class="acc-hint">Tieni il codice segreto per te: chi lo conosce può mandare ricette al tuo servizio.</p></div>';
+  h += '<div class="acc-card"><h2>2 · Collegare l’app</h2><ol class="cl-steps">'+
+    '<li>Torna alla pagina precedente (freccia in alto), incolla l’indirizzo <b>https://ricettario.tuonome.workers.dev/IL-TUO-CODICE</b> e premi <b>Collega</b>.</li>'+
+    '<li>Quando è collegata, tocca <b>Copia l’indirizzo per Claude</b>.</li></ol></div>';
+  h += '<div class="acc-card"><h2>3 · Collegare Claude</h2><ol class="cl-steps">'+
+    '<li>Su <b>claude.ai</b>, dal computer: <b>Impostazioni → Connettori → Aggiungi connettore personalizzato</b>. Nome <b>Ricettario</b>, indirizzo quello copiato. Lascia vuoti i campi di accesso.</li>'+
+    '<li>In una nuova chat apri il menu col segno più, vai su <b>Connettori</b> e accendi <b>Ricettario</b>.</li>'+
+    '<li>Scrivi: «Leggi questa ricetta e aggiungila al ricettario» e incolla un testo, uno screenshot o il link di un sito. Poi apri l’app: in Home compare l’avviso.</li></ol>'+
+    '<p class="acc-hint">I link di Instagram Claude non riesce a leggerli: mandagli uno screenshot del post o la didascalia copiata. Ogni ricetta conta come un normale messaggio del tuo piano.</p>'+
+    '<p class="acc-hint">Nomi e posizioni dei menu possono cambiare un po’ nel tempo.</p></div>';
+  h += '<div class="form-wrap"><button class="btn-ghost" onclick="nav(\'#/claude\')">Ho finito: vai al collegamento</button></div>';
+  return h;
+}
+window.claudeGuidaCopyCode = function(){
+  clgMsg('Preparo il codice…');
+  fetch(CLAUDE_WORKER_URL + '?v=' + Date.now(), {cache:'no-store'}).then(function(r){
+    if(!r.ok) throw new Error('http');
+    return r.text();
+  }).then(function(t){
+    if(!t || t.indexOf('export default') === -1) throw new Error('bad');
+    clgCopy(t, 'Codice copiato: incollalo in Cloudflare, al posto del testo che c’è.');
+  }).catch(function(){
+    clgMsg('Non riesco a scaricare il codice. Apri questo indirizzo, copia tutto il testo e incollalo in Cloudflare: ' + CLAUDE_WORKER_RAW, true);
+  });
+};
+window.claudeGuidaToken = function(){
+  var abc = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789', out = '';
+  var buf = new Uint8Array(36);
+  try{ crypto.getRandomValues(buf); }catch(e){ for(var i = 0; i < buf.length; i++) buf[i] = Math.floor(Math.random() * 256); }
+  for(var j = 0; j < buf.length; j++) out += abc.charAt(buf[j] % abc.length);
+  var el = document.getElementById('clgToken');
+  if(el){ el.style.display = 'block'; el.textContent = out; }
+  clgCopy(out, 'Codice segreto creato e copiato. Incollalo come valore di TOKEN e salvalo da qualche parte: ti servirà anche dopo.');
+};
 
 /* =====================================================================
    Account e famiglia (Firebase, solo REST: nessuna libreria esterna)
