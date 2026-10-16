@@ -4690,15 +4690,25 @@ function renderImporta(){
     'Funziona anche con testi di WhatsApp o di un sito. Poi controlli tutto prima di salvare.</div>';
   html += '<div class="form-wrap">'+
     '<button class="btn-ghost" onclick="importPaste()" style="margin-top:0;">'+ico('note')+' Incolla dagli appunti</button>'+
-    '<div class="field" style="margin-top:12px;"><textarea id="importText" placeholder="Incolla qui il testo della ricetta…" style="min-height:220px;"></textarea></div>'+
+    '<div class="field" style="margin-top:12px;"><textarea id="importText" placeholder="Incolla qui il testo della ricetta…" style="min-height:150px;"></textarea></div>'+
     '<div class="hint" style="margin:0 0 10px;">Hai solo uno screenshot? Su iPhone aprilo in Foto, tocca l’icona del testo in basso a destra, seleziona tutto e scegli Copia, poi incolla qui. '+
     (claudeOn ? 'Oppure mandalo a Claude: <a href="#/claude" style="color:inherit;text-decoration:underline;">Collegamento a Claude</a>.'
               : 'Per screenshot e link di siti puoi anche usare il <a href="#/claude" style="color:inherit;text-decoration:underline;">Collegamento a Claude</a>.')+'</div>'+
-    '<div id="importMsg" class="hint" style="min-height:20px;margin:0 0 8px;"></div>'+
+    '<div id="importMsg" class="acc-msg err" style="display:none;margin:0 0 12px;"></div>'+
     '<button class="btn-primary" id="importGo" onclick="importRun()">Leggi la ricetta</button></div>';
   return html;
 }
-function importMsg(t){ var el = document.getElementById('importMsg'); if(el) el.textContent = t || ''; }
+function importMsg(t, claudeLink){
+  var el = document.getElementById('importMsg'); if(!el) return;
+  el.textContent = t || '';
+  if(t && claudeLink){
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'btn-ghost'; b.style.cssText = 'margin-top:10px;width:100%;';
+    b.textContent = 'Come farlo con Claude'; b.onclick = function(){ nav('#/claude'); };
+    el.appendChild(b);
+  }
+  el.style.display = t ? 'block' : 'none';
+  if(t){ try{ el.scrollIntoView({block:'center', behavior:'smooth'}); }catch(e){} }
+}
 window.importPaste = function(){
   var ta = document.getElementById('importText');
   if(navigator.clipboard && navigator.clipboard.readText){
@@ -4719,9 +4729,15 @@ function importFinish(d, raw){
 window.importRun = function(){
   var ta = document.getElementById('importText');
   var raw = ta ? ta.value : '';
-  if(!raw.trim()){ importMsg('Incolla prima il testo della ricetta.'); return; }
+  if(!raw.trim()){ importMsg('Non c’è ancora nessun testo: tocca “Incolla dagli appunti” oppure incollalo nella casella, poi premi di nuovo “Leggi la ricetta”.'); return; }
   var onlyLink = !raw.replace(/https?:\/\/[^\s)]+/g, '').trim();
-  if(onlyLink){ importMsg('Questo è solo un link: Instagram non lascia leggere il testo da un link. Apri il post, copia la didascalia e incollala qui.'); return; }
+  if(onlyLink){
+    if(/instagram\.com|instagr\.am|tiktok\.com|facebook\.com|fb\.watch|youtu\.?be/i.test(raw))
+      importMsg('Hai incollato solo il link: Instagram, TikTok e simili non permettono all’app di leggerlo. Apri il post, copia la didascalia (il testo, non il link) e incollala qui. Oppure fai uno screenshot e mandalo a Claude.', true);
+    else
+      importMsg('Hai incollato solo un link: da solo l’app non può leggere una pagina web. Apri la pagina, copia il testo della ricetta e incollalo qui. Oppure fai leggere il link a Claude.', true);
+    return;
+  }
   importFinish(parseRecipeText(raw), raw);
 };
 
