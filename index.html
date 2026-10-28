@@ -1513,7 +1513,7 @@ var CHAPTERS = DATA.chapters;
 var APP_VERSION = '2.0.2';
 var COPYRIGHT_NOTE = '\u00a9 Marco Pigozzi \u2013 versione web del libro \u2018Il nostro ricettario\u2019 (testi e immagini realizzati con l\u2019ausilio dell\u2019IA)';
 var VERSION_LOG = [
-  {v:'2.0.2', note:'In fondo alla pagina Io e in \u201cPrivacy e dati\u201d trovi la nota sui diritti: l\u2019app \u00e8 la versione web del libro \u201cIl nostro ricettario\u201d di Marco Pigozzi, con testi e immagini realizzati con l\u2019ausilio dell\u2019IA. Le \u201cCr\u00eapes base 1-2-3\u201d si chiamano ora \u201cCr\u00eapes dolci e salate\u201d: preferiti, piano e note restano al loro posto.'},
+  {v:'2.0.2', note:'In fondo alla pagina Io e in \u201cPrivacy e dati\u201d trovi la nota sui diritti: l\u2019app \u00e8 la versione web del libro \u201cIl nostro ricettario\u201d di Marco Pigozzi, con testi e immagini realizzati con l\u2019ausilio dell\u2019IA. Le \u201cCr\u00eapes base 1-2-3\u201d si chiamano ora \u201cCr\u00eapes dolci e salate\u201d: preferiti, piano e note restano al loro posto. Entrare in una famiglia \u00e8 ora pi\u00f9 sicuro: serve il codice invito valido.'},
   {v:'2.0.1', note:'Otto nuovi hamburger di carne (318 ricette in totale): di tacchino, di tacchino e zucchine, di pollo e ricotta, di scottona con cipolla caramellata, cheeseburger con pancetta croccante, di vitello alle erbe, alla pizzaiola e di agnello con yogurt e menta. Piano settimanale: i tasti \u201cUsciamo a mangiare fuori\u201d e \u201cSgarro\u201d sono ora disponibili sia a pranzo sia a cena, e le note libere si vedono come semplice testo, senza icona. Nelle Impostazioni trovi \u201cSchermo sempre acceso\u201d. Da Io puoi anche \u201cImportare da Instagram\u201d: incolli il testo di un post e l\u2019app riconosce titolo, ingredienti e passaggi, che controlli prima di salvare. Novit\u00e0: il \u201cCollegamento a Claude\u201d (in Io). Dalla chat di Claude, con il tuo abbonamento, mandi all\u2019app ricette lette da testi, screenshot o link di siti: le trovi in Home e le salvi dopo averle riviste.'},
   {v:'2.0.0', note:'Nuova versione ufficiale: rebranding \u201cCucina serale\u201d con logo “tavola apparecchiata”, titoli in Cormorant, sfumature che cambiano con la stagione e tema scuro o avorio. Barra in basso (Ricette, Piano, Spesa, Frigo, Io), nuova home con la card \u201cStasera\u201d (il piatto del piano di oggi o un\u2019idea di stagione), dado animato per \u201cSorprendimi\u201d che chiede se vuoi un primo o un secondo (il secondo arriva con un contorno in accompagnamento), copertine per ogni capitolo, icone nuove al posto delle emoji, illustrazioni per le ricette senza foto e nuova schermata iniziale animata. Nuova pagina \u201cIo\u201d con i Preferiti, le tue ricette, il quaderno e le impostazioni. Nuova sezione \u201cAccount e Famiglia\u201d: accedi con email e password, crea la famiglia o entra con un codice invito e condividi tra pi\u00f9 telefoni il piano settimanale, la lista della spesa, i preferiti, la dispensa, il quaderno e le note. Aspetto scuro, chiaro o automatico (segue il telefono), giro di benvenuto alla prima apertura e pagina Privacy con la possibilità di eliminare il tuo account e i tuoi dati. Slogan: Cosa mangiamo stasera?'},
   {v:'1.32.0', note:'Revisione completa delle 310 ricette: corrette dosi, ingredienti dimenticati o inutilizzati, tempi totali (compresi riposi, lievitazioni e raffreddamenti), temperature del forno con il valore per il ventilato e passaggi in ordine sbagliato in 114 ricette; tolto il peperoncino da amatriciana, puttanesca, aglio olio e tonno, broccoli e tacos. L\u2019interruttore \u201cEvita piatti a base di maiale\u201d ora riguarda solo la carne di maiale: pancetta, guanciale e prosciutto come condimento sono ammessi e segnalati con \u201cContiene salumi\u201d.'},
@@ -5182,8 +5182,15 @@ function joinFamily(code){
   return fsGet('invites/' + code).then(function(inv){
     var fid = inv ? fsField(inv, 'fid') : null;
     if(!fid) throw new Error('CODE_NOT_VALID');
-    return fsCommit([{transform:{document:fsName('families/' + fid), fieldTransforms:[
-      {fieldPath:'members', appendMissingElements:{values:[fsStr(SYNC.uid)]}}]}}]).then(function(){ return fid; });
+    /* insieme all'ingresso si scrive il codice usato: le regole controllano che sia l'invito valido di questa famiglia */
+    return fsCommit([{update:{name:fsName('families/' + fid), fields:{join:{mapValue:{fields:{uid:fsStr(SYNC.uid), code:fsStr(code)}}}}}, updateMask:{fieldPaths:['join']},
+      updateTransforms:[{fieldPath:'members', appendMissingElements:{values:[fsStr(SYNC.uid)]}}],
+      currentDocument:{exists:true}}]).catch(function(e){
+        /* regole vecchie non ancora aggiornate: ingresso come prima (le regole nuove lo rifiutano) */
+        if(!(e && e.status === 403)) throw e;
+        return fsCommit([{transform:{document:fsName('families/' + fid), fieldTransforms:[
+          {fieldPath:'members', appendMissingElements:{values:[fsStr(SYNC.uid)]}}]}}]);
+      }).then(function(){ return fid; });
   }).then(function(fid){
     return setUserFid(fid).then(function(){ return loadMyFamily(); });
   }).then(function(){
