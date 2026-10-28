@@ -8,8 +8,8 @@ const PID = 'demo-ricettario';
 const env = await initializeTestEnvironment({ projectId: PID, firestore: { rules: fs.readFileSync(path.join(HERE, '..', 'firestore.rules'),'utf8'), host:'127.0.0.1', port:8085 } });
 const db = uid => uid ? env.authenticatedContext(uid).firestore() : env.unauthenticatedContext().firestore();
 const A = db('alice'), B = db('bob'), C = db('carlo'), N = db(null);
-let ok = 0, ko = 0;
-async function t(name, p){ try{ await p; ok++; console.log('OK  ', name); }catch(e){ ko++; console.log('FAIL', name, '-', e.message); } }
+let ok = 0, ko = 0; const righe = [];
+async function t(name, p){ try{ await p; ok++; console.log('OK  ', name); righe.push('OK   ' + name); }catch(e){ ko++; console.log('FAIL', name, '-', e.message); righe.push('FAIL ' + name + ' - ' + String(e.message).slice(0, 120)); } }
 const FID = 'fam00000000000000001';
 
 // 1. A crea la famiglia (come il client: famiglia, invito, profilo, stato)
@@ -102,5 +102,10 @@ await t('REST client: uscita (removeAllFromArray di sé)', restCommit('bob', [{t
 await t('REST client: rinnovo codice (updateMask code)', restCommit('alice', [{update:{name:nm('invites/RCODE222'), fields:{fid:{stringValue:'famR'}}}, currentDocument:{exists:false}}]).then(()=>restCommit('alice', [{update:{name:nm('families/famR'), fields:{code:{stringValue:'RCODE222'}}}, updateMask:{fieldPaths:['code']}, currentDocument:{exists:true}}])));
 
 console.log(`\nTotale: ${ok} ok, ${ko} falliti`);
+if (process.env.GITHUB_ACTIONS) {
+  // un'unica annotazione con l'esito caso per caso (leggibile anche senza scaricare i log)
+  const enc = t => t.replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
+  console.log(`::${ko ? 'error' : 'notice'} title=Regole Firestore: ${ok} ok, ${ko} falliti::` + enc(righe.join('\n')));
+}
 await env.cleanup();
 process.exit(ko ? 1 : 0);
