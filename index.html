@@ -5177,8 +5177,15 @@ function joinFamily(code){
   return fsGet('invites/' + code).then(function(inv){
     var fid = inv ? fsField(inv, 'fid') : null;
     if(!fid) throw new Error('CODE_NOT_VALID');
-    return fsCommit([{transform:{document:fsName('families/' + fid), fieldTransforms:[
-      {fieldPath:'members', appendMissingElements:{values:[fsStr(SYNC.uid)]}}]}}]).then(function(){ return fid; });
+    /* insieme all'ingresso si scrive il codice usato: le regole controllano che sia l'invito valido di questa famiglia */
+    return fsCommit([{update:{name:fsName('families/' + fid), fields:{join:{mapValue:{fields:{uid:fsStr(SYNC.uid), code:fsStr(code)}}}}}, updateMask:{fieldPaths:['join']},
+      updateTransforms:[{fieldPath:'members', appendMissingElements:{values:[fsStr(SYNC.uid)]}}],
+      currentDocument:{exists:true}}]).catch(function(e){
+        /* regole vecchie non ancora aggiornate: ingresso come prima (le regole nuove lo rifiutano) */
+        if(!(e && e.status === 403)) throw e;
+        return fsCommit([{transform:{document:fsName('families/' + fid), fieldTransforms:[
+          {fieldPath:'members', appendMissingElements:{values:[fsStr(SYNC.uid)]}}]}}]);
+      }).then(function(){ return fid; });
   }).then(function(fid){
     return setUserFid(fid).then(function(){ return loadMyFamily(); });
   }).then(function(){
