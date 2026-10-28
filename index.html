@@ -1258,6 +1258,8 @@ body.timer-active .fab{bottom:calc(var(--tabh) + 14px + var(--timers-count,1) * 
 .io-row .ch .ico{width:18px;height:18px;}
 .io-foot{text-align:center;color:var(--ink-soft);font-size:12px;padding:18px 20px 4px;font-weight:600;}
 .io-foot .bm{width:48px;height:32px;display:block;margin:0 auto 6px;opacity:.9;}
+.io-copy{display:block;max-width:330px;margin:10px auto 0;font-size:11px;line-height:1.45;font-weight:500;opacity:.85;}
+.priv .priv-copy{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);}
 .empty .ico{width:44px;height:44px;color:var(--g2);display:block;margin:0 auto 10px;}
 
 /* dado animato */
@@ -1508,8 +1510,10 @@ var DATA = JSON.parse(document.getElementById('data').textContent);
 var CHAPTERS = DATA.chapters;
 
 /* ---------- versione app ---------- */
-var APP_VERSION = '2.0.1';
+var APP_VERSION = '2.0.2';
+var COPYRIGHT_NOTE = '\u00a9 Marco Pigozzi \u2013 versione web del libro \u2018Il nostro ricettario\u2019 (testi e immagini realizzati con l\u2019ausilio dell\u2019IA)';
 var VERSION_LOG = [
+  {v:'2.0.2', note:'In fondo alla pagina Io e in \u201cPrivacy e dati\u201d trovi la nota sui diritti: l\u2019app \u00e8 la versione web del libro \u201cIl nostro ricettario\u201d di Marco Pigozzi, con testi e immagini realizzati con l\u2019ausilio dell\u2019IA. Nessun cambiamento alle ricette e ai tuoi dati.'},
   {v:'2.0.1', note:'Otto nuovi hamburger di carne (318 ricette in totale): di tacchino, di tacchino e zucchine, di pollo e ricotta, di scottona con cipolla caramellata, cheeseburger con pancetta croccante, di vitello alle erbe, alla pizzaiola e di agnello con yogurt e menta. Piano settimanale: i tasti \u201cUsciamo a mangiare fuori\u201d e \u201cSgarro\u201d sono ora disponibili sia a pranzo sia a cena, e le note libere si vedono come semplice testo, senza icona. Nelle Impostazioni trovi \u201cSchermo sempre acceso\u201d. Da Io puoi anche \u201cImportare da Instagram\u201d: incolli il testo di un post e l\u2019app riconosce titolo, ingredienti e passaggi, che controlli prima di salvare. Novit\u00e0: il \u201cCollegamento a Claude\u201d (in Io). Dalla chat di Claude, con il tuo abbonamento, mandi all\u2019app ricette lette da testi, screenshot o link di siti: le trovi in Home e le salvi dopo averle riviste.'},
   {v:'2.0.0', note:'Nuova versione ufficiale: rebranding \u201cCucina serale\u201d con logo “tavola apparecchiata”, titoli in Cormorant, sfumature che cambiano con la stagione e tema scuro o avorio. Barra in basso (Ricette, Piano, Spesa, Frigo, Io), nuova home con la card \u201cStasera\u201d (il piatto del piano di oggi o un\u2019idea di stagione), dado animato per \u201cSorprendimi\u201d che chiede se vuoi un primo o un secondo (il secondo arriva con un contorno in accompagnamento), copertine per ogni capitolo, icone nuove al posto delle emoji, illustrazioni per le ricette senza foto e nuova schermata iniziale animata. Nuova pagina \u201cIo\u201d con i Preferiti, le tue ricette, il quaderno e le impostazioni. Nuova sezione \u201cAccount e Famiglia\u201d: accedi con email e password, crea la famiglia o entra con un codice invito e condividi tra pi\u00f9 telefoni il piano settimanale, la lista della spesa, i preferiti, la dispensa, il quaderno e le note. Aspetto scuro, chiaro o automatico (segue il telefono), giro di benvenuto alla prima apertura e pagina Privacy con la possibilità di eliminare il tuo account e i tuoi dati. Slogan: Cosa mangiamo stasera?'},
   {v:'1.32.0', note:'Revisione completa delle 310 ricette: corrette dosi, ingredienti dimenticati o inutilizzati, tempi totali (compresi riposi, lievitazioni e raffreddamenti), temperature del forno con il valore per il ventilato e passaggi in ordine sbagliato in 114 ricette; tolto il peperoncino da amatriciana, puttanesca, aglio olio e tonno, broccoli e tacos. L\u2019interruttore \u201cEvita piatti a base di maiale\u201d ora riguarda solo la carne di maiale: pancetta, guanciale e prosciutto come condimento sono ammessi e segnalati con \u201cContiene salumi\u201d.'},
@@ -3230,7 +3234,7 @@ function renderIo(){
       '<button class="io-row" onclick="openWelcome()"><span class="iic">'+ico('help')+'</span><span class="im"><div class="it">Come funziona</div><div class="id">Il giro di benvenuto, quando vuoi</div></span><span class="ch">'+ico('chevron')+'</span></button>'+
       ioRow('shield', 'Privacy e dati', 'Cosa salva l’app e come cancellare tutto', '#/privacy')+
     '</div>'+
-    '<div class="io-foot">'+BRAND_MARK('io')+'Il nostro ricettario · v'+APP_VERSION+'<br>Cosa mangiamo stasera?</div>';
+    '<div class="io-foot">'+BRAND_MARK('io')+'Il nostro ricettario · v'+APP_VERSION+'<br>Cosa mangiamo stasera?<small class="io-copy">'+esc(COPYRIGHT_NOTE)+'</small></div>';
 }
 function renderPreferiti(){
   var list = [];
@@ -4499,6 +4503,7 @@ function renderPrivacy(){
     '<p>Se lo attivi, l’app chiede al tuo servizio personale (quello che hai creato tu su Cloudflare) se ci sono ricette nuove mandate da Claude. Non viene inviato nulla di tuo: l’app legge soltanto. Le ricette passano da Claude (con le regole del tuo abbonamento) e restano sul tuo servizio per 180 giorni.</p>'+
     '<h2>Copia di sicurezza</h2>'+
     '<p>In Impostazioni puoi esportare un backup dei tuoi dati e ripristinarlo su un altro telefono.</p>'+
+    '<p class="priv-copy">'+esc(COPYRIGHT_NOTE)+'</p>'+
   '</div>';
   h += '<div class="form-wrap"><button class="btn-ghost" onclick="nav(\'#/account\')">Vai ad Account e Famiglia</button></div>';
   return h;
