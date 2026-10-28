@@ -1,0 +1,6 @@
+{
+  "name": "ricettario-test-regole",
+  "private": true,
+  "type": "module",
+  "description": "Test delle regole Firestore con l'emulatore (progetto demo, nessun accesso al progetto reale)"
+}

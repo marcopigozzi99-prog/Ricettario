@@ -1,0 +1,29 @@
+name: Test regole Firestore
+
+# Solo sul ramo regole-sicure o a mano; mai su main.
+on:
+  push:
+    branches: [regole-sicure]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  emulatore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Installa firebase-tools e rules-unit-testing
+        working-directory: test
+        run: npm i --no-audit --no-fund firebase-tools @firebase/rules-unit-testing firebase
+      - name: Esegui i test con l'emulatore Firestore (progetto demo)
+        run: test/node_modules/.bin/firebase emulators:exec --only firestore --project demo-ricettario "node test/test-regole.mjs"
